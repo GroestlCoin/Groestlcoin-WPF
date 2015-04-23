@@ -1,21 +1,10 @@
-Ufasoft Multi-currency Bitcoin Client and Miner
-
-Web:
-  http://ufasoft.com/coin
-
-Forums:
-	http://forum.ufasoft.com/forum/index.php?board=6.0
-	https://bitcointalk.org/index.php?topic=3486.0
-	https://bitcointalk.org/index.php?topic=58821.0
-
-
+Groestlcoin WPF Client and Miner
 
 Miner Manual
 =======================
-
 coin-miner {-options}
   Options:
-    -a scrypt|sha256|prime|<seconds>   hashing algorithm (scrypt, prime or sha256), or time between getwork requests 1..60, default 15
+    -a groestlcoin |<seconds>   hashing algorithm (groestl), or time between getwork requests 1..60, default 15
     -A user-agent       Set custom User-agent string in HTTP header, default: Ufasoft bitcoin miner
     -g yes|no           set 'no' to disable GPU, default 'yes'
     -h                  this help
@@ -27,10 +16,6 @@ coin-miner {-options}
     -T temperature      max temperature in Celsius degrees, default: 80
     -v                  Verbose output
     -x type=host:port   Use HTTP or SOCKS proxy. Examples: -x http=127.0.0.1:3128, -x socks=127.0.0.1:1080
-
-
-
-
 
 Build for Windows by VS 2012 instructions
 ===========================================
@@ -52,13 +37,7 @@ Build for Windows by VS 2012 instructions
 4.	Build coineng.vcxproj. It results to coineng.exe and coineng.tlb files.
 5.	coineng.tlb is required to build WPF UI coin.exe.
 
-
 To run the entire application all .exe/.dll files of used libs should be in the same directory.
 
-	
-
-
 ========================
-This software is free.
-Bitcoin address for donations: 16kfodhAckE8FZQpNcDwzG3tDGxypGTdwm
-Donating will help to improve this project.
+This software is free and open source.
