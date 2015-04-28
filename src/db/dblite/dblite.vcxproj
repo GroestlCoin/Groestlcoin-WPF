@@ -35,10 +35,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{2E655587-09CA-431F-9805-69147DFD3BF4}</ProjectGuid>
-    <RootNamespace>coineng</RootNamespace>
+    <ProjectGuid>{1E655587-E9CA-431F-9805-69147DFD3BF4}</ProjectGuid>
+    <RootNamespace>Ext::DB</RootNamespace>
     <Keyword>MFCDLLProj</Keyword>
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
+    <ProjectName>dblite</ProjectName>
   </PropertyGroup>
   <Import Project="..\..\cfg\vs\vs-ver.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -48,7 +49,7 @@
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
@@ -60,7 +61,7 @@
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
     <UseOfMfc>Static</UseOfMfc>
@@ -73,7 +74,7 @@
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -87,7 +88,7 @@
     <UseOfMfc>Dynamic</UseOfMfc>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>false</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -168,23 +169,17 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>coineng.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
@@ -193,7 +188,8 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
       <MinimumRequiredVersion>5.01</MinimumRequiredVersion>
-      <DelayLoadDLLs>bdb.dll;miner.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -203,10 +199,11 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x86 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">
@@ -214,25 +211,19 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <FavorSizeOrSpeed>Neither</FavorSizeOrSpeed>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>coineng.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -250,32 +241,31 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x86 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <WarningLevel>Level4</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>coineng-64.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite-64.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
@@ -283,51 +273,6 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalDependencies>
       </AdditionalDependencies>
-      <MinimumRequiredVersion>5.2</MinimumRequiredVersion>
-      <DelayLoadDLLs>bdb.dll;miner.dll</DelayLoadDLLs>
-    </Link>
-    <Midl>
-      <MkTypLibCompatible>false</MkTypLibCompatible>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>$(OutDir)inc\$(TargetName).tlb</TypeLibraryName>
-    </Midl>
-    <ResourceCompile>
-      <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x64 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">
-    <ClCompile>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <WarningLevel>Level4</WarningLevel>
-      <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ModuleDefinitionFile>coineng-64.def</ModuleDefinitionFile>
-      <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
-      <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <MinimumRequiredVersion>5.2</MinimumRequiredVersion>
       <DelayLoadDLLs>
       </DelayLoadDLLs>
     </Link>
@@ -339,10 +284,51 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x64 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">
+    <ClCompile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ModuleDefinitionFile>dblite-64.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
+      <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>$(OutDir)inc\$(TargetName).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -351,26 +337,20 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ModuleDefinitionFile>coineng.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
@@ -379,7 +359,8 @@
       <AdditionalDependencies>
       </AdditionalDependencies>
       <MinimumRequiredVersion>5.01</MinimumRequiredVersion>
-      <DelayLoadDLLs>bdb.dll;miner.dll</DelayLoadDLLs>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
     </Link>
     <Midl>
       <MkTypLibCompatible>false</MkTypLibCompatible>
@@ -389,10 +370,11 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x86 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">
@@ -401,28 +383,22 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ModuleDefinitionFile>coineng.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
@@ -440,11 +416,15 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x86 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
     </PostBuildEvent>
+    <Lib>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
@@ -452,26 +432,20 @@
       <PrecompiledHeader>Use</PrecompiledHeader>
       <Optimization>MinSpace</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <BasicRuntimeChecks>Default</BasicRuntimeChecks>
       <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ModuleDefinitionFile>coineng-64.def</ModuleDefinitionFile>
+      <ModuleDefinitionFile>dblite-64.def</ModuleDefinitionFile>
       <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
       <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
@@ -479,57 +453,6 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <AdditionalDependencies>
       </AdditionalDependencies>
-      <MinimumRequiredVersion>5.2</MinimumRequiredVersion>
-      <DelayLoadDLLs>bdb.dll;miner.dll</DelayLoadDLLs>
-    </Link>
-    <Midl>
-      <MkTypLibCompatible>false</MkTypLibCompatible>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <TypeLibraryName>$(OutDir)inc\$(TargetName).tlb</TypeLibraryName>
-    </Midl>
-    <ResourceCompile>
-      <Culture>0x0409</Culture>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
-    </ResourceCompile>
-    <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x64 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
-    </PostBuildEvent>
-  </ItemDefinitionGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">
-    <ClCompile>
-      <WarningLevel>Level4</WarningLevel>
-      <PrecompiledHeader>Use</PrecompiledHeader>
-      <Optimization>MinSpace</Optimization>
-      <FunctionLevelLinking>true</FunctionLevelLinking>
-      <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
-      <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>.;../util;$(OutDir)\inc</AdditionalIncludeDirectories>
-      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
-      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
-      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
-      <RuntimeTypeInfo>true</RuntimeTypeInfo>
-      <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
-    </ClCompile>
-    <Link>
-      <SubSystem>Windows</SubSystem>
-      <GenerateDebugInformation>true</GenerateDebugInformation>
-      <EnableCOMDATFolding>true</EnableCOMDATFolding>
-      <OptimizeReferences>true</OptimizeReferences>
-      <ModuleDefinitionFile>coineng-64.def</ModuleDefinitionFile>
-      <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
-      <BaseAddress>0x2F200000</BaseAddress>
-      <RandomizedBaseAddress>false</RandomizedBaseAddress>
-      <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
-      <AdditionalLibraryDirectories>$(OutDir)</AdditionalLibraryDirectories>
-      <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
-      <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
-      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <AdditionalDependencies>
-      </AdditionalDependencies>
-      <MinimumRequiredVersion>5.2</MinimumRequiredVersion>
       <DelayLoadDLLs>
       </DelayLoadDLLs>
     </Link>
@@ -541,35 +464,59 @@
     <ResourceCompile>
       <Culture>0x0409</Culture>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);currency;../util</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
     </ResourceCompile>
     <PostBuildEvent>
-      <Command>"$(TargetFrameworkSDKToolsDirectory)\tlbimp.exe"  /machine:x64 /out:$(OutDir)inc/Interop.$(ProjectName).dll $(OutDir)/inc/$(TargetName).tlb</Command>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">
+    <ClCompile>
+      <WarningLevel>Level4</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MinSpace</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PreprocessorDefinitions>_DBLITE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>el/ext.h</PrecompiledHeaderFile>
+      <AdditionalIncludeDirectories>.;../inc;$(OutDir)\inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <FavorSizeOrSpeed>Size</FavorSizeOrSpeed>
+      <AdditionalOptions>/J %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <Link>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <ModuleDefinitionFile>dblite-64.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(OutDir)/PDB/$(TargetName).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(OutDir)\lib\$(ProjectName).lib</ImportLibrary>
+      <AdditionalLibraryDirectories>$(OutDir)/lib</AdditionalLibraryDirectories>
+      <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
+      <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <AdditionalDependencies>
+      </AdditionalDependencies>
+      <DelayLoadDLLs>
+      </DelayLoadDLLs>
+    </Link>
+    <Midl>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <TypeLibraryName>$(OutDir)inc\$(TargetName).tlb</TypeLibraryName>
+    </Midl>
+    <ResourceCompile>
+      <Culture>0x0409</Culture>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>.;$(OutDir)inc;$(IntDir);%(AdditionalIncludeDirectories);../inc</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>
+      </Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\el\comp\json-writer.cpp" />
-    <ClCompile Include="..\..\el\crypto\bloom-filter.cpp" />
-    <ClCompile Include="..\..\el\crypto\ext-openssl.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\el\crypto\merkle-tree.cpp" />
-    <ClCompile Include="..\..\el\db\bdb.cpp" />
-    <ClCompile Include="..\..\el\db\ext-sqlite.cpp" />
-    <ClCompile Include="..\..\el\elwin\dllmodul.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\el\inet\irc-client.cpp" />
     <ClCompile Include="..\..\el\comp\stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">Create</PrecompiledHeader>
@@ -587,154 +534,51 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">el/ext.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">el/ext.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">el/ext.h</PrecompiledHeaderFile>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </ForcedIncludeFiles>
+      <ForcedIncludeFiles Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">
+      </ForcedIncludeFiles>
     </ClCompile>
-    <ClCompile Include="..\..\el\crypto\ecdsa.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">false</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="..\..\el\db\bdb-reader.cpp" />
-    <ClCompile Include="..\..\el\inet\proxy-client.cpp" />
-    <ClCompile Include="..\..\el\inet\proxy.cpp" />
-    <ClCompile Include="..\..\el\num\mod.cpp" />
-    <ClCompile Include="..\..\el\num\num.cpp" />
-    <ClCompile Include="..\..\el\xml\xml-dom.cpp" />
-    <ClCompile Include="..\..\el\xml\xml-node-reader.cpp" />
-    <ClCompile Include="..\..\el\xml\xml-reader.cpp" />
-    <ClCompile Include="..\..\el\xml\xml-writer.cpp" />
-    <ClCompile Include="..\..\el\inet\detect-global-ip.cpp" />
-    <ClCompile Include="..\..\el\inet\p2p-net.cpp" />
-    <ClCompile Include="..\..\el\inet\p2p-peers.cpp" />
-    <ClCompile Include="backend-dblite.cpp" />
-    <ClCompile Include="backend-sqlite.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="bootstrap.cpp" />
-    <ClCompile Include="buggy-aes.cpp" />
-    <ClCompile Include="currency\bitcoin.cpp" />
-    <ClCompile Include="block.cpp" />
-    <ClCompile Include="coin-com.cpp" />
-    <ClCompile Include="coin-model.cpp" />
-    <ClCompile Include="coin-protocol.cpp" />
-    <ClCompile Include="coindb.cpp" />
-    <ClCompile Include="coineng.cpp" />
-    <ClCompile Include="coinrpc.cpp" />
-    <ClCompile Include="crypter.cpp" />
-    <ClCompile Include="currency\dogecoin.cpp" />
-    <ClCompile Include="currency\earthcoin.cpp" />
-    <ClCompile Include="currency\groestlcoin.cpp" />
-    <ClCompile Include="currency\ixcoin.cpp" />
-    <ClCompile Include="currency\litecoin.cpp" />
-    <ClCompile Include="currency\maxcoin.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="currency\metiscoin.cpp" />
-    <ClCompile Include="currency\protoshares.cpp" />
-    <ClCompile Include="currency\devcoin.cpp" />
-    <ClCompile Include="currency\feathercoin.cpp" />
-    <ClCompile Include="generate.cpp" />
-    <ClCompile Include="import-export-bdb.cpp" />
-    <ClCompile Include="import-export.cpp" />
-    <ClCompile Include="irc.cpp" />
-    <ClCompile Include="currency\namecoin.cpp" />
-    <ClCompile Include="currency\novacoin.cpp" />
-    <ClCompile Include="mempool.cpp" />
-    <ClCompile Include="currency\ppcoin.cpp" />
-    <ClCompile Include="currency\primecoin.cpp" />
-    <ClCompile Include="proof-of-stake.cpp" />
-    <ClCompile Include="reorganize.cpp" />
-    <ClCompile Include="script.cpp" />
-    <ClCompile Include="currency\terracoin.cpp" />
-    <ClCompile Include="tx.cpp" />
-    <ClCompile Include="wallet.cpp" />
+    <ClCompile Include="..\..\el\win\policy.cpp" />
+    <ClCompile Include="..\..\el\win\secdesc.cpp" />
+    <ClCompile Include="b-tree.cpp" />
+    <ClCompile Include="cursor.cpp" />
+    <ClCompile Include="dblite.cpp" />
+    <ClCompile Include="filet.cpp" />
+    <ClCompile Include="hash-table.cpp" />
+    <ClCompile Include="pager-buffer.cpp" />
+    <ClCompile Include="pager-mmap.cpp" />
+    <ClCompile Include="pager.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\el\crypto\bloom-filter.h" />
-    <ClInclude Include="..\..\el\crypto\hash.h" />
-    <ClInclude Include="..\..\el\db\ext-sqlite.h" />
-    <ClInclude Include="..\..\el\inet\irc-client.h" />
-    <ClInclude Include="..\..\el\crypto\ecdsa.h" />
-    <ClInclude Include="..\..\el\num\mod.h" />
-    <ClInclude Include="..\..\el\num\num.h" />
-    <ClInclude Include="..\..\el\inet\p2p-net.h" />
-    <ClInclude Include="..\..\el\inet\p2p-peers.h" />
-    <ClInclude Include="backend-dblite.h" />
-    <ClInclude Include="backend-sqlite.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="buggy-aes.h" />
-    <ClInclude Include="coin-model.h" />
-    <ClInclude Include="coin-protocol.h" />
-    <ClInclude Include="coinrpc.h" />
-    <ClInclude Include="crypter.h" />
-    <ClInclude Include="eng.h" />
+    <ClInclude Include="b-tree.h" />
+    <ClInclude Include="dblite-file-format.h" />
+    <ClInclude Include="dblite.h" />
+    <ClInclude Include="filet.h" />
     <ClInclude Include="file_config.h" />
-    <ClInclude Include="irc.h" />
-    <ClInclude Include="currency\namecoin.h" />
-    <ClInclude Include="param.h" />
-    <ClInclude Include="proof-of-stake.h" />
+    <ClInclude Include="hash-table.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="script.h" />
-    <ClInclude Include="..\util\util.h" />
-    <ClInclude Include="wallet.h" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="coineng.rc" />
+    <ResourceCompile Include="dblite.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="coineng-64.def">
+    <None Include="dblite-64.def">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">true</ExcludedFromBuild>
     </None>
-    <None Include="coineng.def">
+    <None Include="dblite.def">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">true</ExcludedFromBuild>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Midl Include="coin-com.idl">
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(OutDir)\inc</OutputDirectory>
-      <OutputDirectory Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">$(OutDir)\inc</OutputDirectory>
-    </Midl>
-  </ItemGroup>
-  <ItemGroup>
-    <Xml Include="coin-chains.xml" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

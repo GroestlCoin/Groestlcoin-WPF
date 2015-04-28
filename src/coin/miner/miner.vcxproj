@@ -41,7 +41,6 @@
     <VCTargetsPath Condition="'$(VCTargetsPath11)' != '' and '$(VSVersion)' == '' and $(VisualStudioVersion) == ''">$(VCTargetsPath11)</VCTargetsPath>
   </PropertyGroup>
   <Import Project="..\..\cfg\vs\vs-ver.props" />
-  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
     <UseOfMfc>Dynamic</UseOfMfc>
@@ -160,19 +159,15 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">
     <TargetName>coin-miner</TargetName>
-    <CustomBuildBeforeTargets>BuildGenerateSources</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">
     <TargetName>coin-miner</TargetName>
-    <CustomBuildBeforeTargets>BuildGenerateSources</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">
     <TargetName>coin-miner</TargetName>
-    <CustomBuildBeforeTargets>BuildGenerateSources</CustomBuildBeforeTargets>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">
     <TargetName>coin-miner</TargetName>
-    <CustomBuildBeforeTargets>BuildGenerateSources</CustomBuildBeforeTargets>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -295,16 +290,16 @@
       </Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(OutDir)\inc
-mkdir $(OutDir)\inc\miner
-copy $(SRCDIR)\coin\util\coin-msg.mc  + $(SRCDIR)\el\libext\ext_messages.mc  $(OutDir)\inc\miner_msg.mc
-mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
+      <Command>
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(OutDir)\inc\miner_msg.h</Outputs>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>$(SRCDIR)\coin\util\coin-msg.mc; $(SRCDIR)\el\libext\ext_messages.mc</Inputs>
+      <Inputs>
+      </Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -414,16 +409,16 @@ mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
       </Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(OutDir)\inc
-mkdir $(OutDir)\inc\miner
-copy $(SRCDIR)\coin\util\coin-msg.mc  + $(SRCDIR)\el\libext\ext_messages.mc  $(OutDir)\inc\miner_msg.mc
-mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
+      <Command>
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(OutDir)\inc\miner_msg.h</Outputs>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>$(SRCDIR)\coin\util\coin-msg.mc; $(SRCDIR)\el\libext\ext_messages.mc</Inputs>
+      <Inputs>
+      </Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -536,16 +531,16 @@ mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
       </Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(OutDir)\inc
-mkdir $(OutDir)\inc\miner
-copy $(SRCDIR)\coin\util\coin-msg.mc  + $(SRCDIR)\el\libext\ext_messages.mc  $(OutDir)\inc\miner_msg.mc
-mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
+      <Command>
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(OutDir)\inc\miner_msg.h</Outputs>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>$(SRCDIR)\coin\util\coin-msg.mc; $(SRCDIR)\el\libext\ext_messages.mc</Inputs>
+      <Inputs>
+      </Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -648,16 +643,16 @@ mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
       </Command>
     </PreBuildEvent>
     <CustomBuildStep>
-      <Command>mkdir $(OutDir)\inc
-mkdir $(OutDir)\inc\miner
-copy $(SRCDIR)\coin\util\coin-msg.mc  + $(SRCDIR)\el\libext\ext_messages.mc  $(OutDir)\inc\miner_msg.mc
-mc -h $(OutDir)\inc -r $(OutDir)\inc\miner $(OutDir)\inc\miner_msg.mc</Command>
+      <Command>
+      </Command>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Outputs>$(OutDir)\inc\miner_msg.h</Outputs>
+      <Outputs>
+      </Outputs>
     </CustomBuildStep>
     <CustomBuildStep>
-      <Inputs>$(SRCDIR)\coin\util\coin-msg.mc; $(SRCDIR)\el\libext\ext_messages.mc</Inputs>
+      <Inputs>
+      </Inputs>
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>

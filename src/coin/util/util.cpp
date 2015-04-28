@@ -1,3 +1,8 @@
+/*######   Copyright (c) 2011-2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
+#                                                                                                                                     #
+# 		See LICENSE for licensing information                                                                                         #
+#####################################################################################################################################*/
+
 #include <el/ext.h>
 
 #include <el/crypto/hash.h>
@@ -6,14 +11,6 @@ using namespace Crypto;
 #include "util.h"
 
 namespace Coin {
-
-#ifdef _AFXDLL
-static struct CCoinutilInit {
-	CCoinutilInit() {
-		CMessageProcessor::RegisterModule((DWORD)E_COIN_BASE, (DWORD)E_COIN_UPPER, VER_INTERNALNAME_STR);
-	}
-} s_coinutilInit;
-#endif
 
 static const uint32_t s_sha256_hinit[8] = {
 	0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
@@ -57,6 +54,8 @@ HashAlgo StringToAlgo(RCString s) {
 		return HashAlgo::SCrypt;
 	else if (ua == "NEOSCRYPT")
 		return HashAlgo::NeoSCrypt;
+	else if (ua == "GROESTL")
+		return HashAlgo::Groestl;
 	else if (ua == "PRIME")
    		return HashAlgo::Prime;
    	else if (ua == "MOMENTUM")
@@ -67,6 +66,22 @@ HashAlgo StringToAlgo(RCString s) {
    		return HashAlgo::Metis;
    	else
    		throw Exception(E_INVALIDARG, "Unknown hashing algorithm "+s);
+}
+
+String AlgoToString(HashAlgo algo) {
+	switch (algo) {
+	case HashAlgo::Sha256:		return "SHA256";
+	case HashAlgo::Sha3:		return "SHA3";
+	case HashAlgo::SCrypt:		return "SCrypt";
+	case HashAlgo::NeoSCrypt:	return "NeoSCrypt";
+	case HashAlgo::Groestl:		return "Groestl";
+	case HashAlgo::Prime:		return "Prime";
+	case HashAlgo::Momentum:	return "Momentum";
+	case HashAlgo::Solid:		return "Solid";
+	case HashAlgo::Metis:		return "Metis";
+	default:
+		throw Exception(E_INVALIDARG, "Unknown hashing algorithm " + Convert::ToString((int)algo));
+	}
 }
 
 void BitsToTargetBE(uint32_t bits, byte target[32]) {
@@ -120,6 +135,7 @@ HashValue HashValue::FromShareDifficulty(double difficulty, HashAlgo algo) {
 		memcpy(r.data()+23, &(leTarget = htole(uint64_t(0x00FFFF0000000000ULL / difficulty))), 8);
 		break;
 	case HashAlgo::Metis:
+	case HashAlgo::Groestl:
 		memcpy(r.data()+22, &(leTarget = htole(uint64_t(0x00FFFF0000000000ULL / difficulty))), 8);
 		break;
 	default:
@@ -207,24 +223,21 @@ void CoinSerialized::WriteString(BinaryWriter& wr, RCString s) {
 	wr.Write(p, len);
 }
 
+Blob CoinSerialized::ReadBlob(const BinaryReader& rd) {
+	size_t size = (size_t)ReadVarInt(rd);
+	if (size > 100000000)	//!!!
+		Throw(ExtErr::Protocol_Violation);
+	return rd.ReadBytes(size);
+}
+
 String CoinSerialized::ReadString(const BinaryReader& rd) {
-	Blob blob(0, (size_t)ReadVarInt(rd));
-	rd.Read(blob.data(), blob.Size);
+	Blob blob = ReadBlob(rd);
 	return String((const char*)blob.constData(), blob.Size);
 }
 
 void CoinSerialized::WriteBlob(BinaryWriter& wr, const ConstBuf& mb) {
 	WriteVarInt(wr, mb.Size);
 	wr.Write(mb.P, mb.Size);
-}
-
-Blob CoinSerialized::ReadBlob(const BinaryReader& rd) {
-	size_t size = (size_t)ReadVarInt(rd);
-	if (size > 100000000)	//!!!
-		Throw(E_EXT_Protocol_Violation);
-	Blob r(0, size);
-	rd.Read(r.data(), r.Size);
-	return r;
 }
 
 void BlockBase::WriteHeader(BinaryWriter& wr) const {
@@ -239,7 +252,7 @@ HashValue BlockBase::GetHash() const {
 
 Blob Swab32(const ConstBuf& buf) {
 	if (buf.Size % 4)
-		Throw(E_INVALIDARG);
+		Throw(errc::invalid_argument);
 	Blob r(buf);
 	uint32_t *p = (uint32_t*)r.data();
 	for (int i=0; i<buf.Size/4; ++i)
@@ -339,6 +352,10 @@ HashValue HasherEng::HashBuf(const ConstBuf& cbuf) {
 	return ConstBuf(sha.ComputeHash(sha.ComputeHash(cbuf)));
 }
 
+HashValue HasherEng::HashForAddress(const ConstBuf& cbuf) {
+	return HashBuf(cbuf);
+}
+
 CHasherEngThreadKeeper::CHasherEngThreadKeeper(HasherEng *cur) {
 	m_prev = t_pHasherEng;
 	t_pHasherEng = cur;
@@ -352,38 +369,6 @@ HashValue Hash(const ConstBuf& mb) {
 	return HasherEng::GetCurrent()->HashBuf(mb);
 }
 
-static class CoinCategory : public error_category {
-	typedef error_category base;
-
-	const char *name() const noexcept override { return "Coin"; }
-
-	string message(int errval) const override {
-		return HResultToMessage(E_COIN_BASE + errval).c_str();
-	}
-} s_coin_category;
-
-const error_category& coin_category() {
-	return s_coin_category;
-}
-
-static const char * const s_reasons[] = {
-	"bad-cb-flag", "bad-cb-length", "bad-cb-prefix", "bad-diffbits", "bad-prevblk", "bad-txnmrklroot", "bad-txns", "bad-version", "duplicate", "high-hash", "rejected", "stale-prevblk", "stale-work",
-	"time-invalid", "time-too-new", "time-too-old", "unknown-user", "unknown-work"
-};
-
-void ThrowRejectionError(RCString reason) {
-	for (int i=0; i<size(s_reasons); ++i)
-		if (s_reasons[i] == reason)
-			Throw(E_COIN_MINER_BAD_CB_FLAG+i);
-	Throw(E_FAIL);
-}
-
-int SubmitRejectionCode(RCString rej) {
-	for (int i=0; i<size(s_reasons); ++i)
-		if (s_reasons[i] == rej)
-			return (E_COIN_MINER_BAD_CB_FLAG & 0xFFFF) + i;
-	return E_COIN_MINER_REJECTED & 0xFFFF;
-}
 
 
 } // Coin::

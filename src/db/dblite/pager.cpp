@@ -1,3 +1,8 @@
+/*######   Copyright (c) 2014-2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
+#                                                                                                                                     #
+# 		See LICENSE for licensing information                                                                                         #
+#####################################################################################################################################*/
+
 #include <el/ext.h>
 
 #include "dblite.h"
@@ -266,12 +271,12 @@ void KVStorage::Open(const path& filepath) {
 	DbHeader& header = DbHeaderRef();
 	DbFile.Read(&header, HeaderSize);							//!!! SectorSize
 	if (memcmp(header.Magic, s_Magic, strlen(s_Magic)))
-		Throw(E_EXT_DB_Corrupt);
+		Throw(ExtErr::DB_Corrupt);
 	uint32_t ver = letoh(header.Version);
 	if (ver > UDB_VERSION)
-		Throw(E_EXT_DB_Version);
+		Throw(ExtErr::DB_Version);
 	if (ver < COMPATIBLE_UDB_VERSION)		//!!!
-		Throw(E_EXT_IncompatibleFileVersion);
+		Throw(ExtErr::IncompatibleFileVersion);
 	AppName = header.AppName;
 	uint32_t uver = header.UserVersion;
 	UserVersion = Version(uver>>16, uver & 0xFFFF);
@@ -284,7 +289,7 @@ void KVStorage::Open(const path& filepath) {
 	SetPageSize(header.PageSize==1 ? 65536 : int(header.PageSize));
 	PageCount = header.PageCount;
 	if (FileLength < uint64_t(PageCount)*PageSize)
-		Throw(E_EXT_DB_Corrupt);
+		Throw(ExtErr::DB_Corrupt);
 
 	FileIncrement = max((unsigned long long)FileIncrement, (1ULL << (BitOps::ScanReverse(FileLength)-1))/2);
 
@@ -305,7 +310,7 @@ void KVStorage::Open(const path& filepath) {
 #endif
 	for (uint32_t pgno=header.FreePagePoolList; pgno; ) {
 		if (pgno >= PageCount)
-			Throw(E_EXT_DB_Corrupt);
+			Throw(ExtErr::DB_Corrupt);
 		Page page = OpenPage(pgno);
 		m_nextFreePages.insert(pgno);
 		BeUInt32 *p = (BeUInt32*)page.get_Address();
@@ -313,17 +318,17 @@ void KVStorage::Open(const path& filepath) {
 		for (BeUInt32 *q=p+1, *e=&p[PageSize/4]; q!=e; ++q) {
 			if (uint32_t pn = *q) {
 				if (!FreePages.insert(pn).second)
-					Throw(E_EXT_DB_Corrupt);
+					Throw(ExtErr::DB_Corrupt);
 			} else if (pgno) {
 #ifdef _DEBUG
-				Throw(E_EXT_DB_Corrupt);		// compatibility with old DBLite versions
+				Throw(ExtErr::DB_Corrupt);		// compatibility with old DBLite versions
 #endif
 			}
 		}
 	}
 	EXT_FOR (uint32_t pgno, FreePages) {
 		if (pgno >= PageCount)
-			Throw(E_EXT_DB_Corrupt);
+			Throw(ExtErr::DB_Corrupt);
 	}
 
 #if UCFG_DB_FREE_PAGES_BITSET
@@ -536,7 +541,7 @@ Page KVStorage::OpenPage(uint32_t pgno, bool bAlloc) {
 
 	EXT_LOCK (MtxViews) {
 		if (pgno >= OpenedPages.size())
-			Throw(E_EXT_DB_Corrupt);
+			Throw(ExtErr::DB_Corrupt);
 
 		if (po = OpenedPages[pgno]) {
 			po->Live = true;
@@ -639,7 +644,7 @@ uint32_t KVStorage::TryAllocateMappedFreePage() {
 							return j;
 						}
 					}
-					Throw(E_EXT_CodeNotReachable);
+					Throw(ExtErr::CodeNotReachable);
 				}
 			}
 #else
@@ -876,6 +881,13 @@ DbTransaction::~DbTransaction() {
 	//Tables.clear();			// explicit to be in scope of t_pKVStorage 
 }
 
+void DbTransaction::FreePage(uint32_t pgno) {
+	if (AllocatedPages.erase(pgno)) {
+		EXT_LOCKED(Storage.MtxFreePages, Storage.FreePage(pgno));
+	} else
+		ReleasedPages.insert(pgno);
+}
+
 Page DbTransaction::Allocate(PageAlloc pa, Page *pCopyFrom) {
 	Page r = Storage.Allocate();
 	r.ClearEntries(); //!!!?
@@ -913,13 +925,6 @@ Page DbTransaction::OpenPage(uint32_t pgno) {
 			MemoryMappedView::Protect(r.m_pimpl->GetAddress(), Storage.PageSize, MemoryMappedFileAccess::ReadWrite);
 	}
 	return r;	
-}
-
-void DbTransaction::FreePage(uint32_t pgno) {
-	if (AllocatedPages.erase(pgno)) {
-		EXT_LOCKED(Storage.MtxFreePages, Storage.FreePage(pgno));
-	} else
-		ReleasedPages.insert(pgno);
 }
 
 vector<uint32_t> DbTransaction::AllocatePages(int n) {
@@ -975,7 +980,7 @@ void DbTransaction::Commit() {
 
 		if (m_bError) {
 			Rollback();
-			Throw(E_EXT_DB_InternalError);
+			Throw(ExtErr::DB_InternalError);
 		}
 
 		for (CTables::iterator it=Tables.begin(), e=Tables.end(); it!=e; ++it) {
