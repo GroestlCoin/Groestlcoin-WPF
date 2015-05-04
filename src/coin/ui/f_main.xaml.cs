@@ -52,6 +52,7 @@ namespace Coin {
 
 		Dictionary<ITransaction, object> AllTxes = new Dictionary<ITransaction, object>();
 		Dictionary<IWallet, WalletForms> m_wallet2forms = new Dictionary<IWallet, WalletForms>();
+		WalletForms TheWallet;
 		Dictionary<string, int> AllAlerts = new Dictionary<string, int>();
 
 		public static RegistryKey UserAppRegistryKey {
@@ -213,6 +214,7 @@ namespace Coin {
 				mi.Checked += Currency_CheckChanged;
 				mi.Unchecked += Currency_CheckChanged; */
 				m_wallet2forms[wallet] = wf;
+				TheWallet = wf;
 
 				EEngMode mode = EEngMode.Normal;
                 var sk = UserAppRegistryKey.OpenSubKey(wf.Wallet.CurrencySymbol);
@@ -268,6 +270,7 @@ namespace Coin {
 			foreach (var pp in AllTxes)				//!!!?
 				Marshal.FinalReleaseComObject(pp.Key);
 			AllTxes.Clear();
+			TheWallet = null;
 			while (m_wallet2forms.Count > 0) {
 				IWallet w = null;
 				foreach (var de in m_wallet2forms) {
@@ -317,7 +320,7 @@ namespace Coin {
 		}
 
 		WalletForms SelectedWallet() {
-			return (WalletForms)LvWallet.SelectedItem;
+			return TheWallet;
 		}
 
 		WalletForms SelectedWalletNotNull() {
