@@ -36,11 +36,8 @@ namespace Coin {
 		public static FormMain I;
 		CultureInfo CultureInfo = (CultureInfo)Thread.CurrentThread.CurrentCulture.Clone();
 
-        ControlTemplate menuTemplate;
-
 		public FormMain() {
 			InitializeComponent();
-            menuTemplate = (ControlTemplate)FindResource("currencyMenu");
 
 			I = this;
 			CultureInfo.NumberFormat = (NumberFormatInfo)CultureInfo.NumberFormat.Clone();
@@ -202,17 +199,6 @@ namespace Coin {
 
 				var wf = new WalletForms();
 				wf.Wallet = wallet;
-				/*
-                MenuItem mi = new MenuItem();
-                wf.MenuItem = mi;
-				mi.Header = string.Format("{0}  {1}", wallet.CurrencySymbol, currencyName);
-                mi.Icon = new Image() { Source = new BitmapImage(new Uri(String.Format("images/{0}.ico", currencyName), UriKind.Relative)) };
-				menuCurrency.Items.Add(mi);
-                mi.Template = menuTemplate;
-				mi.IsCheckable = true;
-				mi.Tag = wf;
-				mi.Checked += Currency_CheckChanged;
-				mi.Unchecked += Currency_CheckChanged; */
 				m_wallet2forms[wallet] = wf;
 				TheWallet = wf;
 
@@ -227,6 +213,7 @@ namespace Coin {
 				}
 				wallet.Mode = mode;
 			}
+			AddWalletToList(TheWallet);
 
 			timer1.Tick += (s, e1) => {
 				bool b = false;
@@ -237,19 +224,10 @@ namespace Coin {
 			};
 			timer1.Start();
 
-			List<WalletForms> ar = new List<WalletForms>();
-			foreach (var pp in m_wallet2forms)
-				if (pp.Key.CurrencyName == "GRS") {
-					ar.Add(pp.Value);
-					break;
-				}
 			m_Loaded = true;
 			UpdateView();
 			CheckForCommands();
 			RegisterUriHandler();
-
-			
-//			OnFileImport(null, null);//!!!D
 		}
 
 		public bool EnsurePassphraseUnlock() {
