@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.22609.0
+VisualStudioVersion = 14.0.22823.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "miner", "src\coin\miner\miner.vcxproj", "{172C68FB-4B34-4E24-CD7A-1D4561434F64}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -35,8 +35,6 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "cryp", "src\crypto\cryp\cry
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "groestlcoin-wpf", "src\coin\ui\groestlcoin-wpf.csproj", "{2AA40339-73FA-4440-9A35-2A458E9CBC0B}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotifyIconWpf", "foreign\m-comp\notify-icon\NotifyIconWpf.csproj", "{7AC63864-7638-41C4-969C-D3197EF2BED9}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "tor", "foreign\tor\tor.vcxproj", "{9A6FD577-13D0-4BA1-A562-9FB18B900BC5}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -210,26 +208,6 @@ Global
 		{2AA40339-73FA-4440-9A35-2A458E9CBC0B}.Release|x64.Build.0 = R_St|x64
 		{2AA40339-73FA-4440-9A35-2A458E9CBC0B}.Release|x86.ActiveCfg = R_St|x86
 		{2AA40339-73FA-4440-9A35-2A458E9CBC0B}.Release|x86.Build.0 = R_St|x86
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.D_St|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.D_St|Any CPU.Build.0 = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.D_St|x64.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.D_St|x86.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|x64.Build.0 = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Debug|x86.Build.0 = Debug|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.R_St|Any CPU.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.R_St|Any CPU.Build.0 = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.R_St|x64.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.R_St|x86.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|x64.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|x64.Build.0 = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|x86.ActiveCfg = Release|Any CPU
-		{7AC63864-7638-41C4-969C-D3197EF2BED9}.Release|x86.Build.0 = Release|Any CPU
 		{9A6FD577-13D0-4BA1-A562-9FB18B900BC5}.D_St|Any CPU.ActiveCfg = D_St|Win32
 		{9A6FD577-13D0-4BA1-A562-9FB18B900BC5}.D_St|x64.ActiveCfg = D_St|x64
 		{9A6FD577-13D0-4BA1-A562-9FB18B900BC5}.D_St|x86.ActiveCfg = D_St|Win32
