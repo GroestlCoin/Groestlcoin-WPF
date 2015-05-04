@@ -126,28 +126,6 @@ namespace Coin {
 
 		bool m_Loaded;
 
-		void SaveActiveCurrencies() {
-			var list = new List<string>();
-			foreach (var w in Eng.Wallets)
-				if (w.Enabled)
-					list.Add(w.CurrencyName + (w.MiningEnabled ? " Mining" : ""));
-			UserAppRegistryKey.SetValue("ActiveCurrencies", list.ToArray());
-		}
-
-
-		void Currency_CheckChanged(object s, RoutedEventArgs e) {
-			var wf1 = (WalletForms)((MenuItem)s).Tag;
-			if (wf1.MenuItem.IsChecked) {
-				AddWalletToList(wf1);
-			} else {
-				wf1.Wallet.Enabled = false;
-				ActiveWalletForms.Remove(wf1);
-				//						LvWallet.ItemsSource = ActiveWalletForms;
-				wf1.Free();
-			}
-			if (m_Loaded)
-				SaveActiveCurrencies();
-		}
 
 
 		DispatcherTimer timer1 = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
@@ -223,6 +201,7 @@ namespace Coin {
 
 				var wf = new WalletForms();
 				wf.Wallet = wallet;
+				/*
                 MenuItem mi = new MenuItem();
                 wf.MenuItem = mi;
 				mi.Header = string.Format("{0}  {1}", wallet.CurrencySymbol, currencyName);
@@ -232,10 +211,10 @@ namespace Coin {
 				mi.IsCheckable = true;
 				mi.Tag = wf;
 				mi.Checked += Currency_CheckChanged;
-				mi.Unchecked += Currency_CheckChanged;
+				mi.Unchecked += Currency_CheckChanged; */
 				m_wallet2forms[wallet] = wf;
 
-				EEngMode mode = wallet.CurrencySymbol == "BTC" ? EEngMode.Bootstrap : EEngMode.Normal;
+				EEngMode mode = EEngMode.Normal;
                 var sk = UserAppRegistryKey.OpenSubKey(wf.Wallet.CurrencySymbol);
 				if (sk != null) {
 					switch ((string)sk.GetValue("DBMode")) {
@@ -255,41 +234,13 @@ namespace Coin {
 					UpdateView();
 			};
 			timer1.Start();
+
 			List<WalletForms> ar = new List<WalletForms>();
-			var obj = UserAppRegistryKey.GetValue("ActiveCurrencies", null);
-			if (obj == null) {
-				ar = (from de in m_wallet2forms select de.Value).Take(2).ToList();
-				//!!!R				foreach (var de in m_wallet2forms)
-				//!!!R					ar.Add(de.Value);
-			} else {
-				foreach (var s in (string[])obj) {
-					string[] ss = s.Split();
-					string name = ss[0];
-					try {
-						WalletForms wf = null;
-						foreach (var pp in m_wallet2forms)
-							if (pp.Key.CurrencyName == name) {
-								wf = pp.Value;
-								break;
-							}
-						if (wf != null) {
-							wf.MiningEnabled = false;
-							foreach (var subs in ss) {
-								//!!! wf.MiningEnabled |= subs == "Mining";  // CRASH danger when Mining on Start
-							}
-							ar.Add(wf);
-						}
-					} catch (Exception) {
-					}
+			foreach (var pp in m_wallet2forms)
+				if (pp.Key.CurrencyName == "GRS") {
+					ar.Add(pp.Value);
+					break;
 				}
-			}
-			foreach (var wf in ar) {
-				try {
-					wf.MenuItem.IsChecked = true;
-				} catch (Exception ex) {
-					MessageBox.Show(ex.Message, "Coin", MessageBoxButton.OK, MessageBoxImage.Error);
-				}
-			}
 			m_Loaded = true;
 			UpdateView();
 			CheckForCommands();
@@ -597,7 +548,6 @@ namespace Coin {
 		}
 
 		private void menuMining_Checked(object sender, RoutedEventArgs e) {
-			SaveActiveCurrencies();
 		}
 
 		private void OnChangeWalletPassword(object sender, RoutedEventArgs e) {

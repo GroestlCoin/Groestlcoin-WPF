@@ -3,7 +3,7 @@
 	    xmlns:k="clr-namespace:Coin" 		
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification"
-        Title="Ufasoft Coin" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="coin.ico" Closing="Window_Closing">
+        Title="Ufasoft GroestlCoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="coin.ico" Closing="Window_Closing">
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top">
@@ -16,8 +16,6 @@
                     <Separator/>
                     <MenuItem Header="E_xit" Click="OnFileExit" />
                 </MenuItem>
-			    <MenuItem Header="_Currency" Name="menuCurrency">
-			    </MenuItem>
 			    <MenuItem Header="_Tools">
                     <MenuItem Header="_Rescan" Click="OnToolsRescan"/>
 				    <MenuItem Header="Change Wallet _Password..." Click="OnChangeWalletPassword"/>
@@ -107,54 +105,6 @@
             </GradientBrush.GradientStops>
         </LinearGradientBrush>
         <SolidColorBrush x:Key="GlyphBrush" Color="#444" />
-
-        <ControlTemplate x:Key="currencyMenu" TargetType="MenuItem">
-            <Border Name="Border" >
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto" SharedSizeGroup="Check"/>
-                        <ColumnDefinition Width="Auto" SharedSizeGroup="Icon"/>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="Auto" SharedSizeGroup="Shortcut"/>
-                        <ColumnDefinition Width="13"/>
-                    </Grid.ColumnDefinitions>
-                        <Path 
-                          Name="CheckMark"
-                          Width="9" Height="11" 
-                          Visibility="Hidden" 
-                          SnapsToDevicePixels="False" 
-                          Stroke="{StaticResource GlyphBrush}"
-                           StrokeThickness="2"
-                          Data="M 2,4 C 2,4 3,5 5,13 C 5,13 5,3 12,0" />
-                    <ContentPresenter Name="Icon" Grid.Column="1" Width="16" Height="16" Margin="6,0,6,0" VerticalAlignment="Center" ContentSource="Icon"/>
-                    <ContentPresenter 
-                        Name="HeaderHost"
-                        Grid.Column="2"
-                        ContentSource="Header"
-                        RecognizesAccessKey="True"/>
-                                    <TextBlock x:Name="InputGestureText"
-                        Grid.Column="2"
-                        Text="{TemplateBinding InputGestureText}"
-                        Margin="5,2,0,2"
-                           DockPanel.Dock="Right" />
-                            </Grid>
-                      </Border>
-            <ControlTemplate.Triggers>
-                <Trigger Property="Icon" Value="{x:Null}">
-                    <Setter TargetName="Icon" Property="Visibility" Value="Hidden"/>
-                </Trigger>
-                <Trigger Property="IsChecked" Value="true">
-                    <Setter TargetName="CheckMark" Property="Visibility" Value="Visible"/>
-                </Trigger>
-                <Trigger Property="IsHighlighted" Value="true">
-                    <Setter TargetName="Border" Property="Background"
-                        Value="{StaticResource SelectedBackgroundBrush}"/>
-                </Trigger>
-                <Trigger Property="IsEnabled" Value="false">
-                    <Setter Property="Foreground" Value="{StaticResource DisabledForegroundBrush}"/>
-                </Trigger>
-            </ControlTemplate.Triggers>
-        </ControlTemplate>
 
     </Window.Resources>
 </Window>

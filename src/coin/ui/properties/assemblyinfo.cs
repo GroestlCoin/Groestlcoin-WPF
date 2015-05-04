@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Windows;
 
 [assembly: AssemblyTitle("Coin")]
-[assembly: AssemblyDescription("Ufasoft Coin client")]
+[assembly: AssemblyDescription("Ufasoft GroestlCoin-WPF Wallet")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Ufasoft")]
 [assembly: AssemblyProduct("Coin")]
