@@ -11,6 +11,7 @@ msbuild groestlcoin.sln /p:Configuration=R_St,Platform=x64
 
 Miner Command-Line Manual
 =========================
+<pre>
 groestlcoin-miner {-options}
   Options:
     -a groestlcoin |<seconds>   hashing algorithm (groestl), or time between getwork requests 1..60, default 15
@@ -28,7 +29,7 @@ groestlcoin-miner {-options}
 
 Example:
   groestlcoin-miner  -t 2  -o stratum+tcp://FtPdckbQRiP1XhNkL78s1LmJBhzYhkZL8V:1@erebor.dwarfpool.com:3345
-
+</pre>
 
 ========================
 This software is free and open source.
