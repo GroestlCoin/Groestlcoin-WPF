@@ -1,43 +1,30 @@
-Groestlcoin WPF Client and Miner
+Groestlcoin WPF Wallet and Miner
 
-Miner Manual
-=======================
-coin-miner {-options}
+Build for Windows by Visual Studio 2015 or 2013 instructions
+============================================================
+git clone https://github.com/GroestlCoin/Groestlcoin-WPF --recursive
+
+msbuild groestlcoin.sln /p:Configuration=R_St,Platform=x86
+  or
+msbuild groestlcoin.sln /p:Configuration=R_St,Platform=x64
+
+
+Miner Command-Line Manual
+=========================
+groestlcoin-miner {-options}
   Options:
     -a groestlcoin |<seconds>   hashing algorithm (groestl), or time between getwork requests 1..60, default 15
     -A user-agent       Set custom User-agent string in HTTP header, default: Ufasoft bitcoin miner
-    -g yes|no           set 'no' to disable GPU, default 'yes'
     -h                  this help
-    -i index|name       select device from Device List, can be used multiple times, default - all devices
-    -I intensity        Intensity of GPU usage [-10..10], default 0
     -l yes|no           set \'no\' to disable Long-Polling, default \'yes\'\n"
     -o url              in form (http | stratum+tcp | xpt+tcp)://username:password@server.tld:port/path, by default http://127.0.0.1:8332
     -t threads          Number of threads for CPU mining, 0..256, by default is number of CPUs (Cores), 0 - disable CPU mining
-    -T temperature      max temperature in Celsius degrees, default: 80
     -v                  Verbose output
     -x type=host:port   Use HTTP or SOCKS proxy. Examples: -x http=127.0.0.1:3128, -x socks=127.0.0.1:1080
 
-Build for Windows by VS 2012 instructions
-===========================================
-1. Download 3rd-party Libraries:
+Example:
+  groestlcoin-miner  -t 2  -o stratum+tcp://FtPdckbQRiP1XhNkL78s1LmJBhzYhkZL8V:1@erebor.dwarfpool.com:3345
 
-	OpenSSL			http://www.openssl.org/source/openssl-1.0.1e.tar.gz
-	SQLite			http://sqlite.org/sqlite-amalgamation-3071502.zip
-	Jansson			http://www.digip.org/jansson/releases/jansson-2.4.tar.bz2
-
-	Create .vcxproj files for them and build these LIBs
-
-	For GPU support you need:
-		AMD APP SDK									http://developer.amd.com/tools-and-sdks/heterogeneous-computing/amd-accelerated-parallel-processing-app-sdk/downloads/
-		AMD Display Library (ADL) SDK				http://developer.amd.com/tools-and-sdks/graphics-development/display-library-adl-sdk/
-		CUDA SDK for NVidia cards					https://developer.nvidia.com/cuda-downloads
-
-2.	Add directories with OpenSSL, SQLite header files to the coineng.vcxproj's  INCLUDE list.
-3.	Add direcories with built .lib files to the coineng.vcxproj's linker settings
-4.	Build coineng.vcxproj. It results to coineng.exe and coineng.tlb files.
-5.	coineng.tlb is required to build WPF UI coin.exe.
-
-To run the entire application all .exe/.dll files of used libs should be in the same directory.
 
 ========================
 This software is free and open source.
