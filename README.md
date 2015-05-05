@@ -1,4 +1,4 @@
-Groestlcoin WPF Wallet and Miner
+Groestlcoin-WPF Wallet & Command-line Miner
 
 Build for Windows by Visual Studio 2015 or 2013 instructions
 ============================================================
