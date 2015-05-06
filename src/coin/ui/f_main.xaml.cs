@@ -122,9 +122,6 @@ namespace Coin {
 //			LvWallet.ItemsSource = ActiveWalletForms;
 		}
 
-		bool m_Loaded;
-
-
 
 		DispatcherTimer timer1 = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
 
@@ -224,10 +221,9 @@ namespace Coin {
 			};
 			timer1.Start();
 
-			m_Loaded = true;
 			UpdateView();
 			CheckForCommands();
-			RegisterUriHandler();
+//			RegisterUriHandler();
 		}
 
 		public bool EnsurePassphraseUnlock() {

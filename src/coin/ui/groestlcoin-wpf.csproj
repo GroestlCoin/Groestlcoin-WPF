@@ -4,7 +4,7 @@
     <StartupObject>Coin.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\images\coin-3.ico</ApplicationIcon>
+    <ApplicationIcon>..\images\coin.ico</ApplicationIcon>
     <BaseIntermediateOutputPath>$(SolutionDir)Obj\\</BaseIntermediateOutputPath>
     <OutputPath>$(SolutionDir)$(Platform)_$(Configuration)\</OutputPath>
   </PropertyGroup>

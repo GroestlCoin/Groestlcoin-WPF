@@ -261,7 +261,7 @@
       <AdditionalOptions>/fixed:no  
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x86</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>opencl.dll;  dbghelp.dll; psapi.dll;   aticalrt.dll; aticalcl.dll; </DelayLoadDLLs>
+      <DelayLoadDLLs>opencl.dll;  dbghelp.dll; psapi.dll; </DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -387,7 +387,7 @@
       <AdditionalOptions>/fixed:no  
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x64</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>opencl.dll;  aticalrt64.dll; aticalcl64.dll;</DelayLoadDLLs>
+      <DelayLoadDLLs>opencl.dll;</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
@@ -499,7 +499,7 @@
     <Link>
       <AdditionalOptions>/DELAY:NOBIND /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x86</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>opencl.dll;  dbghelp.dll; psapi.dll;   aticalrt.dll; aticalcl.dll; </DelayLoadDLLs>
+      <DelayLoadDLLs>opencl.dll;  dbghelp.dll; psapi.dll;</DelayLoadDLLs>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
@@ -616,7 +616,7 @@
     <Link>
       <AdditionalOptions>/IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x64</AdditionalLibraryDirectories>
-      <DelayLoadDLLs>opencl.dll;  aticalrt64.dll; aticalcl64.dll;</DelayLoadDLLs>
+      <DelayLoadDLLs>opencl.dll;</DelayLoadDLLs>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
