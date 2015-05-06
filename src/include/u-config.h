@@ -103,4 +103,3 @@
 #define UCFG_COIN_MOMENTUM 0
 #define UCFG_COIN_PRIME 0
 
-
