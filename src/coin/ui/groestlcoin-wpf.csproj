@@ -272,6 +272,7 @@
   <ItemGroup>
     <Resource Include="images\litecoin.ico" />
   </ItemGroup>
+<<<<<<< HEAD:src/coin/ui/groestlcoin-wpf.csproj
   <ItemGroup>
     <Resource Include="images\groestlcoin.ico" />
   </ItemGroup>
@@ -280,6 +281,9 @@
       <Link>coin.ico</Link>
     </Resource>
   </ItemGroup>
+=======
+  <ItemGroup />
+>>>>>>> upstream/master:src/coin/ui/coin.csproj
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>editbin /LARGEADDRESSAWARE $(TargetPath)</PostBuildEvent>
