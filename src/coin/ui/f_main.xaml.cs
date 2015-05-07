@@ -100,7 +100,7 @@ namespace Coin {
 					}
 				}
 			}
-			//!!!T CtlTxes.UpdateTransactions();
+			CtlTxes.UpdateTransactions();
 		}
 
 
@@ -109,6 +109,7 @@ namespace Coin {
             AllAlerts.Clear();
 			foreach (var wf in ActiveWalletForms)
 				UpdateData(wf);
+			SetMenuDBMode();
 		}
 
 		void AddWalletToList(WalletForms wf) {
@@ -209,6 +210,8 @@ namespace Coin {
 				}
 				wallet.Mode = mode;
 			}
+			CtlTxes.WalletForms = TheWallet;
+			CtlTxes.InitLoaded();
 			AddWalletToList(TheWallet);
 
 			timer1.Tick += (s, e1) => {
@@ -221,8 +224,10 @@ namespace Coin {
 			timer1.Start();
 
 			UpdateView();
+
+
 			CheckForCommands();
-//			RegisterUriHandler();
+			//			RegisterUriHandler();
 		}
 
 		public bool EnsurePassphraseUnlock() {
@@ -297,10 +302,7 @@ namespace Coin {
 		}
 
 		WalletForms SelectedWalletNotNull() {
-			WalletForms r = (WalletForms)LvWallet.SelectedItem;
-			if (r == null)
-				throw new ApplicationException("No Currency selected in the List");
-			return r;
+			return TheWallet;
 		}
 
 		WalletForms FindWallet(string netName) {
@@ -512,14 +514,6 @@ namespace Coin {
 				wf.Wallet.CompactDatabase();
 		}
 
-		private void ContextMenu_Opened(object sender, RoutedEventArgs e) {
-			ContextMenu menu = (ContextMenu)sender;
-			var wf = SelectedWallet();
-			menu.DataContext = wf;
-			MenuDBMode.IsEnabled = wf != null;
-			if (MenuDBMode.IsEnabled)
-				SetMenuDBMode();
-		}
 
 		private void menuMining_Checked(object sender, RoutedEventArgs e) {
 		}

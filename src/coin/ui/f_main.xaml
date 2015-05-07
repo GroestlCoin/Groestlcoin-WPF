@@ -41,14 +41,6 @@
 			<TabControl >
 				<TabItem Header="Wallet" Height="22" VerticalAlignment="Bottom">
 					<ListView Name="LvWallet" MouseDoubleClick="LvWallet_MouseDoubleClick">
-						<ListView.ContextMenu>
-							<ContextMenu Opened="ContextMenu_Opened">
-
-
-								<!--							    <MenuItem Header="Mining" IsCheckable="True" IsEnabled="{Binding Path=MiningAllowed}" IsChecked="{Binding Path=MiningEnabled}" Name="menuMining" Unchecked="menuMining_Checked" Checked="menuMining_Checked" />
--->
-							</ContextMenu>
-						</ListView.ContextMenu>
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Path=Balance}" Width="80" />
@@ -60,12 +52,7 @@
 					</ListView>
 				</TabItem>
 				<TabItem Header="Transactions"  >
-					<Grid Background="#FFE5E5E5">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="121*"/>
-							<ColumnDefinition Width="529*"/>
-						</Grid.ColumnDefinitions>
-					</Grid>
+					<k:CtlTransactions x:Name="CtlTxes" />
 				</TabItem>
 				<TabItem Header="My Addresses"  >
 					<Grid Background="#FFE5E5E5">
