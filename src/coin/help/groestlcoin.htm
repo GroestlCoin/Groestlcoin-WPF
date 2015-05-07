@@ -1,0 +1,51 @@
+<html>
+<head>
+	<title>Ufasoft GroestlCoin Wallet Manual</title>
+</head>
+<body>
+
+<h1>Ufasoft GroestlCoin Wallet Manual</h1>
+
+<h2>Command line options</h2>
+<pre>
+	GroestlCoin-WPF.exe [-cancelpending]
+
+	<b>-cancelpending</b>   Cancels all penting (with 0 confirmations) transactions and returns their money to the Balance.
+
+</pre>
+
+
+
+
+<h2>Database Modes</h2>
+
+<h3>Normal mode</h3>
+	<p>Customized DBLite library format. It uses persistent HashTable with parallel transactions. Non-compatible with other wallets. </p>
+
+
+<h3>Bootstrap mode</h3>
+	<p>It is a flat, binary file containing Groestlcoin blockchain data, from the genesis block through a recent height.
+  	 All versions automatically validate and import the file "grs.bootstrap.dat" in the grs directory. 
+	Grs.bootstrap.dat is compatible with Qt wallet. Qt can boot from it. </p>
+
+<h3>SPV (Lite) mode</h3>
+	<p>SPV mode brings lightning-fast syncing with the Groestlcoin blockchain.
+	Design based on the principles of the "Simplified Payment Verification" or “SPV”
+	 system outlined in section 8 of  <a href="https://bitcoin.org/bitcoin.pdf">Satoshi’s Whitepaper</a>
+	We’ve integrated optional lite functionality within the wallet.
+	 This allows for startup configuration to determine which mode you are running (normal, bootstrap or spv mode).
+
+
+<h2>Blockchain Export</h2>
+<p>Export to bootstrap is possible from both Normal and Bootstrap.dat modes. From bootstrap mode it is simple “Copy File” operation. </p>
+
+
+</body>
+</html>
+
+
+
+
+
+
+
