@@ -96,7 +96,7 @@ namespace Coin {
 							break;
 					}
 					finally {
-//						Marshal.ReleaseComObject(addr);
+						Marshal.ReleaseComObject(addr);
 					}
 				}
 			}
@@ -233,10 +233,15 @@ namespace Coin {
 			timer1.Start();
 
 			UpdateView();
+<<<<<<< HEAD
 
 
 			CheckForCommands();
 			//			RegisterUriHandler();
+=======
+			CheckForCommands();
+//			RegisterUriHandler();
+>>>>>>> upstream/master
 		}
 
 		public bool EnsurePassphraseUnlock() {
@@ -387,9 +392,18 @@ namespace Coin {
         }
 
 		void ShowTransactions() {
+<<<<<<< HEAD
 /*			WalletForms wf = SelectedWallet();
 			if (wf.FormTransactions == null)
 				wf.FormTransactions = new FormTransactions() { WalletForms = wf };
+=======
+			WalletForms wf = SelectedWallet();
+			if (wf.FormTransactions == null) {
+				wf.FormTransactions = new FormTransactions();
+				wf.FormTransactions.CtlTxes.WalletForms = wf;
+				wf.FormTransactions.CtlTxes.InitLoaded();
+            }
+>>>>>>> upstream/master
 			wf.FormTransactions.Show();
 			wf.FormTransactions.Activate();*/
 		}
@@ -420,6 +434,17 @@ namespace Coin {
 			}				
 		}
 
+<<<<<<< HEAD
+=======
+		private void OnAddressBook(object sender, RoutedEventArgs e) {
+			WalletForms wf = SelectedWallet();
+			if (wf.FormAddressBook == null)
+				wf.FormAddressBook = new FormAddressBook(wf);
+			wf.FormAddressBook.Show();
+			wf.FormAddressBook.Activate();
+		}
+
+>>>>>>> upstream/master
 		private void OnHelpAbout(object sender, RoutedEventArgs e) {
 			var d = new GuiComp.DialogAbout();
             d.SourceCodeUri = new Uri("https://github.com/ufasoft/coin");
