@@ -442,7 +442,7 @@ namespace Coin {
 			var wf = SelectedWalletNotNull();
             var d = new OpenFileDialog();
 			d.InitialDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), wf.Wallet.CurrencyName);
-			d.Filter = "Bitcoin Wallet format|wallet.dat|All Files|*.*";
+			d.Filter = wf.Wallet.CurrencyName + " Wallet format|wallet.dat|All Files|*.*";
 			d.FileName = "wallet.dat";
 			if (Dialog.ShowDialog(d, this)) {
 				string password = "";
@@ -468,16 +468,17 @@ namespace Coin {
 					"Coin Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK) {
 				if (!EnsurePassphraseUnlock())
 					return;
+				var wf = SelectedWalletNotNull();
 				var d = new SaveFileDialog();
 				d.InitialDirectory = Eng.AppDataDirectory;
-				d.Filter = "Bitcoin Wallet format|wallet.dat|Ufasoft Coin XML|*.xml";
+				d.Filter = wf.Wallet.CurrencyName + " Wallet format|wallet.dat|Ufasoft Coin XML|*.xml";
 				d.FileName = "wallet-backup";
 				if (Dialog.ShowDialog(d, this)) {
 					if (File.Exists(d.FileName))
 						File.Delete(d.FileName);
 					switch (d.FilterIndex) {
 						case 1:
-							SelectedWalletNotNull().Wallet.ExportWalletToBdb(d.FileName);
+							wf.Wallet.ExportWalletToBdb(d.FileName);
 							break;
 					case 2:
 						Eng.ExportWalletToXml(d.FileName);
@@ -491,7 +492,7 @@ namespace Coin {
 			var wf = SelectedWalletNotNull();
 			var d = new OpenFileDialog();
 			d.FileName = "bootstrap.dat";
-			d.Filter = "Bitcoin Bootstrap.dat format|bootstrap.dat";
+			d.Filter = "Bootstrap.dat format|bootstrap.dat";
 			if (Dialog.ShowDialog(d, this))
 				wf.Wallet.ImportFromBootstrapDat(d.FileName);
 		}
@@ -500,7 +501,7 @@ namespace Coin {
 			var wf = SelectedWalletNotNull();
 			var d = new SaveFileDialog();
 			d.FileName = "bootstrap.dat";
-			d.Filter = "Bitcoin Bootstrap.dat format|bootstrap.dat";
+			d.Filter = "Bootstrap.dat format|bootstrap.dat";
 			if (Dialog.ShowDialog(d, this))
 				wf.Wallet.ExportToBootstrapDat(d.FileName);
 		}

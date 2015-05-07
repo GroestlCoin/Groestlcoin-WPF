@@ -4,7 +4,7 @@
     <StartupObject>Coin.App</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\images\coin.ico</ApplicationIcon>
+    <ApplicationIcon>groestlcoin.ico</ApplicationIcon>
     <BaseIntermediateOutputPath>$(SolutionDir)Obj\\</BaseIntermediateOutputPath>
     <OutputPath>$(SolutionDir)$(Platform)_$(Configuration)\</OutputPath>
   </PropertyGroup>
@@ -279,6 +279,9 @@
     <Resource Include="..\images\coin.ico">
       <Link>coin.ico</Link>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="groestlcoin.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
