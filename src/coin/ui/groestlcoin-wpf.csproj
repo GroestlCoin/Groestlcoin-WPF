@@ -84,6 +84,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="c_transactions.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="f_address-book.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -172,6 +176,9 @@
       <Link>win32\winuser.cs</Link>
     </Compile>
     <Compile Include="app.cs" />
+    <Compile Include="c_transactions.xaml.cs">
+      <DependentUpon>c_transactions.xaml</DependentUpon>
+    </Compile>
     <Compile Include="f_address-book.xaml.cs">
       <DependentUpon>f_address-book.xaml</DependentUpon>
     </Compile>
@@ -194,10 +201,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="f_transactions.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="f_options.xaml.cs">
@@ -208,9 +211,6 @@
     </Compile>
     <Compile Include="f_send-money.xaml.cs">
       <DependentUpon>f_send-money.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="f_transactions.xaml.cs">
-      <DependentUpon>f_transactions.xaml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
@@ -244,33 +244,6 @@
     <Resource Include="..\images\coin-3.ico">
       <Link>coin-3.ico</Link>
     </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\primecoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\bitcoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\ppcoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\feathercoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\namecoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\terracoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\devcoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\novacoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\litecoin.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="images\groestlcoin.ico" />

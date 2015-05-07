@@ -100,8 +100,7 @@ namespace Coin {
 					}
 				}
 			}
-			if (wf.FormTransactions != null)
-				wf.FormTransactions.UpdateTransactions();
+			//!!!T CtlTxes.UpdateTransactions();
 		}
 
 
@@ -377,16 +376,13 @@ namespace Coin {
         }
 
 		void ShowTransactions() {
-			WalletForms wf = SelectedWallet();
+/*			WalletForms wf = SelectedWallet();
 			if (wf.FormTransactions == null)
 				wf.FormTransactions = new FormTransactions() { WalletForms = wf };
 			wf.FormTransactions.Show();
-			wf.FormTransactions.Activate();
+			wf.FormTransactions.Activate();*/
 		}
 
-		private void OnTransactions(object sender, RoutedEventArgs e) {
-			ShowTransactions();
-		}
 
 		private void LvWallet_MouseDoubleClick(object sender, MouseButtonEventArgs e) {
 			ShowTransactions();
@@ -546,13 +542,13 @@ namespace Coin {
 
 	public class WalletForms : INotifyPropertyChanged {
 		public IWallet Wallet;
-		public FormTransactions FormTransactions;
 		public FormAddressBook FormAddressBook;
 		public MenuItem MenuItem;
 
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public void Free() {
+			/*!!!T
 			if (FormTransactions != null) {
 				FormTransactions.Close();
 				FormTransactions = null;
@@ -560,7 +556,7 @@ namespace Coin {
 			if (FormAddressBook != null) {
 				FormAddressBook.Close();
 				FormAddressBook = null;
-			}
+			}*/
 		}
 
         public Uri IconUri { get { return new Uri("images/" + Wallet.CurrencyName + ".ico", UriKind.Relative); } }

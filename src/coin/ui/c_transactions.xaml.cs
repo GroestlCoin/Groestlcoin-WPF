@@ -67,9 +67,9 @@ namespace Coin {
 			lv.ItemsSource = Transactions;
 		}
 
-		private void FormTransactions_Closed(object sender, EventArgs e) {
+/*		private void FormTransactions_Closed(object sender, EventArgs e) {
 			WalletForms.FormTransactions = null;
-		}
+		}*/
 
 		void ShowTxInfo(Tx tx) {
 			var dlg = new DialogTextInfo();
