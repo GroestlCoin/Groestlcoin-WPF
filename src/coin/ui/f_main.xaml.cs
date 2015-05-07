@@ -506,7 +506,7 @@ namespace Coin {
 
 		private void OnHelp(object sender, RoutedEventArgs e) {
 			string exe = Assembly.GetExecutingAssembly().Location;
-			System.Windows.Forms.Help.ShowHelpIndex(null, Path.Combine(Path.GetDirectoryName(exe), Path.GetFileNameWithoutExtension(exe) + ".chm"));
+			System.Windows.Forms.Help.ShowHelpIndex(null, Path.Combine(Path.GetDirectoryName(exe), Path.GetFileNameWithoutExtension(exe) + ".htm"));
 		}
 
 		private void OnFileCompact(object sender, RoutedEventArgs e) {
