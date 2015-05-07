@@ -55,20 +55,10 @@
 					<k:CtlTransactions x:Name="CtlTxes" />
 				</TabItem>
 				<TabItem Header="My Addresses"  >
-					<Grid Background="#FFE5E5E5">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="121*"/>
-							<ColumnDefinition Width="529*"/>
-						</Grid.ColumnDefinitions>
-					</Grid>
+					<k:CtlMyAddresses x:Name="CtlMyAddresses" />
 				</TabItem>
-				<TabItem Header="Recepients"  >
-					<Grid Background="#FFE5E5E5">
-						<Grid.ColumnDefinitions>
-							<ColumnDefinition Width="121*"/>
-							<ColumnDefinition Width="529*"/>
-						</Grid.ColumnDefinitions>
-					</Grid>
+				<TabItem Header="Recipients"  >
+					<k:CtlRecipients x:Name="CtlRecipients" />
 				</TabItem>
 				<TabItem Header="Events">
 					<ListView Name="LvEvent">

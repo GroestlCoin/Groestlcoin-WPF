@@ -96,7 +96,7 @@ namespace Coin {
 							break;
 					}
 					finally {
-						Marshal.FinalReleaseComObject(addr);
+//						Marshal.ReleaseComObject(addr);
 					}
 				}
 			}
@@ -117,8 +117,6 @@ namespace Coin {
 			if (App.CancelPendingTxes)
 				wf.Wallet.CancelPendingTxes();
 			wf.Wallet.MiningEnabled = wf.MiningEnabled;			
-			UpdateData(wf);
-			ActiveWalletForms.Add(wf);
 //			LvWallet.ItemsSource = ActiveWalletForms;
 		}
 
@@ -210,9 +208,20 @@ namespace Coin {
 				}
 				wallet.Mode = mode;
 			}
+			AddWalletToList(TheWallet);
+
 			CtlTxes.WalletForms = TheWallet;
 			CtlTxes.InitLoaded();
-			AddWalletToList(TheWallet);
+
+			CtlMyAddresses.Wallet = TheWallet.Wallet;
+			CtlMyAddresses.UpdateMyAddresses();
+
+			CtlRecipients.Wallet = TheWallet.Wallet;
+			CtlRecipients.UpdateRecipients();
+
+			UpdateData(TheWallet);
+			ActiveWalletForms.Add(TheWallet);
+
 
 			timer1.Tick += (s, e1) => {
 				bool b = false;
@@ -411,14 +420,6 @@ namespace Coin {
 			}				
 		}
 
-		private void OnAddressBook(object sender, RoutedEventArgs e) {
-			WalletForms wf = SelectedWallet();
-			if (wf.FormAddressBook == null)
-				wf.FormAddressBook = new FormAddressBook() { WalletForms = wf };
-			wf.FormAddressBook.Show();
-			wf.FormAddressBook.Activate();
-		}
-
 		private void OnHelpAbout(object sender, RoutedEventArgs e) {
 			var d = new GuiComp.DialogAbout();
             d.SourceCodeUri = new Uri("https://github.com/ufasoft/coin");
@@ -536,7 +537,6 @@ namespace Coin {
 
 	public class WalletForms : INotifyPropertyChanged {
 		public IWallet Wallet;
-		public FormAddressBook FormAddressBook;
 		public MenuItem MenuItem;
 
 		public event PropertyChangedEventHandler PropertyChanged;
