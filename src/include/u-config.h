@@ -2,11 +2,8 @@
 
 #include <manufacturer.h>
 
-//#define UCFG_COM 0
-
 #define UCFG_BITCOIN_USE_CAL 0
 
-// These can be changed
 #define UCFG_STDSTL 1
 #define UCFG_LIB_DECLS 0
 
@@ -20,14 +17,10 @@
 
 #define UCFG_EH_SUPPORT_IGNORE 0
 
-//---------------------------------------------------------------------------
-// Don't change these defines.
 #define UCFG_USELISP 0
 #define UCFG_GUI 0
 #define UCFG_UPGRADE 0
 #define ENSURE_COPY_PROT
-//#define UCFG_XML 0
-//#define UCFG_EXTENDED 0
 #define UCFG_WIN_MSG 0
 #define UCFG_WND 0
 #define UCFG_USE_SIMPLE_MAPI 0
@@ -43,9 +36,6 @@
 #ifndef WIN32
 #	define WIN32
 #endif
-
-//typedef unsigned int u_int;
-//typedef	unsigned short	u_short;
 
 #define HAVE_BPF_DUMP conflicts
 
@@ -84,11 +74,6 @@
 
 
 #define _ATL_DLL_IMPL
-//#define USE_STLSOFT
-
-#ifdef _DEBUG
-//	#define CRTDBG_MAP_ALLOC      // define to discover memory leaks
-#endif
 
 #ifndef UCFG_INTRINSIC_MEMFUN
 	#define UCFG_INTRINSIC_MEMFUN 1
@@ -102,4 +87,7 @@
 #define UCFG_COIN_DOGECOIN 0
 #define UCFG_COIN_MOMENTUM 0
 #define UCFG_COIN_PRIME 0
+
+
+#define UCFG_SPH_SMALL_FOOTPRINT 0
 

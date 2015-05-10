@@ -32,8 +32,6 @@
           Type="raw" />
     </Property>
 
-	<Media Id="1" />
-
    	<Directory Id='TARGETDIR' Name='SourceDir'>
 <?if $(sys.BUILDARCH) = x64 ?>
 		<Directory Id='ProgramFiles64Folder' Name='PFiles'>
@@ -62,14 +60,14 @@
 
    		<Directory Id="DesktopFolder" Name="Desktop" />
 
-		<Component Id="DesktopShortcut" Guid="55534654-3F35-46d9-0102-54BAFC250409">
+		<Component Id="DesktopShortcut" Guid="55534654-3F35-46d9-1102-54BAFC250409">
 			<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\GroestlCoin-WPF' Type='string' Name='DesktopKey' Value='yes' KeyPath='yes' />
     		<Shortcut Id="desktopCoin" Directory="DesktopFolder" Name="Ufasoft GroestlCoin-WPF" Target="[INSTALLDIR]\GroestlCoin-WPF.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0"  />
 		</Component>
 	</Directory>
 
 <?if $(sys.BUILDARCH) = x64 ?>
-	<Component Id='CMP_Groestlcoin_x64' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
+	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
 		<File Source="..\..\x64_R_St\interop.coineng.dll"			/>
 		<File Source="..\..\x64_R_St\Groestlcoin-WPF.exe"			/>
@@ -78,9 +76,7 @@
 		<File Source="help\groestlcoin-wpf.htm 						/>
 	</Component>
 <?else ?>
-	<Media Id="2" Cabinet='x86.cab' CompressionLevel='none' />
-
-	<Component Id='CMP_Groestlcoin_x86' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
+	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
 		<File Source="..\..\x86_R_St\interop.coineng.dll" 			/>
 		<File Source="..\..\x86_R_St\Groestlcoin-WPF.exe"			/>
@@ -98,7 +94,6 @@
 	<CustomActionRef Id="WixExitEarlyWithSuccess" />
 	
 	<InstallUISequence>
-    	<!-- App search is what does FindInstallLocation, and it is dependent on FindRelatedProducts -->
     	<AppSearch After="FindRelatedProducts"/> 
 		<Custom Action="WixExitEarlyWithSuccess" OnExit="success"  />
 	</InstallUISequence>
@@ -135,11 +130,7 @@
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" /> 
 
    	<Feature Id='Complete' Level='1'>
-<?if $(sys.BUILDARCH) = x64 ?>
-   		<ComponentRef Id='CMP_Groestlcoin_x64' />
-<?else ?>
-   		<ComponentRef Id='CMP_Groestlcoin_x86' />
-<?endif ?>
+   		<ComponentRef Id='CMP_Groestlcoin' />
    		<ComponentRef Id='ProgramMenuDir' />
    		<ComponentRef Id='DesktopShortcut' />
    	</Feature>
