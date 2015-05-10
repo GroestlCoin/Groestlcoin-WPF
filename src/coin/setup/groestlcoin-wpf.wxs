@@ -1,12 +1,12 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:netfx='http://schemas.microsoft.com/wix/NetFxExtension'>
 
-<?include ../../setup/wix/wix_common.wxi ?>
 
 <?define UpgradeCode="{55534654-3F35-46d9-0101-54BAFC250900}"?>
+<?define PRODVER="0.114"?>
 
-<Product Name='Ufasoft Coin' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' Codepage='1252'>
+<Product Name='Ufasoft GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' Codepage='1252'>
 
-   	<Package Id='*' Keywords='Installer' Description="Ufasoft Coin Installer"
+   	<Package Id='*' Keywords='Installer' Description="Ufasoft GroestlCoin Installer"
    			Comments='Ufasoft' Manufacturer='Ufasoft'
   			InstallerVersion='200' Languages='1033' Compressed='no' SummaryCodepage='1252' />
 
@@ -17,7 +17,7 @@
 	</Upgrade>
 
 
-   	<Property Id='DiskPrompt' Value="Ufasoft Coin" />
+   	<Property Id='DiskPrompt' Value="Ufasoft GroestlCoin-WPF" />
 	<Property Id="ARPHELPLINK" Value="http://ufasoft.com/coin" />
 	<Property Id="ARPURLINFOABOUT" Value="http://ufasoft.com/coin" />
 	<Property Id="ARPURLUPDATEINFO" Value="http://ufasoft.com/coin" />
@@ -38,7 +38,7 @@
 <?if $(sys.BUILDARCH) = x64 ?>
 		<Directory Id='ProgramFiles64Folder' Name='PFiles'>
 	  		<Directory Id='Ufasoft' Name='Ufasoft'>
-    			<Directory Id='INSTALLDIR' Name='Coin' />
+    			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
   			</Directory>
 		</Directory>
 <?else ?>
@@ -51,9 +51,9 @@
 
   		<Directory Id="ProgramMenuFolder" Name="Programs">
    			<Component Id="ProgramMenuDir" Guid="55534654-3F35-46d9-0102-54BAFC251102">
-			 	<Shortcut Id="startmenuCoin" Name="Ufasoft Coin" Target="[INSTALLDIR]\Coin.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0" />
+			 	<Shortcut Id="startmenuCoin" Name="Ufasoft GroestlCoin-WPF" Target="[INSTALLDIR]\GroestlCoin-WPF.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0" />
 
-				<RegistryKey Id='RegistryHkcuCoin' Root='HKCU' Key='Software\Ufasoft\Coin' ForceCreateOnInstall="yes">
+				<RegistryKey Id='RegistryHkcuCoin' Root='HKCU' Key='Software\Ufasoft\GroestlCoin-WPF' ForceCreateOnInstall="yes">
 					<RegistryValue Name='InstallDir' Type='string' Value='[INSTALLDIR]' KeyPath='yes' />
        				<RegistryValue Type='string' Value=''/>
 				</RegistryKey>
@@ -63,40 +63,37 @@
    		<Directory Id="DesktopFolder" Name="Desktop" />
 
 		<Component Id="DesktopShortcut" Guid="55534654-3F35-46d9-0102-54BAFC250409">
-			<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\Coin' Type='string' Name='DesktopKey' Value='yes' KeyPath='yes' />
-    		<Shortcut Id="desktopCoin" Directory="DesktopFolder" Name="Ufasoft Coin" Target="[INSTALLDIR]\Coin.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0"  />
+			<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\GroestlCoin-WPF' Type='string' Name='DesktopKey' Value='yes' KeyPath='yes' />
+    		<Shortcut Id="desktopCoin" Directory="DesktopFolder" Name="Ufasoft GroestlCoin-WPF" Target="[INSTALLDIR]\GroestlCoin-WPF.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0"  />
 		</Component>
 	</Directory>
 
-	<Component Id='MainExecutable' Guid='55534654-3F35-46d9-0102-54BAFC250401' Directory='INSTALLDIR' >
-		<File Source="$(env.OUT)\x86_Release\coin.exe.config"	/>
-		<File Source="$(env.OUT)\Help\Coin\coin.chm" 		/>
-	</Component>
-    
 <?if $(sys.BUILDARCH) = x64 ?>
-	<Component Id='CMP_Coin_x64' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
+	<Component Id='CMP_Groestlcoin_x64' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
 		<File Source="..\..\..\x64_R_St\coineng.dll" 					/>
-		<File Source="..\..\..\x64_R_St\groestcoin-miner.exe" 				/>
-
-		<RemoveFile Id="RM_interop.coineng.dll" Name="interop.coineng.dll" 	On="install" />
-		<File Id="interop.coineng.dll" 			Name="interop.coineng.dll" 	Source="$(env.OUT)\x64_Release\inc\interop.coineng.dll"		Compressed='yes' DiskId='3'	/>
+		<File Source="..\..\..\x64_R_St\interop.coineng.dll"			/>
+		<File Source="..\..\..\x64_R_St\Groestlcoin-WPF.exe"			/>
+		<File Source="..\..\..\x64_R_St\groestcoin-miner.exe" 			/>
+		<File Source="..\..\..\miner-example.cmd"						/>
+		<File Source="..\help\groestlcoin-wpf.htm 						/>
 	</Component>
 <?else ?>
 	<Media Id="2" Cabinet='x86.cab' CompressionLevel='none' />
 
-	<Component Id='CMP_Coin_x86' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
+	<Component Id='CMP_Groestlcoin_x86' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
 		<File Source="..\..\..\x86_R_St\coineng.dll" 					/>
-		<File Source="..\..\..\x86_R_St\groestcoin-miner.exe" 				/>
-
-		<RemoveFile Id="RM_interop.coineng.dll" Name="interop.coineng.dll" 	On="install" />
-		<File Source="$(env.OUT)\x86_Release\inc\interop.coineng.dll"	Compressed='yes' DiskId='2'/>
+		<File Source="..\..\..\x86_R_St\interop.coineng.dll" 			/>
+		<File Source="..\..\..\x86_R_St\Groestlcoin-WPF.exe"			/>
+		<File Source="..\..\..\x86_R_St\groestcoin-miner.exe" 			/>
+		<File Source="..\..\..\miner-example.cmd"						/>
+		<File Source="..\help\groestlcoin-wpf.htm 						/>
 	</Component>
 <?endif ?>
 
 
  	<CustomAction Id="NewerVersionDetected" Error="There is a later version of this product installed"/>
 	<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" /> 
-	<CustomAction Id='LaunchFile' FileKey='coin.exe' ExeCommand='' Return="asyncNoWait" />
+	<CustomAction Id='LaunchFile' FileKey='GroestlCoin-WPF.exe' ExeCommand='' Return="asyncNoWait" />
 
 	<CustomActionRef Id="WixExitEarlyWithSuccess" />
 	
@@ -118,12 +115,6 @@
 
  	<CustomAction Id="NetfxAbortError" Error="This application requires .NET Framework 4.0 or later. Please install the .NET Framework then run this installer again."/>
 
-<!--
-	<Condition Message="This application requires .NET Framework 4.0. Please install the .NET Framework then run this installer again.">
-    	<![CDATA[Installed OR NETFRAMEWORK40CLIENT]]>
-	</Condition>
--->
-
  	<CustomAction Id='UninstallService' FileKey='namecoin_dns.exe' ExeCommand=' -u' Return='ignore' />
 
 	<InstallExecuteSequence>
@@ -144,24 +135,17 @@
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" /> 
 
    	<Feature Id='Complete' Level='1'>
-   		<ComponentRef Id='MainExecutable' />
-   		<ComponentRef Id='CMP_Common' />
-<!--
-   		<ComponentRef Id='CMP_MinerCommon' />
--->
 <?if $(sys.BUILDARCH) = x64 ?>
-   		<ComponentRef Id='CMP_Coin_x64' />
+   		<ComponentRef Id='CMP_Groestlcoin_x64' />
 <?else ?>
-   		<ComponentRef Id='CMP_Coin_x86' />
+   		<ComponentRef Id='CMP_Groestlcoin_x86' />
 <?endif ?>
    		<ComponentRef Id='ProgramMenuDir' />
    		<ComponentRef Id='DesktopShortcut' />
    	</Feature>
 
-    <UIRef Id="MyWixUI_InstallDir" />
-
-    <Icon Id="CoinIcon" SourceFile="..\ui\images\groestlcoin.ico" />
-	<Property Id="ARPPRODUCTICON" Value="CoinIcon" />
+    <Icon Id="GroestlcoinIcon" SourceFile="..\ui\images\groestlcoin.ico" />
+	<Property Id="ARPPRODUCTICON" Value="GroestlcoinIcon" />
 </Product>
 </Wix>
 

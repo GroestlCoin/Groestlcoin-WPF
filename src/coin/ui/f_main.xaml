@@ -40,7 +40,7 @@
 			</StatusBar>
 			<TabControl >
 				<TabItem Header="Wallet" Height="22" VerticalAlignment="Bottom">
-					<ListView Name="LvWallet" MouseDoubleClick="LvWallet_MouseDoubleClick">
+					<ListView Name="LvWallet" >
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Path=Balance}" Width="80" />
