@@ -69,7 +69,6 @@
 <?if $(sys.BUILDARCH) = x64 ?>
 	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
-		<File Source="..\..\x64_R_St\interop.coineng.dll"			/>
 		<File Source="..\..\x64_R_St\Groestlcoin-WPF.exe"			/>
 		<File Source="..\..\x64_R_St\groestcoin-miner.exe" 			/>
 		<File Source="..\..\miner-example.cmd"						/>
@@ -78,7 +77,6 @@
 <?else ?>
 	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
-		<File Source="..\..\x86_R_St\interop.coineng.dll" 			/>
 		<File Source="..\..\x86_R_St\Groestlcoin-WPF.exe"			/>
 		<File Source="..\..\x86_R_St\groestcoin-miner.exe" 			/>
 		<File Source="..\..\miner-example.cmd"						/>
