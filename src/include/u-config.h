@@ -37,9 +37,6 @@
 #	define WIN32
 #endif
 
-#define HAVE_BPF_DUMP conflicts
-
-#define MSC_VER _MSC_VER
 
 #ifndef NTDDI_XPSP1
 	#define NTDDI_XPSP1                      0x05010100
