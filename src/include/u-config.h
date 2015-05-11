@@ -88,6 +88,8 @@
 #define UCFG_COIN_MOMENTUM 0
 #define UCFG_COIN_PRIME 0
 
+#define UCFG_IMP_GROESTL 'S'
 
 #define UCFG_SPH_SMALL_FOOTPRINT 0
+
 
