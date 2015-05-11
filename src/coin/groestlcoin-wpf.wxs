@@ -1,14 +1,12 @@
 <Wix xmlns='http://schemas.microsoft.com/wix/2006/wi' xmlns:netfx='http://schemas.microsoft.com/wix/NetFxExtension'>
 
 
-<?define UpgradeCode="{55534654-3F35-46d9-0101-54BAFC250900}"?>
+<?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
 <?define PRODVER="0.114"?>
 
 <Product Name='Ufasoft GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' Codepage='1252'>
 
-   	<Package Id='*' Keywords='Installer' Description="Ufasoft GroestlCoin Installer"
-   			Comments='Ufasoft' Manufacturer='Ufasoft'
-  			InstallerVersion='200' Languages='1033' Compressed='no' SummaryCodepage='1252' />
+   	<Package Id='*' Keywords='Installer' Description="Ufasoft GroestlCoin Installer" Comments='Ufasoft' Manufacturer='Ufasoft' InstallerVersion='200' Languages='1033' Compressed='yes' SummaryCodepage='1252' />
 
 
 	<Upgrade Id='$(var.UpgradeCode)'>
@@ -16,7 +14,9 @@
 		<UpgradeVersion OnlyDetect="no" Maximum="99.0.0.0" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
 	</Upgrade>
 
+    <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
 
+	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
    	<Property Id='DiskPrompt' Value="Ufasoft GroestlCoin-WPF" />
 	<Property Id="ARPHELPLINK" Value="http://ufasoft.com/coin" />
 	<Property Id="ARPURLINFOABOUT" Value="http://ufasoft.com/coin" />
@@ -31,6 +31,7 @@
           Name="InstallLocation"
           Type="raw" />
     </Property>
+
 
    	<Directory Id='TARGETDIR' Name='SourceDir'>
 <?if $(sys.BUILDARCH) = x64 ?>
@@ -47,58 +48,47 @@
 		</Directory>
 <?endif ?>
 
-  		<Directory Id="ProgramMenuFolder" Name="Programs">
-   			<Component Id="ProgramMenuDir" Guid="55534654-3F35-46d9-0102-54BAFC251102">
-			 	<Shortcut Id="startmenuCoin" Name="Ufasoft GroestlCoin-WPF" Target="[INSTALLDIR]\GroestlCoin-WPF.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0" />
-
-				<RegistryKey Id='RegistryHkcuCoin' Root='HKCU' Key='Software\Ufasoft\GroestlCoin-WPF' ForceCreateOnInstall="yes">
-					<RegistryValue Name='InstallDir' Type='string' Value='[INSTALLDIR]' KeyPath='yes' />
-       				<RegistryValue Type='string' Value=''/>
-				</RegistryKey>
-   			</Component>
-  		</Directory>
-
+  		<Directory Id="ProgramMenuFolder" Name="Programs" />
    		<Directory Id="DesktopFolder" Name="Desktop" />
-
-		<Component Id="DesktopShortcut" Guid="55534654-3F35-46d9-1102-54BAFC250409">
-			<RegistryValue Root='HKCU' Key='Software\[Manufacturer]\GroestlCoin-WPF' Type='string' Name='DesktopKey' Value='yes' KeyPath='yes' />
-    		<Shortcut Id="desktopCoin" Directory="DesktopFolder" Name="Ufasoft GroestlCoin-WPF" Target="[INSTALLDIR]\GroestlCoin-WPF.exe" WorkingDirectory='INSTALLDIR' Icon="CoinIcon" IconIndex="0"  />
-		</Component>
 	</Directory>
 
 <?if $(sys.BUILDARCH) = x64 ?>
-	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250406' Directory='INSTALLDIR' >
+	<Media Id="1" Cabinet="x64.cab" EmbedCab="yes"/>
+
+	<Component Id='CMP_Groestlcoin' Guid='d40983c1-f860-42fa-9dfd-67bc4302f87c' Directory='INSTALLDIR' >
+		<File Id="GroestlCoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
+			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+		</File>
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
-		<File Source="..\..\x64_R_St\Groestlcoin-WPF.exe"			/>
-		<File Source="..\..\x64_R_St\groestcoin-miner.exe" 			/>
+		<File Source="..\..\x64_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
-		<File Source="help\groestlcoin-wpf.htm 						/>
+		<File Source="help\groestlcoin-wpf.htm"						/>
 	</Component>
 <?else ?>
-	<Component Id='CMP_Groestlcoin' Guid='55534654-3F35-46d9-1102-54BAFC250405' Directory='INSTALLDIR' >
+	<Media Id="1" Cabinet="x86.cab" EmbedCab="yes"/>
+
+	<Component Id='CMP_Groestlcoin' Guid='0f8d7055-41f1-4558-a6c9-ba9eb2e39c6f' Directory='INSTALLDIR' >
+		<File Id="GroestlCoin_WPF.exe" Source="..\..\x86_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
+			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+		</File>
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
-		<File Source="..\..\x86_R_St\Groestlcoin-WPF.exe"			/>
-		<File Source="..\..\x86_R_St\groestcoin-miner.exe" 			/>
+		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
-		<File Source="help\groestlcoin-wpf.htm 						/>
+		<File Source="help\groestlcoin-wpf.htm"						/>
 	</Component>
 <?endif ?>
 
 
  	<CustomAction Id="NewerVersionDetected" Error="There is a later version of this product installed"/>
 	<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" /> 
-	<CustomAction Id='LaunchFile' FileKey='GroestlCoin-WPF.exe' ExeCommand='' Return="asyncNoWait" />
+	<CustomAction Id='LaunchFile' FileKey='GroestlCoin_WPF.exe' ExeCommand='' Return="asyncNoWait" />
 
-	<CustomActionRef Id="WixExitEarlyWithSuccess" />
 	
 	<InstallUISequence>
     	<AppSearch After="FindRelatedProducts"/> 
-		<Custom Action="WixExitEarlyWithSuccess" OnExit="success"  />
 	</InstallUISequence>
-
-	<AdminUISequence>
-		<Custom Action="WixExitEarlyWithSuccess" OnExit="success"  />
-	</AdminUISequence>
 
 
 	<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
@@ -108,11 +98,9 @@
 
  	<CustomAction Id="NetfxAbortError" Error="This application requires .NET Framework 4.0 or later. Please install the .NET Framework then run this installer again."/>
 
- 	<CustomAction Id='UninstallService' FileKey='namecoin_dns.exe' ExeCommand=' -u' Return='ignore' />
-
 	<InstallExecuteSequence>
-		<Custom Action="OpenNetfxUrl" Before="InstallInitialize"><![CDATA[(NOT NETFRAMEWORK40CLIENT)]]></Custom>
-		<Custom Action="NetfxAbortError" After="InstallInitialize"><![CDATA[(NOT NETFRAMEWORK40CLIENT)]]></Custom>
+		<Custom Action="OpenNetfxUrl" Before="InstallInitialize"><![CDATA[(NOT (NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT))]]></Custom>
+		<Custom Action="NetfxAbortError" After="InstallInitialize"><![CDATA[(NOT (NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT))]]></Custom>
 
 		<Custom Action="NewerVersionDetected" After="FindRelatedProducts">NEWERVERSIONDETECTED</Custom>
 		<RemoveExistingProducts After="InstallInitialize" />  
@@ -120,8 +108,6 @@
 		<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 		<SelfRegModules/>
 		<Custom Action='LaunchFile' After='InstallFinalize'>LAUNCHPRODUCT</Custom> 
-
-		<Custom Action="UninstallService" Before="RemoveFiles">REMOVE="ALL"</Custom>
 	</InstallExecuteSequence>
 
 
@@ -129,12 +115,7 @@
 
    	<Feature Id='Complete' Level='1'>
    		<ComponentRef Id='CMP_Groestlcoin' />
-   		<ComponentRef Id='ProgramMenuDir' />
-   		<ComponentRef Id='DesktopShortcut' />
    	</Feature>
-
-    <Icon Id="GroestlcoinIcon" SourceFile="..\ui\images\groestlcoin.ico" />
-	<Property Id="ARPPRODUCTICON" Value="GroestlcoinIcon" />
 </Product>
 </Wix>
 
