@@ -23,13 +23,10 @@
 	<Property Id="ARPURLUPDATEINFO" Value="http://ufasoft.com/coin" />
     <Property Id="LAUNCHPRODUCT">1</Property>
 	<Property Id="ARPNOREPAIR" Value="1" />
+<!--	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />-->
 
-    <Property Id="INSTALLDIR">				<!-- Find previous installation -->
-      <RegistrySearch Id="FindInstallLocation"
-          Root="HKLM"
-          Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[OLDERVERSIONBEINGUPGRADED]"
-          Name="InstallLocation"
-          Type="raw" />
+    <Property Id="INSTALLDIR">
+		<RegistrySearch Id="FindInstallLocation" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[OLDERVERSIONBEINGUPGRADED]" Name="InstallLocation" Type="raw" />
     </Property>
 
 
@@ -113,9 +110,12 @@
 
 	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" /> 
 
-   	<Feature Id='Complete' Level='1'>
+   	<Feature Id='Complete' Level='1' Title='GroestlCoin-WPF'>
    		<ComponentRef Id='CMP_Groestlcoin' />
    	</Feature>
+
+	<UIRef Id="WixUI_Mondo" />
+	<UIRef Id="WixUI_ErrorProgressText" />
 </Product>
 </Wix>
 
