@@ -236,17 +236,7 @@
     <AppDesigner Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="..\images\coin-3.ico">
-      <Link>coin-3.ico</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="images\groestlcoin.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="..\images\coin.ico">
-      <Link>coin.ico</Link>
-    </Resource>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="groestlcoin.ico" />

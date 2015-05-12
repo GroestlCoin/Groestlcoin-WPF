@@ -1,6 +1,6 @@
 #	Build MSI packages
 
-WIX_LINK = light.exe -ext WiXNetFxExtension -ext WixUIExtension -ext WixUtilExtension -dWixUILicenseRtf=../../LICENSE
+WIX_LINK = light.exe -ext WiXNetFxExtension -ext WixUIExtension -ext WixUtilExtension -dWixUILicenseRtf=doc\gplv3.rtf
 
 msi : ../../groestlcoin-wpf_x86.msi ../../groestlcoin-wpf_x64.msi
 

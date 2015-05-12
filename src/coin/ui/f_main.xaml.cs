@@ -410,7 +410,7 @@ namespace Coin {
 		private void OnHelpAbout(object sender, RoutedEventArgs e) {
 			var d = new GuiComp.DialogAbout();
             d.SourceCodeUri = new Uri("https://github.com/ufasoft/coin");
-            d.Image.Source = new BitmapImage(new Uri(string.Format("/{0};component/coin.ico", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name), UriKind.Relative));
+            d.Image.Source = new BitmapImage(new Uri(string.Format("/{0};component/groestlcoin.ico", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name), UriKind.Relative));
 			Dialog.ShowDialog(d, this);
 		}
 

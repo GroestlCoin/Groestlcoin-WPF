@@ -3,7 +3,7 @@
 	    xmlns:k="clr-namespace:Coin" 		
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification"
-        Title="Ufasoft GroestlCoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="coin.ico" Closing="Window_Closing">
+        Title="Ufasoft GroestlCoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="groestlcoin.ico" Closing="Window_Closing">
 	<Grid>
 		<DockPanel>
 			<Menu DockPanel.Dock="Top">
@@ -72,7 +72,7 @@
 				</TabItem>
 			</TabControl>
 		</DockPanel>
-		<tb:TaskbarIcon x:Name="TrayIcon" IconSource="coin.ico"  ToolTipText="Ufasoft Coin" TrayLeftMouseUp="TrayIcon_TrayMouseClick" TrayMouseDoubleClick="TrayIcon_TrayMouseClick" Margin="4,0,-4,0">
+		<tb:TaskbarIcon x:Name="TrayIcon" IconSource="groestlcoin.ico"  ToolTipText="Ufasoft Coin" TrayLeftMouseUp="TrayIcon_TrayMouseClick" TrayMouseDoubleClick="TrayIcon_TrayMouseClick" Margin="4,0,-4,0">
 			<tb:TaskbarIcon.ContextMenu>
 				<ContextMenu>
 					<MenuItem x:Name="TrayMenu_Exit" Header="E_xit" Click="OnTrayExit" />
