@@ -33,9 +33,9 @@
 #	define UCFG_BITCOIN_USERAGENT_INFO 0
 #endif
 
-#define VER_FILEDESCRIPTION_STR "coin-miner"
-#define VER_INTERNALNAME_STR "coin-miner"
-#define VER_ORIGINALFILENAME_STR "coin-miner.exe"
+#define VER_FILEDESCRIPTION_STR "groestlcoin-miner"
+#define VER_INTERNALNAME_STR "groestlcoin-miner"
+#define VER_ORIGINALFILENAME_STR "groestlcoin-miner.exe"
 
 #define VER_PRODUCTNAME_STR "xCoin Miner"
 

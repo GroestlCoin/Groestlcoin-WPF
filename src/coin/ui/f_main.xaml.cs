@@ -188,9 +188,9 @@ namespace Coin {
 				Application.Current.Shutdown();
 				return;
 			}
-            
+
 			foreach (var wallet in wallets) {
-                string currencyName = wallet.CurrencyName;
+				string currencyName = wallet.CurrencyName;
 
 				var wf = new WalletForms();
 				wf.Wallet = wallet;
@@ -198,21 +198,32 @@ namespace Coin {
 				TheWallet = wf;
 
 				EEngMode mode = EEngMode.Normal;
-                var sk = UserAppRegistryKey.OpenSubKey(wf.Wallet.CurrencySymbol);
+				var sk = UserAppRegistryKey.OpenSubKey(wf.Wallet.CurrencySymbol);
+				bool bMiningEnabled = false;
 				if (sk != null) {
 					switch ((string)sk.GetValue("DBMode")) {
-					case "Normal": mode = EEngMode.Normal; break;
-					case "Bootstrap": mode = EEngMode.Bootstrap; break;
-					case "Lite": mode = EEngMode.Lite; break;
+						case "Normal": mode = EEngMode.Normal; break;
+						case "Bootstrap": mode = EEngMode.Bootstrap; break;
+						case "Lite": mode = EEngMode.Lite; break;
 					}
+					try {
+						bMiningEnabled = (int)sk.GetValue("Minig", 0) != 0;
+					} catch (Exception) { }
 				}
 				wallet.Mode = mode;
+				if (wallet.MiningAllowed) {
+					MenuMining.IsChecked = bMiningEnabled;
+					wallet.MiningEnabled = bMiningEnabled;
+				}
 			}
 			AddWalletToList(TheWallet);
 
 			CtlTxes.WalletForms = TheWallet;
 			CtlTxes.InitLoaded();
 
+			CtlSendMoney.Wallet = TheWallet.Wallet;
+
+	
 			CtlMyAddresses.Wallet = TheWallet.Wallet;
 			CtlMyAddresses.UpdateMyAddresses();
 
@@ -256,6 +267,7 @@ namespace Coin {
 				Marshal.FinalReleaseComObject(pp.Key);
 			AllTxes.Clear();
 			TheWallet = null;
+			CtlSendMoney.Wallet = null;
 			while (m_wallet2forms.Count > 0) {
 				IWallet w = null;
 				foreach (var de in m_wallet2forms) {
@@ -321,22 +333,16 @@ namespace Coin {
 
 		public void SendMoney(string netName, string address, decimal amount, string label, string comment) {
 			var dlg = new FormSendMoney();
-			dlg.Wallet = FindWallet(netName).Wallet;
+			dlg.CtlSend.Wallet = FindWallet(netName).Wallet;
 			try {
-				dlg.Wallet.AddRecipient(address, label);
+				dlg.CtlSend.Wallet.AddRecipient(address, label);
 			} catch (Exception) {
 			}
 			if (comment == "")
 				comment = label;
-			dlg.textAddress.Text = address;
-			dlg.textAmount.Text = amount.ToString();
-			dlg.textComment.Text = comment;
-			Dialog.ShowDialog(dlg, this);
-		}
-
-		void OnSendMoney(object sender, RoutedEventArgs argg) {
-			var dlg = new FormSendMoney();
-			dlg.Wallet = SelectedWallet().Wallet;
+			dlg.CtlSend.textAddress.Text = address;
+			dlg.CtlSend.textAmount.Text = amount.ToString();
+			dlg.CtlSend.textComment.Text = comment;
 			Dialog.ShowDialog(dlg, this);
 		}
 
@@ -503,9 +509,6 @@ namespace Coin {
 		}
 
 
-		private void menuMining_Checked(object sender, RoutedEventArgs e) {
-		}
-
 		private void OnChangeWalletPassword(object sender, RoutedEventArgs e) {
 			var dlg = new FormPassphrase();
 			dlg.labelOldPassword.Visibility = Visibility.Visible;
@@ -520,6 +523,21 @@ namespace Coin {
             Activate();
         }
 
+		private void OnSendToRecipient(object sender, IWallet wallet, string address, decimal? amount, string comment) {
+			CtlSendMoney.textAddress.Text = address;
+			CtlSendMoney.textComment.Text = comment;
+			tabSend.Focus();
+		}
+
+		public bool MiningEnabled {
+			get { return TheWallet.MiningEnabled; }
+			set { TheWallet.MiningEnabled = value; }
+		}
+
+		private void menuMining_Checked(object sender, RoutedEventArgs e) {
+			var sk = UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol);
+			sk.SetValue("Mining", MiningEnabled ? 1 : 0);
+		}
 	}
 
 	public class WalletForms : INotifyPropertyChanged {

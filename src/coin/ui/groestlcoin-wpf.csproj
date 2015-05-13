@@ -84,6 +84,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="c_send-money.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="c_transactions.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -174,6 +178,9 @@
     <Compile Include="app.cs" />
     <Compile Include="c_my-addresses.cs" />
     <Compile Include="c_recipients.cs" />
+    <Compile Include="c_send-money.xaml.cs">
+      <DependentUpon>c_send-money.xaml</DependentUpon>
+    </Compile>
     <Compile Include="c_transactions.xaml.cs">
       <DependentUpon>c_transactions.xaml</DependentUpon>
     </Compile>

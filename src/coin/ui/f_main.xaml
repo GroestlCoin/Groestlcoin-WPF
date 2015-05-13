@@ -17,10 +17,11 @@
 					<MenuItem Header="E_xit" Click="OnFileExit" />
 				</MenuItem>
 				<MenuItem Header="_Tools">
-					<MenuItem Header="Send money" Click="OnSendMoney"/>
-					<Separator/>
 					<MenuItem Header="_Rescan" Click="OnToolsRescan"/>
 					<MenuItem Header="Change Wallet _Password..." Click="OnChangeWalletPassword"/>
+					<Separator />
+					<MenuItem x:Name="MenuMining" Header="_Mining" IsCheckable="true" IsChecked="{Binding Path=MiningEnabled}" Unchecked="menuMining_Checked" Checked="menuMining_Checked"/>
+					<Separator />
 					<MenuItem Header="_Options" Click="OnToolsOptions"/>
 				</MenuItem>
 				<MenuItem x:Name="MenuDBMode" Header="DB _Mode" >
@@ -51,6 +52,9 @@
 						</ListView.View>
 					</ListView>
 				</TabItem>
+				<TabItem x:Name="tabSend" Header="Send" >
+					<k:CtlSendMoney x:Name="CtlSendMoney" />
+				</TabItem>
 				<TabItem Header="Transactions"  >
 					<k:CtlTransactions x:Name="CtlTxes" />
 				</TabItem>
@@ -58,7 +62,7 @@
 					<k:CtlMyAddresses x:Name="CtlMyAddresses" />
 				</TabItem>
 				<TabItem Header="Recipients"  >
-					<k:CtlRecipients x:Name="CtlRecipients" />
+					<k:CtlRecipients x:Name="CtlRecipients" SendToRecipient="OnSendToRecipient" />
 				</TabItem>
 				<TabItem Header="Events">
 					<ListView Name="LvEvent">

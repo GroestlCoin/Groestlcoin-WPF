@@ -32,6 +32,8 @@
 
 using namespace Coin;
 
+#pragma comment(lib, "miner")
+
 
 #if UCFG_BITCOIN_SOLO_MINING
 #	include "../eng/eng.h"
