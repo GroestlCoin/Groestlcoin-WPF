@@ -73,30 +73,6 @@
     <ClCompile Include="..\..\el\inet\p2p-peers.cpp">
       <Filter>Source Files\p2p</Filter>
     </ClCompile>
-    <ClCompile Include="hasher\hasher-metis.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-sha3.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-solid.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-prime.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-scrypt.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-sha256.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="hasher\hasher-neoscrypt.cpp">
-      <Filter>Source Files\hasher</Filter>
-    </ClCompile>
-    <ClCompile Include="bitcoin-miner.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\el\inet\proxy-client.cpp">
       <Filter>Source Files\p2p</Filter>
     </ClCompile>
