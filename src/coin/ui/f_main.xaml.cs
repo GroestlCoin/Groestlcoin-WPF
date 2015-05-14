@@ -267,7 +267,6 @@ namespace Coin {
 			foreach (var pp in AllTxes)				//!!!?
 				Marshal.FinalReleaseComObject(pp.Key);
 			AllTxes.Clear();
-			TheWallet = null;
 			CtlSendMoney.Wallet = null;
 			while (m_wallet2forms.Count > 0) {
 				IWallet w = null;
@@ -279,6 +278,7 @@ namespace Coin {
 				m_wallet2forms.Remove(w);
 				Marshal.FinalReleaseComObject(w);
 			}
+			TheWallet = null;
 			Marshal.FinalReleaseComObject(Eng);
 		}
 
@@ -543,6 +543,7 @@ namespace Coin {
 		public event PropertyChangedEventHandler PropertyChanged;
 
 		public void Free() {
+			Wallet = null;
 			/*!!!T
 			if (FormTransactions != null) {
 				FormTransactions.Close();
@@ -568,6 +569,8 @@ namespace Coin {
 		public bool LiteModeAllowed { get { return Wallet.LiteModeAllowed; } }
 
 		public bool CheckForChanges() {
+			if (Wallet == null)
+				return false;
 			bool r = Wallet.GetAndResetStateChangedFlag();
 			if (r) {
 				if (PropertyChanged != null) {
