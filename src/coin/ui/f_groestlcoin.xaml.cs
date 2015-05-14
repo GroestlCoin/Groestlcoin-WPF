@@ -425,10 +425,6 @@ namespace Coin {
 		}
 
 		private void OnFileImport(object sender, RoutedEventArgs e) {
-			//			Eng.Password = "1"; //!!!D
-//						Eng.ImportWallet("C:\\work\\coin\\wallet.dat", "123"); //!!D
-//						return; //!!D
-
 			if (!EnsurePassphraseUnlock())
 				return;
 			var wf = SelectedWalletNotNull();
@@ -441,7 +437,10 @@ namespace Coin {
 				while (true) {
 					try {
 						wf.Wallet.ImportWallet(d.FileName, password);
-						break;
+						CtlMyAddresses.UpdateMyAddresses();
+						CtlRecipients.UpdateRecipients();
+						wf.Wallet.Rescan();
+                        break;
 					} catch (Exception) {
 						var dlg = new FormPassphrase();
 						dlg.labelRetype.Visibility = Visibility.Hidden;
