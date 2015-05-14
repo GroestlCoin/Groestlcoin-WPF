@@ -529,7 +529,9 @@ namespace Coin {
 		}
 
 		private void menuMining_Checked(object sender, RoutedEventArgs e) {
-			UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol, true).SetValue("Mining", TheWallet.MiningEnabled ? 1 : 0);
+			var sk = UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol, true);
+			if (sk != null)
+				sk.SetValue("Mining", TheWallet.MiningEnabled ? 1 : 0);
 		}
 
 	}
