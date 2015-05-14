@@ -207,14 +207,12 @@ namespace Coin {
 						case "Lite": mode = EEngMode.Lite; break;
 					}
 					try {
-						bMiningEnabled = (int)sk.GetValue("Minig", 0) != 0;
+//						bMiningEnabled = (int)sk.GetValue("Mining", 0) != 0;
 					} catch (Exception) { }
 				}
 				wallet.Mode = mode;
-				if (wallet.MiningAllowed) {
-					MenuMining.IsChecked = bMiningEnabled;
+				if (wallet.MiningAllowed)
 					wallet.MiningEnabled = bMiningEnabled;
-				}
 			}
 			AddWalletToList(TheWallet);
 
@@ -535,8 +533,7 @@ namespace Coin {
 		}
 
 		private void menuMining_Checked(object sender, RoutedEventArgs e) {
-			var sk = UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol);
-			sk.SetValue("Mining", MiningEnabled ? 1 : 0);
+			UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol).SetValue("Mining", MiningEnabled ? 1 : 0);
 		}
 	}
 

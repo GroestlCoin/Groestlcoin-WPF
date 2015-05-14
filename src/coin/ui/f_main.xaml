@@ -53,7 +53,7 @@
 					</ListView>
 				</TabItem>
 				<TabItem x:Name="tabSend" Header="Send" >
-					<k:CtlSendMoney x:Name="CtlSendMoney" />
+					<k:CtlSendMoney x:Name="CtlSendMoney"/>
 				</TabItem>
 				<TabItem Header="Transactions"  >
 					<k:CtlTransactions x:Name="CtlTxes" />
