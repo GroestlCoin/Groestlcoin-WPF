@@ -91,4 +91,6 @@
 
 #define UCFG_SPH_SMALL_FOOTPRINT 0
 
+#define UCFG_COIN_BIP0014_USER_AGENT "/Groestlcoin-wpf:2.1.0.6/")
+
 
