@@ -66,7 +66,7 @@ namespace Coin {
 		[System.Diagnostics.DebuggerNonUserCodeAttribute()]
 //		[System.CodeDom.Compiler.GeneratedCodeAttribute("PresentationBuildTasks", "4.0.0.0")]
 		public void InitializeComponent() {
-			this.StartupUri = new System.Uri("f_main.xaml", System.UriKind.Relative);
+			this.StartupUri = new System.Uri("f_groestlcoin.xaml", System.UriKind.Relative);
 		}
 
 		[System.STAThreadAttribute()]
