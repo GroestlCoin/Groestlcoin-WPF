@@ -6,7 +6,7 @@
         Title="Ufasoft GroestlCoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="groestlcoin.ico" Closing="Window_Closing">
 	<Grid>
 		<DockPanel>
-			<Menu DockPanel.Dock="Top">
+			<Menu x:Name="MenuTop" DockPanel.Dock="Top">
 				<MenuItem Header="_File">
 					<MenuItem Header="_Import Wallet..." Click="OnFileImport"/>
 					<MenuItem Header="_Export Wallet..." Click="OnFileExport"/>

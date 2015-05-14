@@ -116,7 +116,6 @@ namespace Coin {
 			wf.Wallet.Enabled = true;
 			if (App.CancelPendingTxes)
 				wf.Wallet.CancelPendingTxes();
-			wf.Wallet.MiningEnabled = wf.MiningEnabled;			
 //			LvWallet.ItemsSource = ActiveWalletForms;
 		}
 
@@ -244,6 +243,10 @@ namespace Coin {
 			UpdateView();
 			CheckForCommands();
 			//			RegisterUriHandler();
+
+			MenuTop.DataContext = TheWallet;
+
+			//MenuMining.IsEnabled = TheWallet.MiningAllowed;
 		}
 
 		public bool EnsurePassphraseUnlock() {
@@ -527,14 +530,10 @@ namespace Coin {
 			tabSend.Focus();
 		}
 
-		public bool MiningEnabled {
-			get { return TheWallet.MiningEnabled; }
-			set { TheWallet.MiningEnabled = value; }
+		private void menuMining_Checked(object sender, RoutedEventArgs e) {
+			UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol, true).SetValue("Mining", TheWallet.MiningEnabled ? 1 : 0);
 		}
 
-		private void menuMining_Checked(object sender, RoutedEventArgs e) {
-			UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol).SetValue("Mining", MiningEnabled ? 1 : 0);
-		}
 	}
 
 	public class WalletForms : INotifyPropertyChanged {
@@ -561,8 +560,9 @@ namespace Coin {
 		public int BlockHeight { get { return Wallet.LastBlock; } }
 		public string State { get { return Wallet.State; } }
 		public int Peers { get { return Wallet.Peers; } }
-		public bool MiningEnabled { get { return Wallet.MiningEnabled; } set { Wallet.MiningEnabled = value; } }
+
 		public bool MiningAllowed { get { return Wallet.MiningAllowed; } }
+		public bool MiningEnabled { get { return Wallet.MiningEnabled; } set { Wallet.MiningEnabled = value; } }
 
 		public bool LiteModeEnabled { get { return Wallet.Mode == EEngMode.Lite; } set { Wallet.Mode = value ? EEngMode.Lite : (Wallet.CurrencySymbol=="BTC" ? EEngMode.Bootstrap : EEngMode.Normal); } }
 		public bool LiteModeAllowed { get { return Wallet.LiteModeAllowed; } }
