@@ -333,18 +333,17 @@ namespace Coin {
 		}
 
 		public void SendMoney(string netName, string address, decimal amount, string label, string comment) {
-			var dlg = new FormSendMoney();
-			dlg.CtlSend.Wallet = FindWallet(netName).Wallet;
+			CtlSendMoney.Wallet = FindWallet(netName).Wallet;
 			try {
-				dlg.CtlSend.Wallet.AddRecipient(address, label);
+				CtlSendMoney.Wallet.AddRecipient(address, label);
 			} catch (Exception) {
 			}
 			if (comment == "")
 				comment = label;
-			dlg.CtlSend.textAddress.Text = address;
-			dlg.CtlSend.textAmount.Text = amount.ToString();
-			dlg.CtlSend.textComment.Text = comment;
-			Dialog.ShowDialog(dlg, this);
+			CtlSendMoney.textAddress.Text = address;
+			CtlSendMoney.textAmount.Text = amount.ToString();
+			CtlSendMoney.textComment.Text = comment;
+			CtlSendMoney.OnSend(this, null);
 		}
 
 		public void CheckForCommands() {
