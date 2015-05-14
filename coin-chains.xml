@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <CoinChains>
 
-	<Chain Name='GroestlCoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5' 
+	<Chain Name='GroestlCoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5' AllowMining='1'
 			Genesis='00000ac5927c594d49cc0bdb81759d0da8297eb614683d3acb62f0703b639023'
 			MaxMoney='105000000'  MinTxFee='1000000' 
 			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
