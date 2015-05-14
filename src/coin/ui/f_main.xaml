@@ -20,7 +20,7 @@
 					<MenuItem Header="_Rescan" Click="OnToolsRescan"/>
 					<MenuItem Header="Change Wallet _Password..." Click="OnChangeWalletPassword"/>
 					<Separator />
-					<MenuItem x:Name="MenuMining" Header="_Mining" IsCheckable="true" IsChecked="{Binding Path=MiningEnabled}" Unchecked="menuMining_Checked" Checked="menuMining_Checked"/>
+					<MenuItem x:Name="MenuMining" Header="_Mining" IsCheckable="true" IsEnabled="{Binding Path=MiningAllowed}" IsChecked="{Binding Path=MiningEnabled}" Unchecked="menuMining_Checked" Checked="menuMining_Checked"/>
 					<Separator />
 					<MenuItem Header="_Options" Click="OnToolsOptions"/>
 				</MenuItem>
