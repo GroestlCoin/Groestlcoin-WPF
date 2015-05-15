@@ -2,7 +2,7 @@
 
 
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
-<?define PRODVER="0.114"?>
+<?define PRODVER="2.1.0.6"?>
 
 <Product Name='GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' >
    	<Package Id='*' Keywords='Installer' Description="GroestlCoin Installer" Comments='Ufasoft' Manufacturer='Ufasoft' InstallerVersion='301' Compressed='yes'  />
@@ -19,9 +19,9 @@
 
 	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
    	<Property Id='DiskPrompt' Value="GroestlCoin-WPF" />
-	<Property Id="ARPHELPLINK" Value="http://ufasoft.com/coin/groestlcoin" />
-	<Property Id="ARPURLINFOABOUT" Value="http://ufasoft.com/coin/groestlcoin" />
-	<Property Id="ARPURLUPDATEINFO" Value="http://ufasoft.com/coin/groestlcoin" />
+	<Property Id="ARPHELPLINK" Value="http://www.groestlcoin.org/downloads/" />
+	<Property Id="ARPURLINFOABOUT" Value="http://www.groestlcoin.org/downloads/" />
+	<Property Id="ARPURLUPDATEINFO" Value="http://www.groestlcoin.org/downloads/" />
     <Property Id="LAUNCHPRODUCT">1</Property>
 	<Property Id="ARPNOREPAIR" Value="1" />
 <!--	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />-->
