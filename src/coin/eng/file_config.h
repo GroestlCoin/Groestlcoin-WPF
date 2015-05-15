@@ -10,7 +10,7 @@
 #define UCFG_EXPORT_COIN
 
 #define VER_FILEDESCRIPTION_STR "Coin Engine"
-#define VER_INTERNALNAME_STR "Coin"
+#define VER_INTERNALNAME_STR "GroestlCoin-WPF"
 #define VER_ORIGINALFILENAME_STR "coineng.dll"
 
 

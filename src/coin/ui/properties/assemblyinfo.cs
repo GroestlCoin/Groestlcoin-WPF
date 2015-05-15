@@ -4,12 +4,12 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("Ufasoft GroestlCoin-WPF Wallet")]
-[assembly: AssemblyDescription("Ufasoft GroestlCoin-WPF Wallet")]
+[assembly: AssemblyTitle("GroestlCoin-WPF Wallet")]
+[assembly: AssemblyDescription("GroestlCoin-WPF Wallet")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Ufasoft")]
-[assembly: AssemblyProduct("Coin")]
-[assembly: AssemblyCopyright("Copyright © Ufasoft 2011-2015")]
+[assembly: AssemblyCompany("")]
+[assembly: AssemblyProduct("GroestlCoin-WPF")]
+[assembly: AssemblyCopyright("Copyright © 2011-2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

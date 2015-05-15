@@ -4,8 +4,8 @@
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
 <?define PRODVER="0.114"?>
 
-<Product Name='Ufasoft GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' >
-   	<Package Id='*' Keywords='Installer' Description="Ufasoft GroestlCoin Installer" Comments='Ufasoft' Manufacturer='Ufasoft' InstallerVersion='301' Compressed='yes'  />
+<Product Name='GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' >
+   	<Package Id='*' Keywords='Installer' Description="GroestlCoin Installer" Comments='Ufasoft' Manufacturer='Ufasoft' InstallerVersion='301' Compressed='yes'  />
 
 	<UIRef Id="WixUI_InstallDir" />
 
@@ -18,10 +18,10 @@
     <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
 
 	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
-   	<Property Id='DiskPrompt' Value="Ufasoft GroestlCoin-WPF" />
-	<Property Id="ARPHELPLINK" Value="http://ufasoft.com/coin" />
-	<Property Id="ARPURLINFOABOUT" Value="http://ufasoft.com/coin" />
-	<Property Id="ARPURLUPDATEINFO" Value="http://ufasoft.com/coin" />
+   	<Property Id='DiskPrompt' Value="GroestlCoin-WPF" />
+	<Property Id="ARPHELPLINK" Value="http://ufasoft.com/coin/groestlcoin" />
+	<Property Id="ARPURLINFOABOUT" Value="http://ufasoft.com/coin/groestlcoin" />
+	<Property Id="ARPURLUPDATEINFO" Value="http://ufasoft.com/coin/groestlcoin" />
     <Property Id="LAUNCHPRODUCT">1</Property>
 	<Property Id="ARPNOREPAIR" Value="1" />
 <!--	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />-->
@@ -34,15 +34,11 @@
    	<Directory Id='TARGETDIR' Name='SourceDir'>
 <?if $(sys.BUILDARCH) = x64 ?>
 		<Directory Id='ProgramFiles64Folder' Name='PFiles'>
-	  		<Directory Id='Ufasoft' Name='Ufasoft'>
-    			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
-  			</Directory>
+   			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
 		</Directory>
 <?else ?>
 		<Directory Id='ProgramFilesFolder' Name='PFiles'>
-	  		<Directory Id='Ufasoft' Name='Ufasoft'>
-    			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
-  			</Directory>
+   			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
 		</Directory>
 <?endif ?>
 
@@ -55,8 +51,8 @@
 
 	<Component Id='CMP_Groestlcoin' Guid='d40983c1-f860-42fa-9dfd-67bc4302f87c' Directory='INSTALLDIR' >
 		<File Id="GroestlCoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
-			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
-			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
 		<File Source="..\..\x64_R_St\groestlcoin-miner.exe" 		/>
@@ -68,8 +64,8 @@
 
 	<Component Id='CMP_Groestlcoin' Guid='0f8d7055-41f1-4558-a6c9-ba9eb2e39c6f' Directory='INSTALLDIR' >
 		<File Id="GroestlCoin_WPF.exe" Source="..\..\x86_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
-			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
-			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="Ufasoft GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
 		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
