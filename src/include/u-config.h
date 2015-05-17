@@ -93,4 +93,7 @@
 
 #define UCFG_COIN_BIP0014_USER_AGENT "/Groestlcoin-wpf:2.1.0.6/"
 
+#define UCFG_OS_IMPTLS 1
+
+
 

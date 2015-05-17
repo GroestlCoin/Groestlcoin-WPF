@@ -4,8 +4,8 @@
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
 <?define PRODVER="2.1.0.6"?>
 
-<Product Name='GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Ufasoft' Language='1033' >
-   	<Package Id='*' Keywords='Installer' Description="GroestlCoin Installer" Comments='Ufasoft' Manufacturer='Ufasoft' InstallerVersion='301' Compressed='yes'  />
+<Product Name='GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='GroestlCoin' Language='1033' >
+   	<Package Id='*' Keywords='Installer' Description="GroestlCoin Installer" Comments='GroestlCoin-WPF' Manufacturer='GroestlCoin' InstallerVersion='301' Compressed='yes'  />
 
 	<UIRef Id="WixUI_InstallDir" />
 
