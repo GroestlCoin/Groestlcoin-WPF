@@ -97,6 +97,3 @@
 
 
 
-#define UCFG_OS_IMPTLS 1
-
-

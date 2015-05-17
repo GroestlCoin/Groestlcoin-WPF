@@ -13,4 +13,9 @@
 #define VER_INTERNALNAME_STR "GroestlCoin-WPF"
 #define VER_ORIGINALFILENAME_STR "coineng.dll"
 
+#ifdef _DEBUG//!!!D
+#	define UCFG_COIN_PKSCRIPT_FUTURES 0
+#	define UCFG_COIN_MERKLE_FUTURES 0
+#endif
+
 
