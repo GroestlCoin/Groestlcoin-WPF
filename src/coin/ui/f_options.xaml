@@ -9,7 +9,7 @@
             <ColumnDefinition Width="129*"/>
         </Grid.ColumnDefinitions>
         <Label Content="Listening port:" Height="28" HorizontalAlignment="Left" Margin="12,12,0,0" Name="label1" VerticalAlignment="Top" TabIndex="0" />
-        <TextBox Height="23" Margin="128,17,78,0" Name="textListeningPort" x:FieldModifier="public" VerticalAlignment="Top" Text="8333" TabIndex="1" />
+        <TextBox Height="23" Margin="128,17,78,0" Name="textListeningPort" x:FieldModifier="public" VerticalAlignment="Top" Text="1331" TabIndex="1" />
 
         <Label x:Name="labelProxy" Content="Proxy:" HorizontalAlignment="Left" Margin="12,45,0,0" VerticalAlignment="Top"/>
         <ComboBox x:Name="cbProxy" HorizontalAlignment="Left" Margin="110,49,0,0" VerticalAlignment="Top" Width="80" Text="None" SelectionChanged="OnProxyTypeChanged" TabIndex="2">

@@ -95,5 +95,7 @@
 
 #define UCFG_OS_IMPTLS 1
 
+#define UCFG_COIN_DEFAULT_PORT 1331
+
 
 
