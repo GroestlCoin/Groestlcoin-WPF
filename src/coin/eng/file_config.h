@@ -13,6 +13,10 @@
 #define VER_INTERNALNAME_STR "GroestlCoin-WPF"
 #define VER_ORIGINALFILENAME_STR "coineng.dll"
 
-#define UCFG_COIN_USE_FUTURES 0					// Heap error on XP if futures ar enabled
+#ifdef _DEBUG
+#	define UCFG_COIN_USE_FUTURES 1					// Heap error on XP if futures are enabled
+#else
+#	define UCFG_COIN_USE_FUTURES 0					// Heap error on XP if futures are enabled
+#endif
 
 
