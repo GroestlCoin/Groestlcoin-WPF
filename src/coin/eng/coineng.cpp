@@ -197,9 +197,6 @@ CoinEng::CoinEng(CoinDb& cdb)
 	,	OffsetInBootstrap(0)
 	,	NextOffsetInBootstrap(0)
 {
-#ifdef _DEBUG//!!!D
-	_CrtSetDbgFlag(_CRTDBG_CHECK_ALWAYS_DF /*| _CRTDBG_ALLOC_MEM_DF*/); //!!!D
-#endif
 }
 
 CoinEng::~CoinEng() {

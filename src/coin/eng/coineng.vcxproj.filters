@@ -228,6 +228,9 @@
     <ClCompile Include="..\..\el\elwin\dllmodul.cpp">
       <Filter>comp</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\el\libext\dbg-heap.cpp">
+      <Filter>comp</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
