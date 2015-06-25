@@ -93,6 +93,11 @@ public:
 	}
 
 	void Execute() override {
+		if (1 == Argc) {
+			PrintUsage(&cout);
+			return;
+		}
+
 		String currency = "BITCOIN";
 
 		for (int arg; (arg = getopt(Argc, Argv, "a:h"))!=EOF;) {
