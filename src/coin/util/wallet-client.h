@@ -8,7 +8,7 @@
 #include EXT_HEADER_DECIMAL
 using namespace std::decimal;
 
-#include <el/libext/ext-http.h>
+#include <el/inet/http.h>
 
 #include "util.h"
 #include "block-template.h"
@@ -64,17 +64,17 @@ public:
 	path DataDir;
 	String Args;
 	observer_ptr<INewBlockNotify> OnNewBlockNotify;
-	
+
 	Uri RpcUrl;
 	String Login, Password;
 
 	IPEndPoint EpApi;
-	
+
 	mutex MtxHeaders;
 	WebHeaderCollection Headers;
 
-	bool IsTestNet;
 	bool Listen;
+	bool IsTestNet;
 	bool EnableNotifications;
 	bool WalletNotifications;
 
@@ -93,13 +93,13 @@ public:
 	virtual BlockInfo GetBlock(const HashValue& hashBlock)			{ Throw(E_NOTIMPL); }
 	virtual double GetDifficulty() 									{ Throw(E_NOTIMPL); }
 	virtual TxInfo GetTransaction(const HashValue& hashTx)			{ Throw(E_NOTIMPL); }
-	virtual SinceBlockInfo ListSinceBlock(const HashValue& hashBlock = HashValue())							{ Throw(E_NOTIMPL); }
+	virtual SinceBlockInfo ListSinceBlock(const HashValue& hashBlock = HashValue::Null())							{ Throw(E_NOTIMPL); }
 //!!!R	virtual ptr<PoolWorkData> GetWork() 													{ Throw(E_NOTIMPL); }
 	virtual String GetAccountAddress(RCString account = "")										{ Throw(E_NOTIMPL); }
 	virtual HashValue SendToAddress(RCString address, decimal64 amount, RCString comment = "") 	{ Throw(E_NOTIMPL); }
 	virtual ptr<MinerBlock> GetBlockTemplate(const vector<String>& capabilities = vector<String>()) { Throw(E_NOTIMPL); }
-	virtual void GetWork(const ConstBuf& data) 						{ Throw(E_NOTIMPL); }
-	virtual void SubmitBlock(const ConstBuf& data, RCString workid) 						{ Throw(E_NOTIMPL); }
+	virtual void GetWork(RCSpan data) 						{ Throw(E_NOTIMPL); }
+	virtual void SubmitBlock(RCSpan data, RCString workid) 						{ Throw(E_NOTIMPL); }
 	virtual String GetNewAddress(RCString account = nullptr)			{ Throw(E_NOTIMPL); }
 };
 

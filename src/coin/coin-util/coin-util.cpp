@@ -1,5 +1,9 @@
-#include <el/ext.h>
+/*######   Copyright (c) 2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com      ####
+#                                                                                                                                     #
+# 		See LICENSE for licensing information                                                                                         #
+#####################################################################################################################################*/
 
+#include <el/ext.h>
 
 #include "../util/util.h"
 
@@ -77,6 +81,8 @@ public:
 			return "BTC";
 		if (x == "LITE")
 			return "LTC";
+		if (x == "NAME")
+			return "NMC";
 		if (x == "GROESTL")
 			return "GRS";
 		if (x == "PEER" || x == "PP")

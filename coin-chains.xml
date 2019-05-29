@@ -1,25 +1,17 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <CoinChains>
-
-	<Chain Name='GroestlCoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5' MiningAllowed='1'
+    <Chain Name='GroestlCoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5'  Hrp='grs' MiningAllowed='1'
 			Genesis='00000ac5927c594d49cc0bdb81759d0da8297eb614683d3acb62f0703b639023'
-			MaxMoney='105000000'  MinTxFee='1000000' 
+			MaxMoney='105000000'  MinTxFee='10000'
+			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000'
 			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
-			ProtocolVersion='70001'  ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
-			BootUrls='dns://groestlcoin.net dns://groestlcoin.org' >
-				<!--	dns://electrum1.groestlcoin.org dns://electrum1.groestlcoin.org -->
+			  ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
+			BootUrls='dns://groestlcoin.org dns://electrum1.groestlcoin.org dns://electrum2.groestlcoin.org' >
 
-
-		<Checkpoint Block='28888' 	Hash='00000000000228ce19f55cf0c45e04c7aa5a6a873ed23902b3654c3c49884502' /> 
-		<Checkpoint Block='58888' 	Hash='0000000000dd85f4d5471febeb174a3f3f1598ab0af6616e9f266b56272274ef' /> 
-		<Checkpoint Block='111111' 	Hash='00000000013de206275ee83f93bee57622335e422acbf126a37020484c6e113c' /> 
-		<Checkpoint Block='566514' 	Hash='0000000009be1dbd8da21f1ee22d23b979c0116b60d799bc299af1a98ef93d89' /> 
-
-
-		<AlertPubKey Key='04c72b6103d495c4842dab4747f453a694a7926477466a7c8fc2110484f1ed883c49b41e1d56e20aa9cb593b6003cddec9dfe6b22216ff1b08879ecda8a1dc3aaa' />
+		<Checkpoint Block='100002' 	Hash='0000000001968bbc3e7edd38448661449091a83e1ae6ce42dd8e19af3954c4ec' />
+		<Checkpoint Block='669286' 	Hash='000000001727e1d13ca7272dee43996efdfc6b3b57a6d2b0c48257ef52f40bcb' />
+		<Checkpoint Block='2000000'	Hash='00000000000434d5b8d1c3308df7b6e3fd773657dfb28f5dd2f70854ef94cc66' />
 
 		<Seed EndPoint='' />
 	</Chain>
-
-
 </CoinChains>

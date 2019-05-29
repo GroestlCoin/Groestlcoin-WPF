@@ -5,9 +5,6 @@
 
 #include <el/ext.h>
 
-#include <openssl/evp.h>
-#include <openssl/aes.h>
-
 #include "crypter.h"
 
 #include <el/crypto/cipher.h>
@@ -16,11 +13,17 @@ using namespace Ext::Crypto;
 namespace Coin {
 
 void CMasterKey::Write(BinaryWriter& wr) const {
-	wr << vchCryptedKey << vchSalt << nDerivationMethod << nDeriveIterations << vchOtherDerivationParameters;
+    Ext::Write(wr, vchCryptedKey);
+    Ext::Write(wr, vchSalt);
+    wr << nDerivationMethod << nDeriveIterations;
+    Ext::Write(wr, vchOtherDerivationParameters);
 }
 
 void CMasterKey::Read(const BinaryReader& rd) {
-	rd >> vchCryptedKey >> vchSalt >> nDerivationMethod >> nDeriveIterations >> vchOtherDerivationParameters;
+    Ext::Read(rd, vchCryptedKey);
+    Ext::Read(rd, vchSalt);
+    rd >> nDerivationMethod >> nDeriveIterations;
+    Ext::Read(rd, vchOtherDerivationParameters);
 }
 
 void CWalletKey::Write(BinaryWriter& wr) const {
@@ -68,50 +71,27 @@ bool CCrypter::Encrypt(const CKeyingMaterial& vchPlaintext, std::vector<unsigned
     if (!fKeySet)
         return false;
 
-    // max ciphertext len for a n bytes of plaintext is
-    // n + AES_BLOCK_SIZE - 1 bytes
-    int nLen = vchPlaintext.Size;
-    int nCLen = nLen + AES_BLOCK_SIZE, nFLen = 0;
-    vchCiphertext = std::vector<unsigned char> (nCLen);
 
-    EVP_CIPHER_CTX ctx;
+	Aes aes;
+	aes.Key = Span(chKey, sizeof chKey);
+	aes.IV = Span(chIV, sizeof chIV);
+	Blob r = aes.Encrypt(vchPlaintext);
+	vchCiphertext = vector<unsigned char>(r.constData(), r.constData()+r.Size);
 
-    EVP_CIPHER_CTX_init(&ctx);
-    EVP_EncryptInit_ex(&ctx, EVP_aes_256_cbc(), NULL, chKey, chIV);
-
-    EVP_EncryptUpdate(&ctx, &vchCiphertext[0], &nCLen, vchPlaintext.data(), nLen);
-    EVP_EncryptFinal_ex(&ctx, (&vchCiphertext[0])+nCLen, &nFLen);
-
-    EVP_CIPHER_CTX_cleanup(&ctx);
-
-    vchCiphertext.resize(nCLen + nFLen);
     return true;
 }
 
-bool CCrypter::Decrypt(const ConstBuf& vchCiphertext, CKeyingMaterial& vchPlaintext) {
+bool CCrypter::Decrypt(RCSpan vchCiphertext, CKeyingMaterial& vchPlaintext) {
     if (!fKeySet)
         return false;
 
-    // plaintext will always be equal to or lesser than length of ciphertext
-    int nLen = vchCiphertext.Size;
-    int nPLen = nLen, nFLen = 0;
+	Aes aes;
+	aes.Key = Span(chKey, sizeof chKey);
+	aes.IV = Span(chIV, sizeof chIV);
+	vchPlaintext = aes.Decrypt(vchCiphertext);
 
-    vchPlaintext = CKeyingMaterial(0, nPLen);
-
-    EVP_CIPHER_CTX ctx;
-
-    EVP_CIPHER_CTX_init(&ctx);
-    EVP_DecryptInit_ex(&ctx, EVP_aes_256_cbc(), NULL, chKey, chIV);
-
-    EVP_DecryptUpdate(&ctx, vchPlaintext.data(), &nPLen, vchCiphertext.P, nLen);
-    EVP_DecryptFinal_ex(&ctx, vchPlaintext.data()+nPLen, &nFLen);
-
-    EVP_CIPHER_CTX_cleanup(&ctx);
-
-    vchPlaintext.Size = nPLen + nFLen;
     return true;
 }
-
 
 bool EncryptSecret(CKeyingMaterial& vMasterKey, const Blob& vchPlaintext, const HashValue& nIV, std::vector<unsigned char> &vchCiphertext) {
     CCrypter cKeyCrypter;
@@ -122,7 +102,7 @@ bool EncryptSecret(CKeyingMaterial& vMasterKey, const Blob& vchPlaintext, const 
     return cKeyCrypter.Encrypt((CKeyingMaterial)vchPlaintext, vchCiphertext);
 }
 
-bool DecryptSecret(const CKeyingMaterial& vMasterKey, const ConstBuf& vchCiphertext, const HashValue& nIV, Blob& vchPlaintext) {
+bool DecryptSecret(const CKeyingMaterial& vMasterKey, RCSpan vchCiphertext, const HashValue& nIV, Blob& vchPlaintext) {
     CCrypter cKeyCrypter;
     std::vector<unsigned char> chIV(WALLET_CRYPTO_KEY_SIZE);
     memcpy(&chIV[0], nIV.data(), WALLET_CRYPTO_KEY_SIZE);
@@ -131,29 +111,6 @@ bool DecryptSecret(const CKeyingMaterial& vMasterKey, const ConstBuf& vchCiphert
     return cKeyCrypter.Decrypt(vchCiphertext, vchPlaintext);
 }
 
-MyKeyInfo CCrypter::GenRandomKey() {
-#if UCFG_COIN_USE_OPENSSL
-	ECDsa dsa(256);
-	MyKeyInfo ki;
-	ki.Comment = nullptr;
-	ki.Key = dsa.Key;
-	Blob privData = ki.Key.Export(CngKeyBlobFormat::OSslEccPrivateBignum);
-	ki.SetPrivData(privData, true);
-	ki.PubKey = ki.Key.Export(CngKeyBlobFormat::OSslEccPublicCompressedBlob);
-	return ki;
-#else
-	!!!TODO
-#endif
-}
-
-Blob CCrypter::PublicKeyBlobToCompressedBlob(const ConstBuf& cbuf) {
-#if UCFG_COIN_USE_OPENSSL
-	CngKey key = CngKey::Import(cbuf, CngKeyBlobFormat::OSslEccPublicBlob);
-	return key.Export(CngKeyBlobFormat::OSslEccPublicCompressedBlob);
-#else
-	!!!TODO
-#endif
-}
 
 } // Coin::
 

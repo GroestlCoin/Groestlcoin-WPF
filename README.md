@@ -4,7 +4,7 @@ Groestlcoin-WPF Wallet & Command-line Miner
 Build for Windows by Visual Studio 2015 or 2013 instructions
 ------------------------------------------------------------
 <pre>
-git clone --recursive https://github.com/GroestlCoin/Groestlcoin-WPF 
+git clone --recursive https://github.com/GroestlCoin/Groestlcoin-WPF
 cd Groestlcoin-WPF
 msbuild groestlcoin.sln /p:Configuration=R_St,Platform=x86
   <i>or</i>
@@ -33,6 +33,3 @@ groestlcoin-miner {-options}
 Example:
   groestlcoin-miner  -t 2  -o stratum+tcp://FtPdckbQRiP1XhNkL78s1LmJBhzYhkZL8V:1@erebor.dwarfpool.com:3345
 </pre>
-
-========================
-This software is free and open source.
