@@ -76,13 +76,6 @@
 				</TabItem>
 			</TabControl>
 		</DockPanel>
-		<tb:TaskbarIcon x:Name="TrayIcon" IconSource="groestlcoin.ico"  ToolTipText="GroestlCoin-WPF" TrayLeftMouseUp="TrayIcon_TrayMouseClick" TrayMouseDoubleClick="TrayIcon_TrayMouseClick" Margin="4,0,-4,0">
-			<tb:TaskbarIcon.ContextMenu>
-				<ContextMenu>
-					<MenuItem x:Name="TrayMenu_Exit" Header="E_xit" Click="OnTrayExit" />
-				</ContextMenu>
-			</tb:TaskbarIcon.ContextMenu>
-		</tb:TaskbarIcon>
 	</Grid>
 	<Window.Resources>
 

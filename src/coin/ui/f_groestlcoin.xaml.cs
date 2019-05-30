@@ -425,6 +425,10 @@ namespace Coin {
                     "Coin Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK;
         }
 
+        private void OnToolsRescan(object sender, RoutedEventArgs e) {
+            SelectedWalletNotNull().Wallet.Rescan();
+        }
+
         private void OnFileImport(object sender, RoutedEventArgs e) {
             if (!EnsurePassphraseUnlock())
                 return;

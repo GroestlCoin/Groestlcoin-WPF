@@ -1,70 +1,63 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <StartupObject>Coin.App</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>images\groestlcoin.ico</ApplicationIcon>
-    <BaseIntermediateOutputPath>$(SolutionDir)Obj\\</BaseIntermediateOutputPath>
-    <OutputPath>$(SolutionDir)$(Platform)_$(Configuration)\</OutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'D_St|x64' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R_St|x64' ">
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x64</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
-  </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{2AA40339-73FA-4440-9A35-2A458E9CBC0B}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
+    <TargetFramework>net45</TargetFramework>
     <RootNamespace>Coin</RootNamespace>
+    <UseWPF>true</UseWPF>
+    <Platforms>x64;x86</Platforms>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <ApplicationIcon>images\groestlcoin.ico</ApplicationIcon>
+    <StartupObject>Coin.App</StartupObject>
     <AssemblyName>Groestlcoin-WPF</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <WarningLevel>4</WarningLevel>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <Product>Groestlcoin-WPF</Product>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <OutputPath>$(SolutionDir)$(Platform)_$(Configuration)\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'D_St|x86' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DebugType>full</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'R_St|x86' ">
-    <DefineConstants>
-    </DefineConstants>
-    <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
-    <PlatformTarget>x86</PlatformTarget>
-    <ErrorReport>prompt</ErrorReport>
-    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <Prefer32Bit>false</Prefer32Bit>
-    <UseVSHostingProcess>false</UseVSHostingProcess>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x86'">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.coineng">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath>
-    </Reference>
+    <Compile Include="..\..\m\guicomp\c_dial-pad.cs" Link="GuiComp\c_dial-pad.cs" />
+    <Compile Include="..\..\m\guicomp\c_dial-pad.designer.cs" Link="GuiComp\c_dial-pad.designer.cs" />
+    <Compile Include="..\..\m\guicomp\file-document.cs" Link="GuiComp\file-document.cs" />
+    <Compile Include="..\..\m\guicomp\formsutil.cs" Link="GuiComp\formsutil.cs" />
+    <Compile Include="..\..\m\guicomp\f_about.cs" Link="GuiComp\f_about.cs" />
+    <Compile Include="..\..\m\guicomp\f_about.designer.cs" Link="GuiComp\f_about.designer.cs" />
+    <Compile Include="..\..\m\guicomp\f_querystring.cs" Link="GuiComp\f_querystring.cs" />
+    <Compile Include="..\..\m\guicomp\guicomp.cs" Link="GuiComp\guicomp.cs" />
+    <Compile Include="..\..\m\util\lru.cs" Link="Util\lru.cs" />
+    <Compile Include="..\..\m\util\posix.cs" Link="Util\posix.cs" />
+    <Compile Include="..\..\m\util\util-formatters.cs" Link="Util\util-formatters.cs" />
+    <Compile Include="..\..\m\util\util.cs" Link="Util\util.cs" />
+    <Compile Include="..\..\m\win32\errorcodes.cs" Link="Win32\errorcodes.cs" />
+    <Compile Include="..\..\m\win32\gdi.cs" Link="Win32\gdi.cs" />
+    <Compile Include="..\..\m\win32\kernel.cs" Link="Win32\kernel.cs" />
+    <Compile Include="..\..\m\win32\richedit.cs" Link="Win32\richedit.cs" />
+    <Compile Include="..\..\m\win32\win32.cs" Link="Win32\win32.cs" />
+    <Compile Include="..\..\m\win32\wincon.cs" Link="Win32\wincon.cs" />
+    <Compile Include="..\..\m\win32\winerror.cs" Link="Win32\winerror.cs" />
+    <Compile Include="..\..\m\win32\winmm.cs" Link="Win32\winmm.cs" />
+    <Compile Include="..\..\m\win32\winuser.cs" Link="Win32\winuser.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\m\guicomp\f_about.resx" Link="GuiComp\f_about.resx" />
+    <EmbeddedResource Include="..\..\m\guicomp\f_querystring.resx" Link="GuiComp\f_querystring.resx" />
+    <EmbeddedResource Include="..\..\m\guicomp\f_textinfo.resx" Link="GuiComp\f_textinfo.resx" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -74,186 +67,18 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+
+    <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="..\..\m\guicomp\d_about.xaml">
-      <Link>guicomp\d_about.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="..\..\m\guicomp\d_text-info.xaml">
-      <Link>guicomp\d_text-info.xaml</Link>
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="c_send-money.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="c_transactions.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="f_address.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="f_groestlcoin.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\BalloonIcon.cs">
-      <Link>NotifyIcon\BalloonIcon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\BalloonFlags.cs">
-      <Link>NotifyIcon\BalloonFlags.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\IconDataMembers.cs">
-      <Link>NotifyIcon\IconDataMembers.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\IconState.cs">
-      <Link>NotifyIcon\IconState.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\MouseEvent.cs">
-      <Link>NotifyIcon\MouseEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\NotifyCommand.cs">
-      <Link>NotifyIcon\NotifyCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\NotifyIconData.cs">
-      <Link>NotifyIcon\NotifyIconData.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\NotifyIconVersion.cs">
-      <Link>NotifyIcon\NotifyIconVersion.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\Point.cs">
-      <Link>NotifyIcon\Point.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\TrayInfo.cs">
-      <Link>NotifyIcon\TrayInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\WinApi.cs">
-      <Link>NotifyIcon\WinApi.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\WindowClass.cs">
-      <Link>NotifyIcon\WindowClass.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Interop\WindowMessageSink.cs">
-      <Link>NotifyIcon\WindowMessageSink.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\PopupActivationMode.cs">
-      <Link>NotifyIcon\PopupActivationMode.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\RoutedEventHelper.cs">
-      <Link>NotifyIcon\RoutedEventHelper.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\TaskbarIcon.cs">
-      <Link>NotifyIcon\TaskbarIcon.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\TaskbarIcon.Declarations.cs">
-      <Link>NotifyIcon\TaskbarIcon.Declarations.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\foreign\m-comp\notify-icon\Util.cs">
-      <Link>NotifyIcon\Util.cs</Link>
-    </Compile>
-    <Compile Include="..\..\m\guicomp\d_about.xaml.cs">
-      <Link>guicomp\d_about.xaml.cs</Link>
-      <DependentUpon>d_about.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\m\guicomp\d_text-info.xaml.cs">
-      <Link>guicomp\d_text-info.xaml.cs</Link>
-      <DependentUpon>d_text-info.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="..\..\m\guicomp\f_querystring.cs">
-      <Link>guicomp\f_querystring.cs</Link>
-      <SubType>form</SubType>
-    </Compile>
-    <Compile Include="..\..\m\guicomp\guicomp.cs">
-      <Link>guicomp\guicomp.cs</Link>
-    </Compile>
-    <Compile Include="..\..\m\win32\win32.cs">
-      <Link>win32\win32.cs</Link>
-    </Compile>
-    <Compile Include="..\..\m\win32\winuser.cs">
-      <Link>win32\winuser.cs</Link>
-    </Compile>
-    <Compile Include="app.cs" />
-    <Compile Include="c_my-addresses.cs" />
-    <Compile Include="c_recipients.cs" />
-    <Compile Include="c_send-money.xaml.cs">
-      <DependentUpon>c_send-money.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="c_transactions.xaml.cs">
-      <DependentUpon>c_transactions.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="f_address.xaml.cs">
-      <DependentUpon>f_address.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="f_groestlcoin.xaml.cs">
-      <DependentUpon>f_groestlcoin.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="f_options.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="f_passphrase.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
+    <Reference Include="Interop.coineng"> <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath> </Reference>
+
+    <Resource Include="images\groestlcoin.ico"><Link>groestlcoin.ico   </Link></Resource>
+
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="f_options.xaml.cs">
-      <DependentUpon>f_options.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="f_passphrase.xaml.cs">
-      <DependentUpon>f_passphrase.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\Settings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-    </Compile>
-    <EmbeddedResource Include="..\..\m\guicomp\f_querystring.resx">
-      <Link>guicomp\f_querystring.resx</Link>
-      <DependentUpon>f_querystring.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <None Include="app.config" />
-    <None Include="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <AppDesigner Include="Properties\" />
+    <Folder Include="GuiComp\" />
+    <Folder Include="Win32\" />
+    <Folder Include="Util\" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\groestlcoin.ico">
-      <Link>groestlcoin.ico</Link>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="images\groestlcoin.ico" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PostBuildEvent>editbin /LARGEADDRESSAWARE $(TargetPath)</PostBuildEvent>
-  </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
