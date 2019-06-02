@@ -192,8 +192,8 @@ void AddressObj::DecodeBech32(HasherEng& hasher, RCString s) {
 		wchar_t ch = s[i];
 		if (ch < 33 || ch > 126)
 			Throw(CoinErr::InvalidAddress);
-		bHasLower |= islower(ch);
-		bHasUpper |= isupper(ch);
+		bHasLower |= (bool)islower(ch);
+		bHasUpper |= (bool)isupper(ch);
 		lower[i] = (char)tolower(ch);
 	}
 	lower[s.length()] = 0;

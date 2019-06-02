@@ -31,12 +31,6 @@
     <ClCompile Include="block-template.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="metis.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="metis-imp.c">
-      <Filter>Source Files\C</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\el\crypto\sha-3.cpp">
       <Filter>Comp\crypto</Filter>
     </ClCompile>

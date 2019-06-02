@@ -10,7 +10,7 @@
 
         <WindowsTargetPlatformVersion Condition="'$(PlatformToolset)' == 'v140'">10.0.14393.0</WindowsTargetPlatformVersion>
         <WindowsTargetPlatformVersion Condition="'$(PlatformToolset)' == 'v141'">10.0.14393.0</WindowsTargetPlatformVersion>
-        <WindowsTargetPlatformVersion Condition="'$(PlatformToolset)' == 'v142'">10.0.14393.0</WindowsTargetPlatformVersion>
+        <WindowsTargetPlatformVersion Condition="'$(PlatformToolset)' == 'v142'">10.0.17763.0</WindowsTargetPlatformVersion>
 
         <YasmPath>C:\UTIL\</YasmPath>
         <SpectreMitigation>false</SpectreMitigation>

@@ -557,8 +557,6 @@ protected:
     void Process(Link& link) override;
 };
 
-typedef array<uint8_t, 6> ShortTxId;
-
 class CompactSize {
 public:
     uint16_t Value;

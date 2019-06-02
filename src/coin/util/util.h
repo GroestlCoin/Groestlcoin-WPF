@@ -324,6 +324,10 @@ public:
     }
 };
 
+struct ShortTxId {
+	uint8_t Data[6];
+};
+
 class CoinSerialized {
 public:
 	uint32_t Ver;
@@ -344,6 +348,10 @@ public:
         wr.Write(Span(ar));
     }
 
+	static void WriteEl(ProtocolWriter& wr, const ShortTxId& txId) {
+		wr.Write(txId.Data, sizeof(txId.Data));
+	}
+
     template <class T>
     static void WriteEl(ProtocolWriter& wr, const T& v) { v.Write(wr); }
 
@@ -358,6 +366,10 @@ public:
     static void ReadEl(const ProtocolReader& rd, array<uint8_t, N>& ar) {
         rd.Read(ar.data(), N);
     }
+
+	static void ReadEl(const ProtocolReader& rd, ShortTxId txId) {
+		rd.Read(txId.Data, sizeof(txId.Data));
+	}
 
     template <class T>
     static void ReadEl(const ProtocolReader& rd, T& v) { v.Read(rd); }

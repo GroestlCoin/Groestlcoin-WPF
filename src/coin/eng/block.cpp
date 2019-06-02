@@ -284,9 +284,11 @@ HashValue BlockObj::Hash() const {
 		case HashAlgo::Sha3:
 			m_hash = HashValue(SHA3<256>().ComputeHash(hdata));
 			break;
+			/*!!!R
 		case HashAlgo::Metis:
 			m_hash = MetisHash(hdata);
 			break;
+			*/
 		case HashAlgo::Groestl:
 			m_hash = GroestlHash(hdata);
 			break;

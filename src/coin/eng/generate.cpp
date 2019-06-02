@@ -75,7 +75,7 @@ typedef list<COrphan> COrhpans;
 
 void WalletBase::ReserveGenKey() {
 	EXT_LOCK (m_eng->Mtx) {
-		pair<Blob, HashValue160> pp = GetReservedPublicKey();
+		pair<CanonicalPubKey, HashValue160> pp = GetReservedPublicKey();
 		m_genPubKey = pp.first;
 		m_genHash160 = pp.second;
 	}
@@ -90,8 +90,8 @@ Tx WalletBase::CreateCoinbaseTx() {
 
 	MemoryStream ms;
 	ScriptWriter wr(ms);
-//!!!?	if (m_genPubKey.Size != 0)
-//!!!?		wr << m_genPubKey << OP_CHECKSIG;
+//!!!?	if (m_genPubKey.Data.Size != 0)
+//!!!?		wr << m_genPubKey.Data << OP_CHECKSIG;
 //!!!?	else
 		wr << OP_DUP << OP_HASH160 << HashValue160(m_genHash160) << OP_EQUALVERIFY << OP_CHECKSIG;
 
@@ -198,7 +198,7 @@ void EmbeddedMiner::UpdateParentChilds() {
 	/*!!!
 	EXT_FOR (WalletBase *w, m_genWallets) {
 		if (m_parentWallets.empty()) {
-			WalletBestHash wbh = { w, HashValue() }; //!!!
+			WalletBestHash wbh = { w, HashValue::Null() }; //!!!
 			m_parentWallets.push_back(wbh);
 		}
 		else if (w->m_eng->ChainParams.AuxPowEnabled) {
@@ -302,7 +302,7 @@ LAB_START:
 
 	ptr<BitcoinWorkData> wd = new BitcoinWorkData;
 
-	DateTime now = DateTime::UtcNow();		
+	DateTime now = Clock::now();		
 	Block block(nullptr);
 		
 	if (now > m_dtPrevGetwork + seconds(60) ||

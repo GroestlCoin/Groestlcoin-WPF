@@ -1006,7 +1006,7 @@ CompactBlockMessage::CompactBlockMessage(const Block& block, bool bUseWtxid)
 ShortTxId CompactBlockMessage::GetShortTxId(const HashValue& hash, const uint64_t keys[2]) {
 	hashval hv = SipHash2_4(keys[0], keys[1]).ComputeHash(hash.ToSpan());
 	ShortTxId r;
-	memcpy(r.data(), hv.data(), 6);
+	memcpy(r.Data, hv.data(), 6);
 	return r;
 }
 
