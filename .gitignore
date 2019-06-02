@@ -16,5 +16,14 @@
 .vs/
 src/coin/.vs
 x64_R_St/
+x64_D_St/
 x86_R_St/
+x86_D_St/
 obj/
+*.vcxproj.user
+*.csproj.user
+*.msi
+*.wixobj
+*.wixpdb
+launchSettings.json
+

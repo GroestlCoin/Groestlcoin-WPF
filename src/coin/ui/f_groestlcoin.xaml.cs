@@ -194,12 +194,11 @@ namespace Coin {
                 m_wallet2forms[wallet] = wf;
                 TheWallet = wf;
 
-                EEngMode mode = EEngMode.Normal;
+                EEngMode mode = EEngMode.Bootstrap;
                 var sk = UserAppRegistryKey.OpenSubKey(wf.Wallet.CurrencySymbol);
                 bool bMiningEnabled = false;
                 if (sk != null) {
                     switch ((string)sk.GetValue("DBMode")) {
-                        case "Normal": mode = EEngMode.Normal; break;
                         case "Bootstrap": mode = EEngMode.Bootstrap; break;
                         case "Lite": mode = EEngMode.Lite; break;
                     }
