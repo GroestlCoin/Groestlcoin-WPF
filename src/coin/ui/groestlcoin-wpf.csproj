@@ -63,10 +63,5 @@
     <Folder Include="Win32\" />
     <Folder Include="Util\" />
 
-
-    <ContentWithTargetPath Include="..\..\..\coin-chains.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <TargetPath>coin-chains.xml</TargetPath>
-    </ContentWithTargetPath>
   </ItemGroup>
 </Project>

@@ -457,7 +457,7 @@ namespace Coin {
         }
 
         private void OnFileExport(object sender, RoutedEventArgs e) {
-            if (MessageBox.Show("Exported wallet file will contain unencrypted keys. You can lose all your GroestlCoins if this file will be stolen!\nPlease save it to secure place and remove from the working computer.\nAre you sure to export the wallet?",
+            if (MessageBox.Show("Exported wallet file will contain unencrypted keys. You can lose all your Groestlcoins if this file will be stolen!\nPlease save it to secure place and remove from the working computer.\nAre you sure to export the wallet?",
                     "Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK) {
                 if (!EnsurePassphraseUnlock())
                     return;

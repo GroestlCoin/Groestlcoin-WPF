@@ -2,10 +2,10 @@
 
 
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
-<?define PRODVER="2.1.0.6"?>
+<?define PRODVER="2.19.0.7"?>
 
-<Product Name='GroestlCoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='GroestlCoin' Language='1033' >
-   	<Package Id='*' Keywords='Installer' Description="GroestlCoin Installer" Comments='GroestlCoin-WPF' Manufacturer='GroestlCoin' InstallerVersion='301' Compressed='yes'  />
+<Product Name='Groestlcoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Groestlcoin' Language='1033' >
+   	<Package Id='*' Keywords='Installer' Description="Groestlcoin Installer" Comments='Groestlcoin-WPF' Manufacturer='Groestlcoin' InstallerVersion='301' Compressed='yes'  />
 
 	<UIRef Id="WixUI_InstallDir" />
 
@@ -18,7 +18,7 @@
     <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
 
 	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
-   	<Property Id='DiskPrompt' Value="GroestlCoin-WPF" />
+   	<Property Id='DiskPrompt' Value="Groestlcoin-WPF" />
 	<Property Id="ARPHELPLINK" Value="http://www.groestlcoin.org/downloads/" />
 	<Property Id="ARPURLINFOABOUT" Value="http://www.groestlcoin.org/downloads/" />
 	<Property Id="ARPURLUPDATEINFO" Value="http://www.groestlcoin.org/downloads/" />
@@ -34,11 +34,11 @@
    	<Directory Id='TARGETDIR' Name='SourceDir'>
 <?if $(sys.BUILDARCH) = x64 ?>
 		<Directory Id='ProgramFiles64Folder' Name='PFiles'>
-   			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
+   			<Directory Id='INSTALLDIR' Name='Groestlcoin-WPF' />
 		</Directory>
 <?else ?>
 		<Directory Id='ProgramFilesFolder' Name='PFiles'>
-   			<Directory Id='INSTALLDIR' Name='GroestlCoin-WPF' />
+   			<Directory Id='INSTALLDIR' Name='Groestlcoin-WPF' />
 		</Directory>
 <?endif ?>
 
@@ -50,22 +50,24 @@
 	<Media Id="1" Cabinet="x64.cab" EmbedCab="yes"/>
 
 	<Component Id='CMP_Groestlcoin' Guid='d40983c1-f860-42fa-9dfd-67bc4302f87c' Directory='INSTALLDIR' >
-		<File Id="GroestlCoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
-			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
-			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+		<File Id="Groestlcoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
+			<Shortcut Id="startmenuGroestlcoin" 	Directory="ProgramMenuFolder" 	Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
+<!--!!!T
 		<File Source="..\..\x64_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
+-->
 		<File Source="help\groestlcoin-wpf.htm"						/>
 	</Component>
 <?else ?>
 	<Media Id="1" Cabinet="x86.cab" EmbedCab="yes"/>
 
 	<Component Id='CMP_Groestlcoin' Guid='0f8d7055-41f1-4558-a6c9-ba9eb2e39c6f' Directory='INSTALLDIR' >
-		<File Id="GroestlCoin_WPF.exe" Source="..\..\x86_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
-			<Shortcut Id="startmenuGroestlCoinn" 	Directory="ProgramMenuFolder" 	Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
-			<Shortcut Id="desktopGroestlCoin" 		Directory="DesktopFolder"  		Name="GroestlCoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+		<File Id="Groestlcoin_WPF.exe" Source="..\..\x86_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
+			<Shortcut Id="startmenuGroestlcoin" 	Directory="ProgramMenuFolder" 	Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
 		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
@@ -76,12 +78,12 @@
 
 
  	<CustomAction Id="NewerVersionDetected" Error="There is a later version of this product installed"/>
-	<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" /> 
-	<CustomAction Id='LaunchFile' FileKey='GroestlCoin_WPF.exe' ExeCommand='' Return="asyncNoWait" />
+	<CustomAction Id="SetARPINSTALLLOCATION" Property="ARPINSTALLLOCATION" Value="[INSTALLDIR]" />
+	<CustomAction Id='LaunchFile' FileKey='Groestlcoin_WPF.exe' ExeCommand='' Return="asyncNoWait" />
 
-	
+
 	<InstallUISequence>
-    	<AppSearch After="FindRelatedProducts"/> 
+    	<AppSearch After="FindRelatedProducts"/>
 	</InstallUISequence>
 
 
@@ -97,20 +99,19 @@
 		<Custom Action="NetfxAbortError" After="InstallInitialize"><![CDATA[(NOT (NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT))]]></Custom>
 
 		<Custom Action="NewerVersionDetected" After="FindRelatedProducts">NEWERVERSIONDETECTED</Custom>
-		<RemoveExistingProducts After="InstallInitialize" />  
+		<RemoveExistingProducts After="InstallInitialize" />
 		<InstallFiles/>
 		<Custom Action="SetARPINSTALLLOCATION" After="InstallValidate"></Custom>
 		<SelfRegModules/>
-		<Custom Action='LaunchFile' After='InstallFinalize'>LAUNCHPRODUCT</Custom> 
+		<Custom Action='LaunchFile' After='InstallFinalize'>LAUNCHPRODUCT</Custom>
 	</InstallExecuteSequence>
 
 
-	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" /> 
+	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />
 
-   	<Feature Id='Complete' Level='1' Title='GroestlCoin-WPF'>
+   	<Feature Id='Complete' Level='1' Title='Groestlcoin-WPF'>
    		<ComponentRef Id='CMP_Groestlcoin' />
    	</Feature>
 
 </Product>
 </Wix>
-

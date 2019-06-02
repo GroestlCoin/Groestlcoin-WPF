@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Windows;
 
-[assembly: AssemblyTitle("GroestlCoin-WPF Wallet")]
-[assembly: AssemblyDescription("GroestlCoin-WPF Wallet")]
+[assembly: AssemblyTitle("Groestlcoin-WPF Wallet")]
+[assembly: AssemblyDescription("Groestlcoin-WPF Wallet")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("GroestlCoin-WPF")]
+[assembly: AssemblyProduct("Groestlcoin-WPF")]
 [assembly: AssemblyCopyright("Copyright © 2011-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

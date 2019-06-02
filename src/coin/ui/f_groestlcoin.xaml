@@ -3,7 +3,7 @@
 	    xmlns:k="clr-namespace:Coin" 		
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:tb="clr-namespace:Hardcodet.Wpf.TaskbarNotification"
-        Title="GroestlCoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="groestlcoin.ico" Closing="Window_Closing">
+        Title="Groestlcoin-WPF" Height="300" Width="664" Loaded="Window_Loaded" Closed="Window_Closed" Icon="groestlcoin.ico" Closing="Window_Closing">
 	<Grid>
 		<DockPanel>
 			<Menu x:Name="MenuTop" DockPanel.Dock="Top">
