@@ -12,7 +12,7 @@
 
 	<Upgrade Id='$(var.UpgradeCode)'>
 		<UpgradeVersion OnlyDetect="yes" Minimum="$(var.PRODVER)" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
-		<UpgradeVersion OnlyDetect="no" Maximum="99.0.0.0" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
+		<UpgradeVersion OnlyDetect="no" Maximum="2.19.0.7" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
 	</Upgrade>
 
     <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
@@ -26,8 +26,9 @@
 	<Property Id="ARPNOREPAIR" Value="1" />
 <!--	<Property Id="WIXUI_INSTALLDIR" Value="INSTALLDIR" />-->
 
+
     <Property Id="INSTALLDIR">
-		<RegistrySearch Id="FindInstallLocation" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[OLDERVERSIONBEINGUPGRADED]" Name="InstallLocation" Type="raw" />
+        <RegistrySearch Id="FindInstallLocation" Root="HKLM" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\[OLDERVERSIONBEINGUPGRADED]" Name="InstallLocation" Type="raw" />
     </Property>
 
 
@@ -55,6 +56,9 @@
 			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
+		<File Source="..\..\x64_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
+
+
 <!--!!!T
 		<File Source="..\..\x64_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
@@ -70,6 +74,7 @@
 			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 		</File>
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
+		<File Source="..\..\x64_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
 		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
 		<File Source="help\groestlcoin-wpf.htm"						/>
@@ -87,16 +92,16 @@
 	</InstallUISequence>
 
 
-	<PropertyRef Id="NETFRAMEWORK40CLIENT"/>
+	<PropertyRef Id="NETFRAMEWORK45"/>
 
-	<Property Id="WixShellExecTarget" Value="http://www.microsoft.com/download/en/details.aspx?id=17718" />
+	<Property Id="WixShellExecTarget" Value="https://www.microsoft.com/en-us/download/details.aspx?id=42642" />
 	<CustomAction Id="OpenNetfxUrl" BinaryKey="WixCA" DllEntry="WixShellExec"/>
 
- 	<CustomAction Id="NetfxAbortError" Error="This application requires .NET Framework 4.0 or later. Please install the .NET Framework then run this installer again."/>
+ 	<CustomAction Id="NetfxAbortError" Error="This application requires .NET Framework 4.5 or later. Please install the .NET Framework then run this installer again."/>
 
 	<InstallExecuteSequence>
-		<Custom Action="OpenNetfxUrl" Before="InstallInitialize"><![CDATA[(NOT (NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT))]]></Custom>
-		<Custom Action="NetfxAbortError" After="InstallInitialize"><![CDATA[(NOT (NETFRAMEWORK35 OR NETFRAMEWORK40CLIENT))]]></Custom>
+		<Custom Action="OpenNetfxUrl" Before="InstallInitialize"><![CDATA[(NOT NETFRAMEWORK45)]]></Custom>
+		<Custom Action="NetfxAbortError" After="InstallInitialize"><![CDATA[(NOT NETFRAMEWORK45)]]></Custom>
 
 		<Custom Action="NewerVersionDetected" After="FindRelatedProducts">NEWERVERSIONDETECTED</Custom>
 		<RemoveExistingProducts After="InstallInitialize" />
