@@ -155,10 +155,8 @@ namespace Coin {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
-            MenuModeNormal.Tag = EEngMode.Normal;
-            MenuModeBootstrap.Tag = EEngMode.Bootstrap;
+            MenuModeFull.Tag = EEngMode.Bootstrap;
             MenuModeLite.Tag = EEngMode.Lite;
-
 
             LvWallet.ItemsSource = ActiveWalletForms;
             LvEvent.ItemsSource = WalletEvents;
@@ -395,8 +393,7 @@ namespace Coin {
         void SetMenuDBMode() {
             var wf = SelectedWallet();
             var mode = wf.Wallet.Mode;
-            MenuModeNormal.IsChecked = mode == EEngMode.Normal;
-            MenuModeBootstrap.IsChecked = mode == EEngMode.Bootstrap;
+            MenuModeFull.IsChecked = mode == EEngMode.Bootstrap;
             MenuModeLite.IsChecked = mode == EEngMode.Lite;
             MenuModeLite.IsEnabled = wf.Wallet.LiteModeAllowed;
         }

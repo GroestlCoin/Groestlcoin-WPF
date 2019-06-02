@@ -9,7 +9,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("GroestlCoin-WPF")]
-[assembly: AssemblyCopyright("Copyright © 2011-2015")]
+[assembly: AssemblyCopyright("Copyright © 2011-2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -35,4 +35,4 @@ using System.Windows;
 )]
 
 [assembly: AssemblyVersion("2.19.0.7")]
-[assembly: AssemblyFileVersion("2.1.0.7")]
+[assembly: AssemblyFileVersion("2.19.0.7")]

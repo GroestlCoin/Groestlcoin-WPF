@@ -1,33 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
+    <UseWPF>true</UseWPF>
     <OutputType>WinExe</OutputType>
     <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
-    <TargetFramework>net45</TargetFramework>
-    <RootNamespace>Coin</RootNamespace>
-    <UseWPF>true</UseWPF>
     <Platforms>x64;x86</Platforms>
+    <RootNamespace>Coin</RootNamespace>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
     <ApplicationIcon>images\groestlcoin.ico</ApplicationIcon>
     <StartupObject>Coin.App</StartupObject>
     <AssemblyName>Groestlcoin-WPF</AssemblyName>
     <Product>Groestlcoin-WPF</Product>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <OutputPath>$(SolutionDir)$(Platform)_$(Configuration)\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
-    <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <Configurations>R_St;D_St</Configurations>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='D_St|x86'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x86'">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
@@ -57,6 +41,8 @@
     <EmbeddedResource Include="..\..\m\guicomp\f_about.resx" Link="GuiComp\f_about.resx" />
     <EmbeddedResource Include="..\..\m\guicomp\f_querystring.resx" Link="GuiComp\f_querystring.resx" />
     <EmbeddedResource Include="..\..\m\guicomp\f_textinfo.resx" Link="GuiComp\f_textinfo.resx" />
+    <Resource Include="images\groestlcoin.ico"><Link>groestlcoin.ico   </Link></Resource>
+    <Reference Include="Interop.coineng"> <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath> </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -70,16 +56,17 @@
     <Reference Include="PresentationFramework" />
 
     <PackageReference Include="Hardcodet.NotifyIcon.Wpf" Version="1.0.8" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Interop.coineng"> <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath> </Reference>
-
-    <Resource Include="images\groestlcoin.ico"><Link>groestlcoin.ico   </Link></Resource>
 
   </ItemGroup>
   <ItemGroup>
     <Folder Include="GuiComp\" />
     <Folder Include="Win32\" />
     <Folder Include="Util\" />
+
+
+    <ContentWithTargetPath Include="..\..\..\coin-chains.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <TargetPath>coin-chains.xml</TargetPath>
+    </ContentWithTargetPath>
   </ItemGroup>
 </Project>

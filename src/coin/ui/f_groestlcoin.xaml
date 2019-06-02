@@ -25,9 +25,8 @@
 					<MenuItem Header="_Options" Click="OnToolsOptions"/>
 				</MenuItem>
 				<MenuItem x:Name="MenuDBMode" Header="DB _Mode" >
-					<MenuItem x:Name="MenuModeNormal" Header="_Normal" IsCheckable="True"  Click="MenuDBMode_Click" />
-					<MenuItem x:Name="MenuModeBootstrap" Header="_bootstrap.dat (Fast)" IsCheckable="True" Click="MenuDBMode_Click"  />
-					<MenuItem x:Name="MenuModeLite" Header="_Lite" IsCheckable="True" Click="MenuDBMode_Click"  />
+									<MenuItem Name="MenuModeFull" Header="_Full" IsCheckable="True" Click="MenuDBMode_Click"  />
+									<MenuItem Name="MenuModeLite" Header="_Lite" IsCheckable="True" Click="MenuDBMode_Click"  />
 				</MenuItem>
 				<MenuItem Header="_Help">
 					<MenuItem Header="_Help" Click="OnHelp"/>
