@@ -44,7 +44,6 @@
   <Import Project="..\..\cfg\vs\vs-ver.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'" Label="Configuration">
@@ -54,7 +53,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'" Label="Configuration">
@@ -64,7 +62,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -76,7 +73,6 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
-    <UseOfMfc>Dynamic</UseOfMfc>
     <CharacterSet>Unicode</CharacterSet>
     <CLRSupport>false</CLRSupport>
   </PropertyGroup>
@@ -118,38 +114,6 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
     <_ProjectFileVersion>10.0.21006.1</_ProjectFileVersion>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
-    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">false</LinkIncremental>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='D_St|x64'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='D_St|x64'" />
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">AllRules.ruleset</CodeAnalysisRuleSet>
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='R_St|x64'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|x64'" />
-    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='R_St|x64'" />
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">false</GenerateManifest>
     <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
@@ -196,14 +160,13 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalOptions>/fixed:no  
+      <AdditionalOptions>/fixed:no
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir)lib;$(FOREIGNDIR)\lib\x86</AdditionalLibraryDirectories>
       <DelayLoadDLLs>opencl.dll;</DelayLoadDLLs>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
-      <BaseAddress>0x2F100000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -223,7 +186,7 @@
       <TypeLibraryName>.\Debug/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -251,7 +214,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalOptions>/fixed:no  
+      <AdditionalOptions>/fixed:no
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x86</AdditionalLibraryDirectories>
       <DelayLoadDLLs>opencl.dll;  dbghelp.dll; psapi.dll; </DelayLoadDLLs>
@@ -299,7 +262,7 @@
       <TypeLibraryName>.\Debug/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -327,7 +290,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalOptions>/fixed:no  
+      <AdditionalOptions>/fixed:no
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <OutputFile>$(OutDir)$(TargetName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir)lib;$(FOREIGNDIR)\lib\x64</AdditionalLibraryDirectories>
@@ -335,7 +298,6 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>$(OutDir)PDB/$(TargetName).pdb</ProgramDatabaseFile>
       <SubSystem>Console</SubSystem>
-      <BaseAddress>0x2F100000</BaseAddress>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -349,7 +311,7 @@
       <TypeLibraryName>.\Debug/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>Disabled</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -377,7 +339,7 @@
       <LinkLibraryDependencies>false</LinkLibraryDependencies>
     </ProjectReference>
     <Link>
-      <AdditionalOptions>/fixed:no  
+      <AdditionalOptions>/fixed:no
 /IGNORE:4254 %(AdditionalOptions)</AdditionalOptions>
       <AdditionalLibraryDirectories>$(OutDir);$(FOREIGNDIR)\lib\x64</AdditionalLibraryDirectories>
       <DelayLoadDLLs>opencl.dll;</DelayLoadDLLs>
@@ -416,7 +378,7 @@
       <TypeLibraryName>.\Release/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -457,7 +419,6 @@
       <ImportLibrary>$(TargetDir)\lib\$(TargetName).lib</ImportLibrary>
       <SupportNobindOfDelayLoadedDLL>true</SupportNobindOfDelayLoadedDLL>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
-      <BaseAddress>0x2F100000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">
@@ -465,7 +426,7 @@
       <TypeLibraryName>.\Release/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -536,7 +497,7 @@
       <TypeLibraryName>.\Release/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -574,7 +535,6 @@
       <AdditionalDependencies>cryp.lib</AdditionalDependencies>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <ImportLibrary>$(TargetDir)\lib\$(TargetName).lib</ImportLibrary>
-      <BaseAddress>0x2F100000</BaseAddress>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">
@@ -582,7 +542,7 @@
       <TypeLibraryName>.\Release/testvc.tlb</TypeLibraryName>
     </Midl>
     <ClCompile>
-      <AdditionalOptions>/EHs /J %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>/EHs %(AdditionalOptions)</AdditionalOptions>
       <Optimization>MaxSpeed</Optimization>
       <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
       <AdditionalIncludeDirectories>.;../util;$(OutDir)/inc;</AdditionalIncludeDirectories>
@@ -716,7 +676,6 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">el/ext.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">el/ext.h</PrecompiledHeaderFile>
     </ClCompile>
-    <ClCompile Include="..\..\el\crypto\sha256.cpp" />
     <ClCompile Include="..\..\el\inet\proxy-client.cpp" />
     <ClCompile Include="..\..\el\inet\proxy.cpp" />
     <ClCompile Include="..\..\el\num\prime.cpp" />
@@ -926,16 +885,6 @@
     <ResourceCompile Include="bitcoin-miner.rc" />
   </ItemGroup>
   <ItemGroup>
-    <MASM Include="..\..\el\crypto\x86x64\sha256_x86x64.asm">
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='R_St|Win32'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='D_St|x64'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(SRCDIR)el\comp</IncludePaths>
-      <IncludePaths Condition="'$(Configuration)|$(Platform)'=='R_St|x64'">$(SRCDIR)el\comp</IncludePaths>
-    </MASM>
     <MASM Include="bitcoin_sha256_x86x64.asm">
       <IncludePaths Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\..\el\comp</IncludePaths>
       <IncludePaths Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">..\..\el\comp</IncludePaths>
