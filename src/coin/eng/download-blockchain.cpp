@@ -1,4 +1,4 @@
-/*######   Copyright (c) 2018 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com      ####
+/*######   Copyright (c) 2018-2019 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
 #                                                                                                                                     #
 # 		See LICENSE for licensing information                                                                                         #
 #####################################################################################################################################*/
@@ -8,92 +8,6 @@
 #include "coin-protocol.h"
 
 namespace Coin {
-
-BlockTreeItem::BlockTreeItem(const BlockHeader& header)
-	: base(header)
-{
-}
-
-BlockTreeItem BlockTree::FindInMap(const HashValue& hashBlock) const {
-	return EXT_LOCKED(Mtx, Lookup(Map, hashBlock).value_or(BlockTreeItem()));
-}
-
-BlockHeader BlockTree::FindHeader(const HashValue& hashBlock) const {
-	if (BlockTreeItem item = FindInMap(hashBlock))
-		return item;
-	return Eng().Db->FindHeader(hashBlock);
-}
-
-BlockTreeItem BlockTree::GetHeader(const HashValue& hashBlock) const {
-	if (BlockTreeItem item = FindHeader(hashBlock))
-		return item;
-	Throw(E_FAIL);
-}
-
-Block BlockTree::FindBlock(const HashValue& hashBlock) const {
-	if (BlockTreeItem item = FindInMap(hashBlock)) {
-		if (!item.IsHeaderOnly)
-			return Block(item.m_pimpl);
-	}
-	return Eng().LookupBlock(hashBlock);
-}
-
-Block BlockTree::GetBlock(const HashValue& hashBlock) const {
-	if (Block b = FindBlock(hashBlock))
-		return b;
-	Throw(E_FAIL);
-}
-
-BlockHeader BlockTree::GetAncestor(const HashValue& hashBlock, int height) const {
-	CoinEng& eng = Eng();
-	BlockTreeItem item = GetHeader(hashBlock);
-	if (height == item.Height)
-		return item;
-	if (height > item.Height)
-		return BlockHeader(nullptr);
-	EXT_LOCK(Mtx) {
-		while (height < item.Height-1) {
-			if (auto o = Lookup(Map, item.PrevBlockHash))
-				item = o.value();
-			else
-				goto LAB_TRY_MAIN_CHAIN;
-		}
-	}
-	return GetHeader(item.PrevBlockHash);
-LAB_TRY_MAIN_CHAIN:
-	return eng.Db->FindHeader(height);
-}
-
-BlockHeader BlockTree::LastCommonAncestor(const HashValue& ha, const HashValue& hb) const {
-	int h = (min)(GetHeader(ha).Height, GetHeader(hb).Height);
-	ASSERT(h >= 0);
-	BlockHeader a = GetAncestor(ha, h), b = GetAncestor(hb, h);
-	while (Hash(a) != Hash(b)) {
-		a = a.GetPrevHeader();
-		b = b.GetPrevHeader();
-	}
-	return a;
-}
-
-vector<Block> BlockTree::FindNextBlocks(const HashValue& hashBlock) const {
-	vector<Block> r;
-	EXT_LOCK(Mtx) {
-		EXT_FOR(CMap::value_type pp, Map) {
-			if (pp.second.PrevBlockHash == hashBlock && !pp.second.IsHeaderOnly)
-				r.push_back(Block(pp.second.m_pimpl));
-		}
-	}
-	return r;
-}
-
-void BlockTree::Add(const BlockHeader& header) {
-	ASSERT(header.Height >= 0);
-	EXT_LOCKED(Mtx, Map[Hash(header)] = BlockTreeItem(header));
-}
-
-void BlockTree::RemovePersistentBlock(const HashValue& hashBlock) {
-	EXT_LOCKED(Mtx, Map.erase(hashBlock));
-}
 
 bool CoinEng::HaveAllBlocksUntil(const HashValue& hash) {
 	BlockTreeItem bti = Tree.FindInMap(hash);
@@ -173,21 +87,32 @@ void CoinEng::MarkBlockAsInFlight(GetDataMessage& mGetData, Link& link, const In
 	mGetData.Invs.push_back(Inventory(invType, inv.HashValue));
 }
 
+void Link::SetHashBlockBestKnown(const HashValue& hash) {
+	CoinEng& eng = static_cast<CoinEng&>(*Net);
+
+	HashBlockBestKnown = hash;
+
+	TRC(4, Peer->get_EndPoint().Address << " " << eng.BlockStringId(HashBlockBestKnown));
+}
+
 void Link::UpdateBlockAvailability(const HashValue& hashBlock) {
 	CoinEng& eng = static_cast<CoinEng&>(*Net);
 
 	if (eng.Tree.FindHeader(HashBlockLastUnknown)) {
 		if (!HashBlockBestKnown)
-			HashBlockBestKnown = HashBlockLastUnknown;
+			SetHashBlockBestKnown(HashBlockLastUnknown);
 		HashBlockLastUnknown = HashValue::Null();
 	}
 
 	if (BlockTreeItem bti = eng.Tree.FindHeader(hashBlock)) {
 		BlockTreeItem btiPrevBest = eng.Tree.FindHeader(HashBlockBestKnown);
 		if (!btiPrevBest || btiPrevBest.Height < bti.Height)
-			HashBlockBestKnown = hashBlock;
-	} else
+			SetHashBlockBestKnown(hashBlock);
+	} else {
 		HashBlockLastUnknown = hashBlock;
+
+		TRC(4, Peer->get_EndPoint().Address << " let HashBlockLastUnknown = " << eng.BlockStringId(hashBlock));
+	}
 }
 
 void InvMessage::Process(Link& link) {
@@ -210,8 +135,13 @@ void InvMessage::Process(Link& link) {
 
 
 	EXT_FOR(const Inventory& inv, Invs) {
+#ifdef _DEBUG
+		if (inv.Type == InventoryType::MSG_WITNESS_BLOCK) {
+			int aa = 1;
+		}
+#endif
 
-		bool bIsBlockInv = inv.Type==InventoryType::MSG_BLOCK || eng.Mode==EngMode::Lite && inv.Type==InventoryType::MSG_FILTERED_BLOCK;
+		bool bIsBlockInv = inv.Type == InventoryType::MSG_BLOCK || eng.Mode == EngMode::Lite && inv.Type == InventoryType::MSG_FILTERED_BLOCK;
 		if (bIsBlockInv)
 			link.UpdateBlockAvailability(inv.HashValue);
 
@@ -252,10 +182,8 @@ void InvMessage::Process(Link& link) {
 	}
 
 	if (hashLastInvBlock) {
-		HashValue hashBest;
-		if (BlockHeader bh = eng.BestHeader())
-			hashBest = Hash(bh);
-		link.Send(new GetHeadersMessage(hashBest, hashLastInvBlock));
+		BlockHeader bh = eng.BestHeader();
+		link.Send(new GetHeadersMessage(bh ? Hash(bh) : HashValue(), hashLastInvBlock));
 	}
 
 	if (!m->Invs.empty()) {
@@ -264,27 +192,31 @@ void InvMessage::Process(Link& link) {
 	}
 }
 
+BlockHeader CoinEng::ProcessNewBlockHeaders(const vector<BlockHeader>& headers) {
+	BlockHeader headerLast;
+	for (size_t i = 0; i < headers.size(); ++i) {
+		if (BlockHeader headerPrev = exchange(headerLast, headers[i]))
+			if (Hash(headerPrev) != headerLast.PrevBlockHash)
+				throw PeerMisbehavingException(20);
+		headerLast.Accept();
+	}
+	return headerLast;
+}
+
 void HeadersMessage::Process(Link& link) {
 	CoinEng& eng = Eng();
 
-	if (Headers.size() > MAX_HEADERS_RESULTS)
+	if (Headers.size() > ProtocolParam::MAX_HEADERS_RESULTS)
 		throw PeerMisbehavingException(20);
 
 	if (eng.UpgradingDatabaseHeight)
 		return;
 
-	BlockHeader headerLast;
-	for (size_t i = 0; i < Headers.size(); ++i) {
-		if (BlockHeader headerPrev = exchange(headerLast, Headers[i]))
-			if (Hash(headerPrev) != headerLast.PrevBlockHash)
-				throw PeerMisbehavingException(20);
-		headerLast.Accept();
-	}
-	if (headerLast) {
+	if (BlockHeader headerLast = eng.ProcessNewBlockHeaders(Headers)) {
 		HashValue hashLast = Hash(headerLast);
 		link.UpdateBlockAvailability(hashLast);
-		if (Headers.size() == MAX_HEADERS_RESULTS) {
-			TRC(4, "Last Header: " << headerLast.Height << " " << hashLast);
+		if (Headers.size() == ProtocolParam::MAX_HEADERS_RESULTS) {
+			TRC(4, "Last Header: " << headerLast.Height << "/" << hashLast);
 			link.Send(new GetHeadersMessage(hashLast));
 		}
 	}
@@ -295,14 +227,16 @@ void Link::RequestHeaders() {
 
 	if (!IsSyncStarted && !IsClient && !eng.UpgradingDatabaseHeight) {
 		if (Block bestBlock = eng.BestBlock()) {
-			bool bFetch = IsPreferredDownload || (0==eng.aPreferredDownloadPeers && !IsClient && !IsOneShot);
-			IsSyncStarted = eng.aSyncStartedPeers.load()==0 && bFetch || bestBlock.Timestamp > Clock::now()-TimeSpan::FromHours(24);
+			bool bFetch = IsPreferredDownload || (0 == eng.aPreferredDownloadPeers && !IsOneShot);
+			IsSyncStarted = eng.aSyncStartedPeers.load() == 0 && bFetch || bestBlock.Timestamp > Clock::now() - TimeSpan::FromHours(24);
 			if (IsSyncStarted) {
 				++eng.aSyncStartedPeers;
 
-				HashValue hashBest;
-				if (BlockHeader bh = eng.BestHeader())
-					hashBest = Hash(bh);
+				BlockHeader bh = eng.BestHeader();
+				HashValue hashBest =
+					!bh ? HashValue()
+					: bh.PrevBlockHash ? bh.PrevBlockHash			// Start with previous of best known header to avoid getting empty Headers list.
+					: Hash(bh);
 				Send(new GetHeadersMessage(hashBest));
 			}
 		} else {
@@ -318,10 +252,10 @@ void Link::RequestHeaders() {
 void Link::RequestBlocks() {
 	CoinEng& eng = static_cast<CoinEng&>(*Net);
 
-	bool bFetch = IsPreferredDownload || (0==eng.aPreferredDownloadPeers && !IsClient && !IsOneShot);
+	bool bFetch = IsPreferredDownload || (0 == eng.aPreferredDownloadPeers.load() && !IsClient && !IsOneShot);
 
 	int count = MAX_BLOCKS_IN_TRANSIT_PER_PEER - (int)EXT_LOCKED(eng.Mtx, BlocksInFlight.size());
-	if (IsClient || (!bFetch && eng.IsInitialBlockDownload()) || count<=0 || !HashBlockBestKnown)
+	if (IsClient || ((!bFetch || IsLimitedNode) && eng.IsInitialBlockDownload()) || count <= 0 || !HashBlockBestKnown)
 		return;
 
 	if (!HashBlockLastCommon) {
@@ -338,7 +272,7 @@ void Link::RequestBlocks() {
 	BlockTreeItem bti = eng.Tree.GetHeader(HashBlockLastCommon),
 		btiBestKnown = eng.Tree.GetHeader(HashBlockBestKnown);
 	HashValue prevHashBlockLastCommon = HashBlockLastCommon;
-	TRC(4, "HashBlockLastCommon: " << bti.Height << " " << HashBlockLastCommon << "     HashBlockBestKnown: " << btiBestKnown.Height << " " << HashBlockBestKnown);
+	TRC(4, "HashBlockLastCommon: " << bti.Height << "/" << HashBlockLastCommon << "     HashBlockBestKnown: " << btiBestKnown.Height << "/" << HashBlockBestKnown);
 
 	int nWindowEnd = bti.Height + BLOCK_DOWNLOAD_WINDOW,
 		nMaxHeight = (min)(btiBestKnown.Height, nWindowEnd + 1);
@@ -349,11 +283,11 @@ void Link::RequestBlocks() {
 		typedef map<int, HashValue> CHeight2Value;
 		CHeight2Value height2hash;
 
-		int nToFetch = (min)(nMaxHeight-bti.Height, (max)(128, count - (mGetData ? (int)mGetData->Invs.size() : 0) ));
+		int nToFetch = (min)(nMaxHeight - bti.Height, (max)(128, count - (mGetData ? (int)mGetData->Invs.size() : 0)));
 		BlockHeader cur = bti = eng.Tree.GetAncestor(HashBlockBestKnown, bti.Height+nToFetch);
 		height2hash.insert(make_pair(cur.Height, Hash(cur)));
-		for (int i=1; i<nToFetch; ++i) {
-			height2hash.insert(make_pair(cur.Height-1, cur.PrevBlockHash));
+		for (int i = 1; i < nToFetch; ++i) {
+			height2hash.insert(make_pair(cur.Height - 1, cur.PrevBlockHash));
 			cur = cur.GetPrevHeader();
 		}
 
@@ -395,7 +329,7 @@ void Link::RequestBlocks() {
 	}
 LAB_OUT_LOOP:
 	if (prevHashBlockLastCommon != HashBlockLastCommon) {
-		TRC(4, "Updated HashBlockLastCommon: " << HashBlockLastCommon);
+		TRC(4, "Updated HashBlockLastCommon: " << eng.BlockStringId(HashBlockLastCommon));
 	}
 
 	if (mGetData) {

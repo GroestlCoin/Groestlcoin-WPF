@@ -13,6 +13,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <Configurations>R_St;D_St</Configurations>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <Version>2.19.0.8</Version>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\m\guicomp\c_dial-pad.cs" Link="GuiComp\c_dial-pad.cs" />

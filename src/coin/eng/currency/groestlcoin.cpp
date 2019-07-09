@@ -122,15 +122,9 @@ protected:
 
 };
 
+
+
 static CurrencyFactory<GroestlCoinEng> s_groestlcoin("GroestlCoin");
-
-#if UCFG_COIN_GENERATE && !defined(_AFXDLL)
-
-class GroestlHasher;							
-extern GroestlHasher g_groestlHasher;
-GroestlHasher *g_pHasher = &g_groestlHasher;			// to Link GroestlHasher
-
-#endif
 
 } // Coin::
 

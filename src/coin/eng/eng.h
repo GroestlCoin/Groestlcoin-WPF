@@ -49,6 +49,13 @@ class IBlockChainDb;
 class GetDataMessage;
 class Link;
 
+extern const Version
+VER_BLOCKS_TABLE_IS_HASHTABLE,
+VER_PUBKEY_RECOVER,
+VER_HEADERS,
+DB_VER_COMPACT_UTXO,
+DB_VER_LATEST;
+
 struct QueuedBlockItem {
 	Coin::Link& Link;
 	HashValue HashBlock;
@@ -106,6 +113,12 @@ class ChainParams {
 	typedef ChainParams class_type;
 
 public:
+	vector<String> BootUrls;
+
+	typedef vector<pair<int, HashValue>> CCheckpoints;
+	CCheckpoints Checkpoints;
+
+	unordered_set<IPEndPoint> Seeds;
 	String Name, Symbol;
 	HashValue Genesis;
 	seconds BlockSpan;
@@ -123,7 +136,6 @@ public:
 	uint32_t ProtocolMagic;
 	uint32_t ProtocolVersion;
 	uint16_t DefaultPort;
-	vector<String> BootUrls;
 	int IrcRange;
 	int PayToScriptHashHeight;
 	int CheckDupTxHeight;
@@ -143,10 +155,6 @@ public:
 	bool Listen;
 	size_t MedianTimeSpan;
 
-	typedef vector<pair<int, HashValue>> CCheckpoints;
-	CCheckpoints Checkpoints;
-
-	unordered_set<IPEndPoint> Seeds;
 	int LastCheckpointHeight;
 	vector<Blob> AlertPubKeys;
 	Blob CheckpointMasterPubKey;
@@ -163,7 +171,7 @@ private:
 	void ReadParam(int64_t& param, IXmlAttributeCollection& xml, RCString name);
 };
 
-class Alert : public Object, public CPersistent {
+class Alert : public NonInterlockedObject, public CPersistent {
 public:
 	int32_t Ver;
 	DateTime RelayUntil, Expiration;
@@ -314,9 +322,9 @@ public:
 	CoinDb();
 	~CoinDb();
 	KeyInfo AddNewKey(KeyInfo ki);
-	KeyInfo FindReservedKey();
+	KeyInfo FindReservedKey(AddressType type = AddressType::P2SH);
 	void TopUpPool(int lim = KEYPOOL_SIZE);
-	KeyInfo GenerateNewAddress(RCString comment, int lim = KEYPOOL_SIZE);
+	KeyInfo GenerateNewAddress(AddressType type, RCString comment, int lim = KEYPOOL_SIZE);
 	void RemovePubKeyFromReserved(const CanonicalPubKey& pubKey);
 	void RemovePubHash160FromReserved(const HashValue160& hash160);
 
@@ -373,10 +381,8 @@ extern thread_local ScriptPolicy t_scriptPolicy;
 class COIN_CLASS CCoinEngThreadKeeper : public CHasherEngThreadKeeper {
 	typedef CHasherEngThreadKeeper base;
 
-	//!!!R	CoinEng *m_prev;
 	EnabledFeatures m_prevFeatures;
 	ScriptPolicy m_prevScriptPolicy;
-
 public:
 	CCoinEngThreadKeeper(CoinEng* cur, ScriptPolicy *pScriptPolicy = nullptr, bool enableFeatures = false);
 	~CCoinEngThreadKeeper();
@@ -384,29 +390,28 @@ public:
 
 class CoinMessage : public P2P::Message, public CoinSerialized, public CPrintable {
 	typedef P2P::Message Base;
-
 public:
 	const char* const Cmd;
 	uint32_t Checksum;
-	bool WitnessAware;
+	bool WitnessAware = true;
 
 	CoinMessage(const char* cmd)
 		: Cmd(cmd)
-		, WitnessAware(true)
 	{}
 
 	static ptr<CoinMessage> ReadFromStream(Link& link, const BinaryReader& rd);
 	virtual void Write(ProtocolWriter& wr) const;
     virtual void Read(const ProtocolReader& rd);
+	virtual void Trace(Coin::Link& link, bool bSend) const;
 protected:
 	void Print(ostream& os) const override;
 	virtual void Process(Coin::Link& link) {}
 	void ProcessMsg(P2P::Link& link) override;
-
-	friend class CoinEng;
 private:
     void Write(BinaryWriter& wr) const override { Write((ProtocolWriter&)wr); }
     void Read(const BinaryReader& rd) override { Read((const ProtocolReader&)rd); }
+
+	friend class CoinEng;
 };
 
 extern const Version
@@ -443,7 +448,7 @@ public:
 		*/
 };
 
-class IBlockChainDb : public Object, public ITransactionable {
+class IBlockChainDb : public InterlockedObject, public ITransactionable {
 public:
 	CInt<int> m_nCheckpont;
 	String DefaultFileExt;
@@ -456,7 +461,7 @@ public:
 	virtual bool Create(const path& p) = 0;
 	virtual bool Open(const path& p) = 0; // returns false if DBConvering deffered
 	virtual void Close(bool bAsync = true) = 0;
-	virtual void Recreate();
+	virtual void Recreate(const Version& verOld);
 	virtual void Checkpoint() = 0;
 
 	virtual Version CheckUserVersion() = 0;
@@ -465,8 +470,10 @@ public:
 
 	virtual bool HaveHeader(const HashValue& hash) = 0;
 	virtual bool HaveBlock(const HashValue& hash) = 0;
+	virtual int FindHeight(const HashValue& hash) = 0;
 	virtual BlockHeader FindHeader(int height) = 0;
 	virtual BlockHeader FindHeader(const HashValue& hash) = 0;
+	virtual optional<pair<uint64_t, uint32_t>> FindBlockOffset(const HashValue& hash) = 0;
 	virtual Block FindBlock(const HashValue& hash) = 0;
 	virtual Block FindBlock(int height) = 0;
 	virtual Block FindBlockPrefixSuffix(int height) { return FindBlock(height); }
@@ -479,19 +486,20 @@ public:
 	virtual void DeleteBlock(int height, const vector<int64_t>* txids) = 0;
 
 	virtual bool FindTx(const HashValue& hash, Tx* ptx) = 0;
-	virtual bool FindTxById(RCSpan txid8, Tx* ptx) = 0;
+	virtual bool FindTxByHash(const HashValue& hashTx, Tx* ptx) = 0;
 	virtual vector<int64_t> GetTxesByPubKey(const HashValue160& pubkey) = 0;
 
 	virtual void ReadTxes(const BlockObj& bo) = 0;
 	virtual void ReadTxIns(const HashValue& hash, const TxObj& txObj) = 0;
 	virtual pair<int, int> FindPrevTxCoords(DbWriter& wr, int height, const HashValue& hash) = 0;
-	virtual void InsertTx(const Tx& tx, uint16_t nTx, const TxHashesOutNums& hashesOutNums, const HashValue& txHash, int height, RCSpan txIns, RCSpan spend, RCSpan data) = 0;
+	virtual void InsertTx(const Tx& tx, uint16_t nTx, const TxHashesOutNums& hashesOutNums, const HashValue& txHash, int height, RCSpan txIns, RCSpan spend, RCSpan data, uint32_t txOffset) = 0;
 
 	virtual void InsertSpentTxOffsets(const unordered_map<HashValue, SpentTx>& spentTxOffsets) { Throw(E_NOTIMPL); } // used only for EngMode::Bootstrap
 
 	virtual vector<bool> GetCoinsByTxHash(const HashValue& hash) = 0;
 	virtual void SaveCoinsByTxHash(const HashValue& hash, const vector<bool>& vec) = 0;
-	virtual void UpdateCoins(const OutPoint& op, bool bSpend);
+	virtual void UpdateCoins(const OutPoint& op, bool bSpend, int32_t heightCur);
+	virtual void PruneTxo(const OutPoint& op, int32_t heightCur) {}
 
 	virtual void BeginEngTransaction() = 0;
 	virtual void SetProgressHandler(int (*pfn)(void*), void* p = 0, int n = 1) = 0;
@@ -506,6 +514,11 @@ public:
 
 	virtual uint64_t GetBoostrapOffset() { return 0; }
 	virtual void SetBoostrapOffset(uint64_t v) {}
+
+	virtual int32_t GetLastPrunedHeight() { return 0; }
+	virtual void SetLastPrunedHeight(int32_t height) {}
+	virtual Blob ReadBlob(uint64_t offset, uint32_t size) { return Blob();  }
+	virtual void CopyTo(uint64_t offset, uint32_t size, Stream& stm) { }
 };
 
 ptr<IBlockChainDb> CreateBlockChainDb();
@@ -533,6 +546,7 @@ public:
 	typedef unordered_map<HashValue, BlockTreeItem> CMap; //!!!TODO change to unordered_set<BlockTreeItem> to save space
 	CMap Map;
 	int HeightLastCheckpointed;
+	//----
 
 	BlockTree() : HeightLastCheckpointed(-1) {}
 
@@ -571,18 +585,18 @@ public:
 };
 
 
+class TxInfo {
+public:
+	uint64_t FeeRatePerKB;
+	Tx Tx;
+
+	TxInfo() {}
+	TxInfo(const class Tx& tx, uint32_t serializationSize);
+};
+
 // Tx Pool
 class TxPool {
 public:
-	class TxInfo {
-	public:
-		Tx Tx;
-		uint64_t FeeRate;	// per KB
-
-		TxInfo() {}
-		TxInfo(const class Tx& tx);
-	};
-
 	CoinEng& Eng;
 
 	recursive_mutex Mtx;
@@ -594,12 +608,14 @@ public:
 	COutPointToNextTx m_outPointToNextTx;
 
 	typedef unordered_map<HashValue, Tx> CHashToOrphan;
-	typedef unordered_multimap<HashValue, HashValue> CHashToHash;
 	CHashToOrphan m_hashToOrphan;
+
+	typedef unordered_multimap<HashValue, HashValue> CHashToHash;
 	CHashToHash m_prevHashToOrphanHash;
+	//----
 
 	TxPool(CoinEng& eng);
-	void Add(const Tx& tx);
+	void Add(const TxInfo& txInfo);
 	void Remove(const Tx& tx);
 	void EraseOrphanTx(const HashValue& hash);
 	void AddOrphan(const Tx& tx);
@@ -608,6 +624,7 @@ public:
 
 class CoinConf : public Ext::Inet::P2P::P2PConf {
 public:
+	int64_t MinTxFee, MinRelayTxFee;	// Fee rate per KB (1000 bytes)
 	String RpcUser, RpcPassword;
 	int RpcPort, RpcThreads;
 	int KeyPool;
@@ -627,7 +644,6 @@ public:
 	CoinDb& m_cdb;
 
 	Coin::ChainParams ChainParams;
-	uint16_t MaxBlockVersion; //!!!Obsolete, never used
 
 	recursive_mutex Mtx;
 
@@ -645,7 +661,6 @@ public:
 
 	ChainCaches Caches;
 
-
 	EngEvents Events;
 
 	static const int HEIGHT_BOOTSTRAPING = -2;
@@ -659,13 +674,15 @@ public:
 #endif
 	ptr<CoinFilter> Filter;
 
+	path m_dbFilePath;
+
 	int CommitPeriod;
 	int m_idPeersNet;
-
 
 	atomic<int> aPreferredDownloadPeers;
 	atomic<int> aSyncStartedPeers;
 
+	uint16_t MaxBlockVersion; //!!!Obsolete, never used
 	CBool InWalJournalMode;
 	CBool JournalModeDelete;
 	CBool m_dbTxBegin;
@@ -704,6 +721,7 @@ public:
 	virtual ptr<IBlockChainDb> CreateBlockChainDb();
 
 	void TryStartBootstrap();
+	void TryStartPruning();
 	void Start() override;
 	void SignalStop();
 	void Stop();
@@ -716,7 +734,6 @@ public:
 	void SetBestBlock(const Block& b);
 	int BestBlockHeight();
 
-	path m_dbFilePath;
 	path GetDbFilePath();
 
 	bool CheckSelfVerNonce(uint64_t nonce);
@@ -731,7 +748,7 @@ public:
 	Block GetPrevBlockPrefixSuffixFromMainTree(const Block& block);
 	bool IsFromMe(const Tx& tx);
 	void Push(const Inventory& inv);
-	void Push(const Tx& tx);
+	void Push(const TxInfo& txInfo);
 	void ExportToBootstrapDat(const path& pathBoostrap);
 	virtual void ClearByHeightCaches();
 	Block GetBlockByHeight(uint32_t height);
@@ -742,6 +759,7 @@ public:
 	void CommitTransactionIfStarted();
 	void Reorganize(const BlockHeader& header);
 
+	String BlockStringId(const HashValue& hashBlock);
 	virtual HashValue HashMessage(RCSpan cbuf);
 	virtual HashValue HashForSignature(RCSpan cbuf);
 	virtual HashValue HashFromTx(const Tx& tx, bool widnessAware = false);
@@ -749,22 +767,23 @@ public:
 	HashValue WitnessHashFromTx(const Tx& tx) { return HashFromTx(tx, true); }
 
 	virtual void OnCheck(const Tx& tx) {}
-	virtual void OnConnectInputs(const Tx& tx, const vector<Tx>& vTxPrev, bool bBlock, bool bMiner) {}
+	virtual void OnConnectInputs(const Tx& tx, const vector<Txo>& vTxo, bool bBlock, bool bMiner) {}
 	virtual void OnConnectBlock(const Block& block) {}
 	virtual void OnDisconnectInputs(const Tx& tx) {}
 	virtual void CheckForDust(const Tx& tx) {}
 
 	virtual int64_t GetSubsidy(int height, const HashValue& prevBlockHash, double difficulty = 0, bool bForCheck = false);
-	virtual void CheckCoinbasedTxPrev(int height, const Tx& txPrev);
+	virtual void CheckCoinbasedTxPrev(int hCur, int hOut);
 
 	DateTime GetTimestampForNextBlock();
 
-	void Relay(const Tx& tx);
+	void Relay(const TxInfo& txInfo);
 
 	bool IsInitialBlockDownload();
 	bool MarkBlockAsReceived(const HashValue& hashBlock);
 	void MarkBlockAsInFlight(GetDataMessage& mGetData, Link& link, const Inventory& inv);
 	void OnPeriodicMsgLoop(const DateTime& now) override;
+	BlockHeader ProcessNewBlockHeaders(const vector<BlockHeader>& headers);
 	CoinPeer* CreatePeer() override;
 
 	uint64_t CheckMoneyRange(uint64_t v) {
@@ -774,8 +793,6 @@ public:
 	}
 
 	virtual double ToDifficulty(const Target& target);
-
-	virtual int64_t GetMinRelayTxFee() { return ChainParams.CoinValue / 10000; }
 
 	virtual Target GetNextTarget(const BlockHeader& headerLast, const Block& block);
 
@@ -840,7 +857,6 @@ protected:
 	void OnInitLink(P2P::Link& link) override;
 	ptr<P2P::Message> RecvMessage(P2P::Link& link, const BinaryReader& rd) override;
 
-
 	void SavePeers() override;
 
 	void OnMessage(P2P::Message* m) override;
@@ -877,56 +893,56 @@ class CoinEngTransactionScope : noncopyable {
 public:
 	CoinEng& Eng;
 	ITransactionable& m_db;
-
-	CoinEngTransactionScope(CoinEng& eng) : Eng(eng), m_db(Eng.Db->GetSavepointObject()) {
-		Eng.BeginTransaction();
-		m_db.BeginTransaction();
-	}
-
-	~CoinEngTransactionScope() {
-		if (!m_bCommitted) {
-			if (InException) {
-				m_db.Rollback();
-				Eng.Rollback();
-			} else {
-				m_db.Commit();
-				Eng.Commit();
-			}
-		}
-	}
+private:
+	CInException InException;
+	CBool m_bCommitted;
+public:
+	CoinEngTransactionScope(CoinEng& eng);
+	~CoinEngTransactionScope();
 
 	void Commit() {
 		m_db.Commit();
 		Eng.Commit();
 		m_bCommitted = true;
 	}
-
-private:
-	CInException InException;
-	CBool m_bCommitted;
 };
 
 class BootstrapDbThread : public Thread {
 	typedef Thread base;
-
 public:
 	CoinEng& Eng;
 	path PathBootstrap;
-	CBool Exporting;
+	CBool Exporting, Indexing;
 
-	BootstrapDbThread(CoinEng& eng, const path& pathBootstrap)
+	BootstrapDbThread(CoinEng& eng, const path& pathBootstrap, bool bIndexing = false)
 		: base(&eng.m_tr)
 		, Eng(eng)
 		, PathBootstrap(pathBootstrap)
+		, Indexing(bIndexing)
 	{}
 protected:
 	void BeforeStart() override;
 	void Execute() override;
 };
 
+class PruneDbThread : public Thread {
+	typedef Thread base;
+public:
+	CoinEng& Eng;
+	int From, To;
+
+	PruneDbThread(CoinEng& eng, int from, int to)
+		: base(&eng.m_tr)
+		, Eng(eng)
+		, From(from)
+		, To(to)
+	{}
+protected:
+	void Execute() override;
+};
+
 class ExportKeysThread : public Thread {
 	typedef Thread base;
-
 public:
 	CoinEng& Eng;
 	path Path;
@@ -959,14 +975,19 @@ void SetUserVersion(SqliteConnection& db, const Version& ver = Version());
 
 class TxNotFoundException : public Exception {
 	typedef Exception base;
-
 public:
 	HashValue HashTx;
 
+	TxNotFoundException(CoinErr err, const HashValue& hashTx) : base(err), HashTx(hashTx) {}
 	TxNotFoundException(const HashValue& hashTx) : base(CoinErr::TxNotFound), HashTx(hashTx) {}
-
 protected:
 	String get_Message() const override { return EXT_STR(base::get_Message() << " " << HashTx); }
+};
+
+class WitnessProgramException : public Exception {
+	typedef Exception base;
+public:
+	WitnessProgramException(CoinErr err) : base(err) {}
 };
 
 class PeerMisbehavingException : public Exception {
@@ -978,30 +999,18 @@ public:
 	PeerMisbehavingException(int howMuch = 1) : base(CoinErr::Misbehaving), HowMuch(howMuch) {}
 };
 
-class VersionException : public Exception {
-	typedef Exception base;
-
-public:
-	Ext::Version Version;
-
-	VersionException(const Ext::Version& ver = Ext::Version()) : base(ExtErr::DB_Version), Version(ver) {}
-
-	~VersionException() noexcept {} //!!! GCC 4.6
-
-protected:
-	String get_Message() const override { return base::get_Message() + " " + Version.ToString(2); }
-};
-
 Version CheckUserVersion(SqliteConnection& db);
 
 class CEngStateDescription : noncopyable {
+	CoinEng& m_eng;
+	String m_s;
 public:
 	CEngStateDescription(CoinEng& eng, RCString s);
 	~CEngStateDescription();
-
-private:
-	CoinEng& m_eng;
-	String m_s;
 };
+
+#if UCFG_COIN_USE_NORMAL_MODE
+void RecoverPubKey(CConnectJob* connJob, const OutPoint* pop, TxObj* pTxObj, int nIn);
+#endif
 
 } // namespace Coin

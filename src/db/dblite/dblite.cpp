@@ -20,7 +20,7 @@ void DbTable::Open(DbTransaction& tx, bool bCreate) {
 	CKVStorageKeeper keeper(&tx.Storage);
 
 	DbCursor cM(tx, DbTable::Main());
-	Span k((const uint8_t*)Name.c_str(), strlen(Name.c_str()));
+	Span k((const uint8_t*)Name.c_str(), Name.length());
 	if (!cM.SeekToKey(k)) {
 		if (!bCreate)
 			Throw(E_FAIL);
@@ -38,7 +38,7 @@ void DbTable::Drop(DbTransaction& tx) {
 	if (tx.ReadOnly)
 		Throw(errc::permission_denied);
 	DbCursor(tx, _self).Drop();
-	Span k((const uint8_t*)Name.c_str(), strlen(Name.c_str()));
+	Span k((const uint8_t*)Name.c_str(), Name.length());
 	DbTable::Main().Delete(tx, k);
 }
 
@@ -62,7 +62,10 @@ bool DbTable::Delete(DbTransaction& tx, RCSpan k) {
 }
 
 void KVStorage::Vacuum() {
-	path tmpPath = Path::GetTempFileName(FilePath.parent_path(), "tmp").first;
+	path pathParent = FilePath.parent_path();
+	if (pathParent.empty())
+		pathParent = ".";
+	path tmpPath = Path::GetTempFileName(pathParent, "tmp").first;
 	lock_guard<mutex> lkWrite(MtxWrite);
 	unique_lock<shared_mutex> lk(ShMtx, defer_lock);
 	try {
@@ -81,7 +84,7 @@ void KVStorage::Vacuum() {
 			int nProgress = m_stepProgress;
 
 			for (DbCursor ct(txS, DbTable::Main()); ct.SeekToNext();) {
-				String tableName = Encoding::UTF8.GetChars(ct.Key);
+				string tableName((const char*)ct.Key.data(), ct.Key.size());
 				const TableData& td = *(const TableData*)ct.get_Data().data();
 
 				DbTable tS(tableName), tD(tableName);
@@ -110,7 +113,8 @@ void KVStorage::Vacuum() {
 		filesystem::remove(tmpPath);
 		throw;
 	}
-	path tmpOriginal = FilePath / ".bak";
+	path tmpOriginal = FilePath;
+	tmpOriginal.replace_extension(String(FilePath.extension().native()) + ".bak");
 	filesystem::rename(FilePath, tmpOriginal);
 	filesystem::rename(tmpPath, FilePath);
 	filesystem::remove(tmpOriginal);

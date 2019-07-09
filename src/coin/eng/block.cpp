@@ -113,7 +113,7 @@ Target::Target(uint32_t v) {
 
 Target::Target(const BigInteger& bi) {
 	Blob blob = bi.ToBytes();
-	int size = blob.Size;
+	int size = blob.size();
 	m_value = size << 24;
 	const uint8_t *p = blob.constData()+size;
 	if (size >= 1)
@@ -177,7 +177,7 @@ static HashValue HashFromTx(CoinEng *peng, const BlockObj *block, int n) {
 	CCoinEngThreadKeeper engKeeper(peng);
 	const Tx& tx = block->get_Txes()[n];
 	HashValue r = block->HashFromTx(tx, n);
-	if (tx.m_pimpl->m_nBytesOfHash != 32)
+	if (tx->m_nBytesOfHash != 32)
 		tx.SetHash(r);
 	return r;
 }
@@ -373,7 +373,7 @@ void BlockObj::Read(const ProtocolReader& rd) {
 void BlockObj::Write(DbWriter& wr) const {
 	CoinEng& eng = Eng();
 
-	CoinSerialized::WriteVarInt(wr, Ver);
+	CoinSerialized::WriteVarUInt64(wr, Ver);
 	wr << (uint32_t)to_time_t(Timestamp) << get_DifficultyTarget() << Nonce;
 	if (eng.Mode == EngMode::Lite || eng.Mode == EngMode::BlockParser || wr.ForHeader)
 		wr << MerkleRoot();
@@ -386,7 +386,7 @@ void BlockObj::Write(DbWriter& wr) const {
 void BlockObj::Read(const DbReader& rd) {
 	CoinEng& eng = Eng();
 
-	Ver = (uint32_t)CoinSerialized::ReadVarInt(rd);
+	Ver = (uint32_t)CoinSerialized::ReadVarUInt64(rd);
 	Timestamp = DateTime::from_time_t(rd.ReadUInt32());
 	DifficultyTargetBits = rd.ReadUInt32();
 	Nonce = rd.ReadUInt32();
@@ -600,7 +600,7 @@ uint32_t Block::OffsetOfTx(const HashValue& hashTx) const {
 	ProtocolWriter wr(ms);
 	m_pimpl->WriteHeader(wr);
 	const CTxes& txes = m_pimpl->get_Txes();
-	CoinSerialized::WriteVarInt(wr, txes.size());
+	CoinSerialized::WriteVarUInt64(wr, txes.size());
 	for (size_t i=0; i<txes.size(); ++i) {
 		if (Hash(txes[i]) == hashTx)
 			return uint32_t(ms.Position);
@@ -634,7 +634,7 @@ Block Block::GetOrphanRoot() const {					// ASSERT(eng.Caches.Mtx is locked)
 	return *r;
 }
 
-TxFeeTuple RunConnectAsync(const CConnectJob *pjob, TxObj *to, bool bVerifySignature) {
+static TxFeeTuple RunConnectAsync(const CConnectJob *pjob, TxObj *to, bool bVerifySignature) {
 	TxFeeTuple r;
 	const CConnectJob& job = *pjob;
 	CCoinEngThreadKeeper engKeeper(&job.Eng);
@@ -644,7 +644,7 @@ TxFeeTuple RunConnectAsync(const CConnectJob *pjob, TxObj *to, bool bVerifySigna
 		r.Tx = tx;
 
 		int64_t nValueIn = 0;
-		if ((job.aSigOps += tx.SigOpCost(job.TxMap)) > MAX_BLOCK_SIGOPS_COST)
+		if ((job.aSigOps += tx.SigOpCost(job.TxoMap)) > MAX_BLOCK_SIGOPS_COST)
 			Throw(CoinErr::TxTooManySigOps);
 		SignatureHasher sigHasher(*tx.m_pimpl);
 		if (bVerifySignature && tx.m_pimpl->HasWitness())
@@ -657,21 +657,17 @@ TxFeeTuple RunConnectAsync(const CConnectJob *pjob, TxObj *to, bool bVerifySigna
 
 			const TxIn& txIn = txIns[nIn];
 			const OutPoint& op = txIn.PrevOutPoint;
-			const Tx& txPrev = job.TxMap.Get(op.TxHash);
-			const TxOut& txOut = txPrev.TxOuts()[op.Index];
-
-			if (txPrev.IsCoinBase())
-				job.Eng.CheckCoinbasedTxPrev(job.Height, txPrev);
+			Txo txo = job.TxoMap.Get(op);
 
 			if (bVerifySignature) { // Skip ECDSA signature verification when connecting blocks (fBlock=true) during initial download
 				sigHasher.m_bWitness = false;
 				sigHasher.NIn = nIn;
-				sigHasher.m_amount = txOut.Value;
+				sigHasher.m_amount = txo.Value;
 				sigHasher.HashType = SigHashType::ZERO;
-				sigHasher.VerifySignature(txPrev);
+				sigHasher.VerifySignature(txo.ScriptPubKey);
 			}
 
-			job.Eng.CheckMoneyRange(nValueIn += txOut.Value);
+			job.Eng.CheckMoneyRange(nValueIn += txo.Value);
 		}
 		tx.CheckInOutValue(nValueIn, r.Fee, job.Eng.AllowFreeTxes ? 0 : tx.GetMinFee(1, false), job.DifficultyTarget);
 	} catch (RCExc) {
@@ -680,6 +676,7 @@ TxFeeTuple RunConnectAsync(const CConnectJob *pjob, TxObj *to, bool bVerifySigna
 	return r;
 }
 
+/*!!!O
 int64_t RunConnectTask(const CConnectJob *pjob, const ConnectTask *ptask) {
 	CoinEng& eng = pjob->Eng;
 	CCoinEngThreadKeeper engKeeper(&eng);
@@ -693,62 +690,8 @@ int64_t RunConnectTask(const CConnectJob *pjob, const ConnectTask *ptask) {
 	return fee;
 }
 
-static void RecoverPubKey(CConnectJob* connJob, const OutPoint* pop, TxObj* pTxObj, int nIn) {
-	CCoinEngThreadKeeper engKeeper(&connJob->Eng);
-	const OutPoint& op = *pop;
 
-	const TxOut *txOut = &connJob->TxMap.GetOutputFor(op);
-	Span pkScript = txOut->get_ScriptPubKey();
-	TxIn& txIn = pTxObj->m_txIns[nIn];
-	Span scriptSig = txIn.Script();
-	Span pk = FindStandardHashAllSigPubKey(scriptSig);
-	if (pk.data()) {
-		Span sig = scriptSig.subspan(1, pk.data() - scriptSig.data() - 2);
-		try {
-			Sec256Signature sigObj;
-			sigObj.AssignCompact(Sec256Signature(sig).ToCompact());
-			Blob ser = sigObj.Serialize();
-			if (ser == sig) {
-				if (!pk.size())
-					txIn.RecoverPubKeyType = 8;
-				else {
-					SignatureHasher hasher(*pTxObj);
-					hasher.NIn = nIn;
-					hasher.HashType = SigHashType::SIGHASH_ALL;
-					HashValue hashSig = hasher.Hash(pkScript);
-#ifdef X_DEBUG//!!!D
-					static int s_i;
-					s_i++;
-					if (s_i >= 1) {
-						if (!memcmp(pk.P, "\x41\x04\x06\xF3", 4)) {
-							cout << "hashSig: " << hashSig << endl;
-							cout << "pkScript: " << pkScript << endl;
-							cout << "Pk: " << pk << endl;
-							cout << "Sig: " << sig << endl;
-							cout << "Recover: " << Sec256Dsa::RecoverPubKey(hashSig, sigObj, 1, false) << endl;
-							s_i = s_i;
-						}
-						s_i = s_i;
-					}
-#endif
-					bool bCompressed = pk.size() < 35;
-					Span hsig = hashSig.ToSpan(),
-						pubKeyData = Span(pk.data() + 1, pk.size() -1);
-					for (uint8_t recid=0; recid<3; ++recid) {
-						if (Equal(Sec256Dsa::RecoverPubKey(hsig, sigObj, recid, bCompressed), pubKeyData)) {
-							txIn.RecoverPubKeyType = uint8_t(0x48 | (int(bCompressed) << 2) | recid);
-							return;
-						}
-					}
-					ASSERT(0);
-				}
-			}
-		} catch (CryptoException&) {
-		}
-	}
-}
 
-/*!!!O
 void CConnectJob::AsynchCheckAll(const vector<Tx>& txes) {
 	vector<future<void>> futsTxOut;
 	EXT_FOR (const Tx& tx, txes) {
@@ -809,35 +752,35 @@ void CConnectJob::AsynchCheckAll(const vector<Tx>& txes) {
 }
 */
 
-void CConnectJob::AsynchCheckAllSharedFutures(const vector<Tx>& txes) {
+void CConnectJob::AsynchCheckAllSharedFutures(const vector<Tx>& txes, int height) {
 	bool bVerifySignature = Eng.BestBlockHeight() > Eng.ChainParams.LastCheckpointHeight - INITIAL_BLOCK_THRESHOLD;
 
 	vector<shared_future<TxFeeTuple>> futsTx;
 	futsTx.reserve(txes.size());
 	vector<future<void>> futsTxOut;
+	auto launchType = UCFG_COIN_TX_CONNECT_FUTURES ? launch::async : launch::deferred;
 	EXT_FOR(const Tx& tx, txes) {
 		HashValue hashTx = Hash(tx);
 		if (tx.IsCoinBase()) {
-			TxMap.Add(tx);
+			if (Eng.ChainParams.CoinbaseMaturity == 0)
+				TxoMap.AddAllOuts(hashTx, tx);
 		} else {
 			if (tx.IsCoinStake())
 				tx.m_pimpl->GetCoinAge();		// cache CoinAge, which can't be calculated in Pooled Thread
 			auto& txIns = tx.TxIns();
 			for (size_t nIn = 0; nIn < txIns.size(); ++nIn) {
 				const OutPoint& op = txIns[nIn].PrevOutPoint;
-				const HashValue& hashPrev = op.TxHash;
-				if (!TxMap.Contains(hashPrev))
-					TxMap.Add(Tx::FromDb(hashPrev));		//!!!TODO: make async
-				if (Eng.Mode != EngMode::Bootstrap) {
+				TxoMap.Add(op, height);
+#if UCFG_COIN_USE_NORMAL_MODE
+				if (Eng.Mode == EngMode::Normal || Eng.Mode == EngMode::BlockExplorer) {
 					auto launchType = UCFG_COIN_PKSCRIPT_FUTURES ? launch::async : launch::deferred;
 					futsTxOut.push_back(std::async(launchType, RecoverPubKey, this, &op, tx.m_pimpl.get(), nIn));
 				}
+#endif
 			}
-
-			auto launchType = UCFG_COIN_TX_CONNECT_FUTURES ? launch::async : launch::deferred;
 			shared_future<TxFeeTuple> ft = std::async(launchType, RunConnectAsync, this, tx.m_pimpl.get(), bVerifySignature);
 			futsTx.push_back(ft);
-			TxMap.Add(hashTx, ft);
+			TxoMap.AddAllOuts(hashTx, tx);
 		}
 	}
 	EXT_FOR(future<void>& fut, futsTxOut) {
@@ -849,101 +792,6 @@ void CConnectJob::AsynchCheckAllSharedFutures(const vector<Tx>& txes) {
 		Fee = Eng.CheckMoneyRange(Fee + ft.get().Fee);
 }
 
-void CConnectJob::PrepareTask(const HashValue160& hash160, const CanonicalPubKey& pubKey) {
-	if (!pubKey.IsValid())
-		return;
-	Blob compressed;
-	try {
-		DBG_LOCAL_IGNORE_CONDITION(ExtErr::Crypto);
-		compressed = pubKey.ToCompressed();
-	} catch (RCExc) {
-		return;
-	}
-	CMap::iterator it = Map.find(hash160);
-	if (it != Map.end()) {
-		PubKeyData& pkd = it->second;
-		if (!!pkd.PubKey) {
-			if (pkd.PubKey.Size == 20) {
-				pkd.Update = !pkd.Insert;
-				pkd.PubKey = compressed;
-
-				ASSERT(CanonicalPubKey::FromCompressed(compressed).get_Hash160() == hash160);
-			} else {
-				pkd.IsTask = false;
-				if (pkd.PubKey != compressed)
-					pkd.PubKey = Blob(nullptr);
-			}
-		}
-	} else {
-		int64_t id = CIdPk(hash160);
-		PubKeyData pkd;
-		pkd.PubKey = compressed;
-		Blob pk(nullptr);
-		EXT_LOCK (Eng.Caches.Mtx) {
-			ChainCaches::CCachePkIdToPubKey::iterator j = Eng.Caches.m_cachePkIdToPubKey.find(id);
-			if (j != Eng.Caches.m_cachePkIdToPubKey.end()) {
-				PubKeyHash160& pkh = j->second.first;
-				if (pkh.Hash160 != hash160)
-					return;
-				ASSERT(pkh.PubKey.Data.empty() || Equal(pkh.PubKey.Data, pubKey.Data));
-				if (pkd.Update = pkh.PubKey.Data.empty())
-					pkh.PubKey = pubKey;
-				goto LAB_SAVE;
-			}
-		}
-		if (!!(pk = Eng.Db->FindPubkey(id))) {
-			if (pkd.Update = (pk.Size == 20)) {
-				if (HashValue160(pk) != hash160)
-					return;
-			} else if (pk != compressed)
-				return;
-		} else if (!InsertedIds.insert(id).second)
-			return;
-		else
-			pkd.Insert = true;
-LAB_SAVE:
-		Map.insert(make_pair(hash160, pkd));
-	}
-}
-
-void CConnectJob::Prepare(const Block& block) {
-	if (Eng.Mode == EngMode::Lite || Eng.Mode == EngMode::BlockParser)
-		return;
-
-	EXT_FOR (const Tx& tx, block.get_Txes()) {
-		EXT_FOR (const TxOut& txOut, tx.TxOuts()) {
-			Span span160, spanPk;
-			HashValue160 hash160;
-			Blob pk;
-			switch (uint8_t typ = TryParseDestination(txOut.get_ScriptPubKey(), span160, spanPk)) {
-			case 20:
-				pk = Blob(spanPk);
-				hash160 = HashValue160(span160);
-				if (!Map.count(hash160)) {
-					PubKeyData pkd;
-					int64_t id = CIdPk(hash160);
-					if (!!(pk = Eng.Db->FindPubkey(id))) {
-						pkd.PubKey = (pkd.IsTask = pk.Size != 20) || HashValue160(pk) == hash160 ? pk : Blob(nullptr);
-						Map.insert(make_pair(hash160, pkd));
-					} else {
-						if (InsertedIds.insert(id).second) {
-							pkd.Insert = true;
-							pkd.PubKey = hash160;
-							Map.insert(make_pair(hash160, pkd));
-						}
-					}
-				}
-				break;
-			case 33:
-			case 65:
-				pk = Blob(spanPk);
-				hash160 = HashValue160(span160);
-				PrepareTask(hash160, CanonicalPubKey(pk));
-				break;
-			}
-		}
-	}
-}
 
 typedef pair<const HashValue160, CConnectJob::PubKeyData> PubKeyTask;
 
@@ -975,7 +823,7 @@ void BlockHeader::Connect() const {
 	HashValue hashBlock = Hash(_self);
 #if UCFG_TRC
 	if (!(Height & 0x1FF)) {
-		TRC(4, "                \t" << Height << "\t" << hashBlock);
+		TRC(4, Height << "/" << hashBlock);
 	}
 #endif
 
@@ -1026,7 +874,7 @@ void Block::ContextualCheck(const BlockHeader& blockPrev) {
         if (auto witnessCommitment = GetWitnessCommitment()) {
             bHaveWitness = true;
             auto& coinbaseWitness = txes[0].TxIns()[0].Witness;
-            if (coinbaseWitness.size() != 1 || coinbaseWitness[0].Size != 32)
+            if (coinbaseWitness.size() != 1 || coinbaseWitness[0].size() != 32)
                 Throw(CoinErr::BadWitnessNonceSize);
             HashValue ar[2] = { CalcWitnessTxHashes(*m_pimpl).back(), HashValue(coinbaseWitness[0].data()) };
             auto hashWitness = Hash(Span((const uint8_t*)ar, sizeof ar));
@@ -1046,7 +894,8 @@ void Block::ContextualCheck(const BlockHeader& blockPrev) {
 void Block::Connect() const {
 	CoinEng& eng = Eng();
 	HashValue hashBlock = Hash(_self);
-	TRC(3, Height << " " << hashBlock <<  (eng.Mode == EngMode::Lite ? String() : EXT_STR(" " << setw(4) << get_Txes().size() << " Txes")));
+	const CTxes& txes = get_Txes();
+	TRC(3, Height << "/" << hashBlock << (eng.Mode == EngMode::Lite ? String() : EXT_STR(" " << setw(4) << txes.size() << " Txes")));
 
 	Check(false);		// Check Again without bCheckMerkleRoot
 	int64_t nFees = 0;
@@ -1077,7 +926,7 @@ void Block::Connect() const {
 		job.Features = t_features;
 		job.Height = Height;
 
-		job.AsynchCheckAllSharedFutures(Txes);
+		job.AsynchCheckAllSharedFutures(Txes, height);
 		if (job.Failed)
 			Throw(CoinErr::ProofOfWorkFailed);
 		nFees = job.Fee;
@@ -1089,9 +938,11 @@ void Block::Connect() const {
 		CoinEngTransactionScope scopeBlockSavepoint(eng);
 
 		switch (eng.Mode) {
+#if UCFG_COIN_USE_NORMAL_MODE
 		case EngMode::Normal:
 		case EngMode::BlockExplorer:
 			job.Prepare(_self);
+#endif
 		case EngMode::Bootstrap:
 			job.Calculate();
 		}
@@ -1116,16 +967,16 @@ void Block::Connect() const {
 		}
 
 		if (eng.Mode != EngMode::Lite) {
-			EXT_FOR (const Tx& tx, get_Txes()) {
+			EXT_FOR (const Tx& tx, txes) {
 				if (!tx.IsCoinBase()) {
-					vector<Tx> vTxPrev;
+					vector<Txo> vTxo;
 					if (eng.Mode != EngMode::BlockParser) {
 						const vector<TxIn>& txIns = tx.TxIns();
-						vTxPrev.reserve(txIns.size());
+						vTxo.reserve(txIns.size());
 						for (auto& txIn : txIns)
-							vTxPrev.push_back(job.TxMap.Get(txIn.PrevOutPoint.TxHash));
+							vTxo.push_back(job.TxoMap.Get(txIn.PrevOutPoint));
 					}
-					eng.OnConnectInputs(tx, vTxPrev, true, false);
+					eng.OnConnectInputs(tx, vTxo, true, false);
 				}
 			}
 		}
@@ -1150,7 +1001,7 @@ void Block::Connect() const {
 	Inventory inv(eng.Mode == EngMode::Lite || eng.Mode == EngMode::BlockParser ? InventoryType::MSG_FILTERED_BLOCK : InventoryType::MSG_BLOCK, hashBlock);
 
 	EXT_LOCK(eng.MtxPeers) {
-		for (CoinEng::CLinks::iterator it=begin(eng.Links); it!=end(eng.Links); ++it) {
+		for (CoinEng::CLinks::iterator it = begin(eng.Links); it != end(eng.Links); ++it) {
 			Link& link = static_cast<Link&>(**it);
 			if (Height > link.LastReceivedBlock-2000)
 				link.Push(inv);
@@ -1162,12 +1013,12 @@ void Block::Connect() const {
 		eng.Caches.HashToBlockCache.insert(make_pair(hashBlock, _self));
 	}
 
-	EXT_FOR (const Tx& tx, get_Txes()) {
+	EXT_FOR (const Tx& tx, txes) {
 		eng.Events.OnProcessTx(tx);
 	}
 
 	if (eng.Mode != EngMode::Lite && eng.Mode != EngMode::BlockParser) {
-		EXT_FOR(const Tx& tx, get_Txes()) {
+		EXT_FOR(const Tx& tx, txes) {
 			eng.TxPool.Remove(tx);
 		}
 	}
@@ -1261,7 +1112,7 @@ bool BlockHeader::HasBestChainWork() const {
 	}
 
 	HashValue hashB = Hash(bestHeader);
-	for (BlockTreeItem bti=bestHeader; hashB!=hash && forkWork > work;) {
+	for (BlockTreeItem bti = bestHeader; hashB != hash && forkWork > work;) {
 		hashB = bti.PrevBlockHash;
 		work += eng.ChainParams.MaxTarget / exchange(bti, eng.Tree.GetHeader(bti.PrevBlockHash)).DifficultyTarget;
 	}
@@ -1291,29 +1142,28 @@ void BlockHeader::Accept() {
 			Throw(ExtErr::ThreadInterrupted);
 		if (Height <= eng.BestHeaderHeight() && eng.Tree.FindHeader(hash))
 			return;																	// RaceCondition check, header already accepted by parallel thread.
-		if (!HasBestChainWork()) {
-			TRC(2, "Fork detected: " << Height << " " << hash);
-			eng.Tree.Add(_self);
-		} else {
-			if (eng.BestBlock() && Hash(eng.BestHeader()) != get_PrevBlockHash())
-				eng.Reorganize(_self);
-			else {
+		if (HasBestChainWork()) {
+			if (!eng.BestBlock() || Hash(eng.BestHeader()) == get_PrevBlockHash())
 				Connect();
+			else {
+				eng.Reorganize(_self);
 			}
+		} else {
+			TRC(2, "Fork detected: " << Height << "/" << hash);
+			eng.Tree.Add(_self);
 		}
-//!!!?
-
-
 	}
 }
 
 void Block::Accept() {
 	CoinEng& eng = Eng();
 
-	if (!PrevBlockHash)
-		m_pimpl->Height = 0;
+	int height = 0;
+	HashValue hashPrev = PrevBlockHash;
+	if (!hashPrev)
+		m_pimpl->Height = height = 0;
 	else {
-		BlockHeader blockPrev = eng.Tree.FindHeader(PrevBlockHash);
+		BlockHeader blockPrev = eng.Tree.FindHeader(hashPrev);
 
 		Target targetNext = eng.GetNextTarget(blockPrev, _self);
 		if (get_DifficultyTarget() != targetNext) {
@@ -1326,7 +1176,7 @@ void Block::Accept() {
 			Throw(CoinErr::IncorrectProofOfWork);
 		}
 
-        m_pimpl->Height = blockPrev.Height + 1;
+        m_pimpl->Height = height = blockPrev.Height + 1;
         ContextualCheck(blockPrev);
 	}
 
@@ -1336,24 +1186,28 @@ void Block::Accept() {
 	EXT_LOCK (eng.Mtx) {
 		if (!eng.Runned)
 			Throw(ExtErr::ThreadInterrupted);
-		if (Height <= eng.BestBlockHeight() && eng.HaveBlock(hash))
+		Block blockBest = eng.BestBlock();
+		if (height <= blockBest.SafeHeight && eng.HaveBlock(hash))
 			return;		// RaceCondition check, block already accepted by parallel thread.
 		bool bConnectToMainChain = IsInMainChain();
+		bool bReorganize = false;
 		if (!bConnectToMainChain) {
 			CheckAgainstCheckpoint();
 			if (BlockTreeItem bti = eng.Tree.FindInMap(hash)) {
 				eng.Tree.Add(_self);
 				return;
-			} else if (!(bConnectToMainChain = HasBestChainWork())) {
-				TRC(2, "Fork detected: " << Height << " " << hash);
+			} else if (!(bReorganize = HasBestChainWork())) {
+				TRC(2, "Fork detected: " << height << "/" << hash);
 				eng.Tree.Add(_self);
 				return;
 			}
 		}
-		if (eng.BestBlock() && Hash(eng.BestBlock()) != get_PrevBlockHash())
+		if (!blockBest || Hash(blockBest) == hashPrev)
+			Connect();
+		else if (bReorganize)
 			eng.Reorganize(_self);
 		else
-			Connect();
+			eng.Tree.Add(_self);
 
 		bool bNotifyWallet = !eng.Events.Subscribers.empty() && !eng.IsInitialBlockDownload();
 		if (bNotifyWallet || !(Height % eng.CommitPeriod))
@@ -1398,7 +1252,7 @@ LAB_AGAIN:
 				Throw(ExtErr::ThreadInterrupted);
 			Block blk(nullptr);
 			EXT_LOCK (eng.Caches.Mtx) {
-				for (ChainCaches::COrphanMap::iterator it=eng.Caches.OrphanBlocks.begin(); it!=eng.Caches.OrphanBlocks.end(); ++it) {
+				for (ChainCaches::COrphanMap::iterator it = eng.Caches.OrphanBlocks.begin(); it != eng.Caches.OrphanBlocks.end(); ++it) {
 					Block& blockNext = it->second.first;
 					if (blockNext.PrevBlockHash == h) {
 						blk = blockNext;
@@ -1430,12 +1284,12 @@ LAB_AGAIN:
 		if (BlockTreeItem bti = eng.Tree.FindHeader(hash)) {
 			m_pimpl->Height = bti.Height;
 			eng.Tree.Add(_self);
-			TRC(4, "requested    \t" << bti.Height << "\t" << hash << " added to Tree");
+			TRC(4, "requested " << bti.Height << "/" << hash << " added to Tree");
 		} else {
 			EXT_LOCK(eng.Caches.Mtx) {
 				eng.Caches.OrphanBlocks.insert(make_pair(hash, _self));
 
-				TRC(4, "B \t" << hash << " added to OrphanBlocks.size= " << eng.Caches.OrphanBlocks.size());
+				TRC(4, "B " << hash << " added to OrphanBlocks.size= " << eng.Caches.OrphanBlocks.size());
 			}
 		}
 	} else {

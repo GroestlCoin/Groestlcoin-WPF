@@ -1,4 +1,4 @@
-/*######   Copyright (c) 2014-2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
+﻿/*######   Copyright (c) 2014-2019 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
 #                                                                                                                                     #
 # 		See LICENSE for licensing information                                                                                         #
 #####################################################################################################################################*/
@@ -11,7 +11,12 @@ using namespace Ext::DB::KV;
 
 class CkStorage : public KVStorage {
 	typedef KVStorage base;
+protected:
+	dynamic_bitset<> BmUsedPages;
 public:
+	CkStorage() {
+		AllowLargePages = false;
+	}
 
 	void CheckPgno(uint32_t pgno) {
 		if (pgno >= BmUsedPages.size())
@@ -24,24 +29,22 @@ public:
 	void CheckFreePages();
 	void PrintReport();
 protected:
-	dynamic_bitset<> BmUsedPages;
-
 	void OnOpenPage(uint32_t pgno) override {
 		CheckPgno(pgno);
 	}
 };
 
-
-
-class CCkDbApp : public CConApp {
+class CUdbApp : public CConApp {
 public:
 	void PrintUsage() {
-		cerr << "Usage:\n"
-			<< "  " << path(Argv[0]).filename() << " <filename>.udb" << endl;
+		cerr << "Usage:"
+			<< "\n  " << path(Argv[0]).filename() << " check <filename>.udb"
+			<< "\n  " << path(Argv[0]).filename() << " vacuum <filename>.udb"
+			<< endl;
 	}
 
 	void Execute() override {
-		if (Argc < 2) {
+		if (Argc < 3) {
 			PrintUsage();
 			Environment::ExitCode = 1;
 			return;
@@ -50,10 +53,20 @@ public:
 		storage.UseMMapPager = false;
 		storage.ReadOnly = true;										//!!! Mapping don't work for unaligned ReadOnly file
 		storage.m_accessViewMode = ViewMode::Window;			// to count Pages; ViewMode::Full avoids OpenPage() calls
-		storage.Open(Argv[1]);
-		storage.Check();
-		storage.CheckFreePages();
-		storage.PrintReport();
+
+		String command = Argv[1];
+		if (command == "check") {
+			storage.Open(Argv[2]);
+			storage.Check();
+			storage.CheckFreePages();
+			storage.PrintReport();
+		} else if (command == "vacuum") {
+			storage.Open(Argv[2]);
+			storage.Vacuum();
+		} else {
+			PrintUsage();
+			Environment::ExitCode = 1;
+		}
 	}
 } theApp;
 
@@ -87,41 +100,44 @@ void CkStorage::Check() {
 			if (cht->Top().Pos == 0)
 				goto LAB_AGAIN;
 			cht = cht;
-			
+
 		}
 	}
 	return;
 #endif
 
 
-	cout << "Checking file " << FilePath << "\n";
-	uint32_t ver = letoh(DbHeaderRef().Version);
-	cout << "Version: " << Version((ver >> 16) & 255, (ver >> 8) & 255)
-		<< "\tPageSize: " << int(DbHeaderRef().PageSize) << "\n"
-		<< "App: " << AppName << " " << UserVersion << "\n";
+	cout << "Checking file " << FilePath;
+	const DbHeader& h = DbHeaderRef();
+	uint32_t ver = letoh(h.Version);
+	cout << "\nVersion: " << Version((ver >> 16) & 255, (ver >> 8) & 255)
+		<< "\nPage Size:  " << int(h.PageSize)
+		<< "\nPage Count: " << int(h.PageCount)
+		<< "\nFree Page Count: " << int(h.FreePageCount)
+		<< "\nApplication: " << AppName << " " << UserVersion << "\n";
 
 	DbReadTransaction txS(_self);
 	int nProgress = m_stepProgress;
 
 
-	struct Space_Throusands : numpunct<char> { 
-   		char do_thousands_sep() const override { return ' '; } 
+	struct Space_Throusands : numpunct<char> {
+   		char do_thousands_sep() const override { return ' '; }
 		string do_grouping() const override { return "\3"; }
 	};
 	cout.imbue(locale(locale(), new Space_Throusands));
 
-	cout << "\nTable           Key Type     Records        Pages        Bytes"
-			"\n--------------- --- -------- -------------- ------------ ------------\n";
+	cout << "\nTable           Key Type     Records        Pages       Bytes"
+			"\n--------------- --- -------- -------------- ----------- ------------\n";
 	for (DbCursor ct(txS, DbTable::Main()); ct.SeekToNext();) {
-		String tableName = Encoding::UTF8.GetChars(ct.Key);
-		const TableData& td = *(const TableData*)ct.get_Data().P;
+		string tableName((const char*)ct.Key.data(), ct.Key.size());
+		const TableData& td = *(const TableData*)ct.get_Data().data();
 		ostringstream os;
 
 		os << tableName;
 
 		os << string((max)(1, 16 - (int)os.tellp()), ' ');
 		os << (td.KeySize ? Convert::ToString(int(td.KeySize)) : String("var"));
-		
+
 		os << string((max)(1, 20 - (int)os.tellp()), ' ');
 		switch ((TableType)td.Type) {
 		case TableType::BTree: 		os << "B-Tree"; break;
@@ -142,7 +158,7 @@ void CkStorage::Check() {
 		cout << os.str();
 
 		DbTable tS(tableName);
-		int64_t nRecords = 0, 
+		int64_t nRecords = 0,
 			bytes = 0;
 		size_t nPages = BmUsedPages.count();
 		for (DbCursor c(txS, tS); c.SeekToNext();) {
@@ -154,7 +170,7 @@ void CkStorage::Check() {
 				nProgress = m_stepProgress;
 			}
 			++nRecords;
-			bytes += c.get_Key().Size + c.get_Data().Size;
+			bytes += c.get_Key().size() + c.get_Data().size();
 		}
 		nPages = BmUsedPages.count() - nPages;
 		cout << setw(13) << nRecords << " " << setw(10) << nPages << " " << setw(15) << bytes << "\n";
@@ -171,18 +187,14 @@ void CkStorage::CheckFreePages() {
 void CkStorage::PrintReport() {
 	cout << "Free Pages: " << FreePages.size() << "\n";
 	set<uint32_t> setLeaked;
-	for (uint32_t pgno=2; pgno<PageCount; ++pgno) {
-		if (pgno>=BmUsedPages.size() || !BmUsedPages[pgno])
+	for (uint32_t pgno = 2; pgno < PageCount; ++pgno) {
+		if (pgno >= BmUsedPages.size() || !BmUsedPages[pgno])
 			setLeaked.insert(pgno);
 	}
-	if (setLeaked.empty())
-		cout << "No Leaks" << endl;
-	else {
-		cout << "Leaks:\n";
+	if (!setLeaked.empty()) {
+		cout << "Leaked pages:\n";
 		for (uint32_t pgno : setLeaked)
 			cout << pgno << " ";
 		cout << endl;
 	}
 }
-
-

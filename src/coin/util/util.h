@@ -84,6 +84,7 @@ HashAlgo StringToAlgo(RCString s);
 String AlgoToString(HashAlgo algo);
 
 class HashValue : totally_ordered<HashValue> {
+	uint64_t m_data[4];
 public:
 	typedef uint8_t* iterator;
 	typedef const uint8_t* const_iterator;
@@ -157,8 +158,13 @@ public:
 		rd.Read(data(), 32);
 	}
 
-private:
-	uint64_t m_data[4];
+	void Print(ostream& os, bool bFull = true) const;
+
+	String ToString(bool bFull = true) const {
+		ostringstream os;
+		Print(os, bFull);
+		return os.str();
+	}
 };
 
 COIN_UTIL_API ostream& operator<<(ostream& os, const HashValue& hash);
@@ -228,6 +234,8 @@ const int64_t PUBKEYID_MASK = 0x7FFFFFFFFLL;
 #endif
 
 class CIdPk {
+private:
+	int64_t m_val;
 public:
 	explicit CIdPk(const HashValue160& hash)
 		: m_val(letoh(*(int64_t*)(hash.data() + 12)) & PUBKEYID_MASK) //	Use last bytes. First bytes are not random, because many generated addresses are like "1ReadableWord..."
@@ -251,9 +259,6 @@ public:
 	bool IsNull() const {
 		return m_val == -1;
 	}
-
-private:
-	int64_t m_val;
 };
 
 class ReducedBlockHash {
@@ -336,8 +341,9 @@ public:
 		: Ver(1) {
 	}
 
-	static void WriteVarInt(BinaryWriter& wr, uint64_t v);
-	static uint64_t ReadVarInt(const BinaryReader& rd);
+	static void WriteVarUInt64(BinaryWriter& wr, uint64_t v);
+	static uint64_t ReadVarUInt64(const BinaryReader& rd);
+	static uint32_t ReadVarSize(const BinaryReader& rd);
 	static String ReadString(const BinaryReader& rd);
 	static void WriteString(BinaryWriter& wr, RCString s);
 	static void WriteSpan(BinaryWriter& wr, RCSpan mb);
@@ -357,7 +363,7 @@ public:
 
 	template <class T>
     static void Write(ProtocolWriter& wr, const vector<T>& ar) {
-		WriteVarInt(wr, ar.size());
+		WriteVarUInt64(wr, ar.size());
         for (size_t i = 0; i < ar.size(); ++i)
             WriteEl(wr, ar[i]);
 	}
@@ -375,10 +381,10 @@ public:
     static void ReadEl(const ProtocolReader& rd, T& v) { v.Read(rd); }
 
 	template <class T> static void Read(const ProtocolReader& rd, vector<T>& ar, size_t maxSize = SIZE_MAX) {
-        auto size = ReadVarInt(rd);
+        uint32_t size = ReadVarSize(rd);
         if (size > maxSize)
             Throw(ExtErr::Protocol_Violation);
-		ar.resize((size_t)size);
+		ar.resize(size);
 		for (size_t i = 0; i < ar.size(); ++i)
 			ReadEl(rd, ar[i]);
 	}
@@ -392,10 +398,8 @@ struct BlockHeaderBinary {
 		Timestamp, DifficultyTargetBits, Nonce;
 };
 
-class COIN_UTIL_CLASS BlockBase : public Object {
+class COIN_UTIL_CLASS BlockBase : public InterlockedObject {
 public:
-	typedef InterlockedPolicy interlocked_policy;
-
 	HashValue PrevBlockHash;
 	mutable optional<HashValue> m_merkleRoot;
 	DateTime Timestamp;
@@ -440,10 +444,10 @@ const int PASSWORD_ENCRYPT_ROUNDS_A = 1000, PASSWORD_ENCRYPT_ROUNDS_B = 100 * 10
 
 const char DEFAULT_PASSWORD_ENCRYPT_METHOD = 'B';
 
-class HasherEng : public Object {
+class HasherEng : public InterlockedObject {
 public:
-	uint8_t AddressVersion, ScriptAddressVersion;
 	String Hrp;
+	uint8_t AddressVersion, ScriptAddressVersion;
 
 	HasherEng()
 		: AddressVersion(0)
@@ -484,9 +488,10 @@ private:
 
 class CanonicalPubKey {
 	typedef CanonicalPubKey class_type;
-
 public:
-	typedef vararray<uint8_t, 65> CData;
+	const static size_t MAX_SIZE = 65;
+
+	typedef vararray<uint8_t, MAX_SIZE> CData;
 	CData Data;
 
 	CanonicalPubKey() {
@@ -497,7 +502,7 @@ public:
 	}
 
 	CanonicalPubKey(RCSpan cbuf)
-		: Data(cbuf.data(), cbuf.size()) {
+		: Data(cbuf.data(), CheckArgSize(cbuf.size())) {
 	}
 
 	bool IsCompressed() const {
@@ -516,6 +521,12 @@ public:
 
 	Blob ToCompressed() const;
 	static CanonicalPubKey FromCompressed(RCSpan cbuf);
+private:
+	static size_t CheckArgSize(size_t size) {
+		if (size > MAX_SIZE)
+			Throw(E_INVALIDARG);
+		return size;
+	}
 };
 
 enum class AddressType : uint8_t {				// Used in WalletDb in pubkeys.type field
@@ -532,16 +543,16 @@ enum class AddressType : uint8_t {				// Used in WalletDb in pubkeys.type field
 	, NonStandard = 9
 };
 
-class COIN_CLASS AddressObj : public Object {
+class COIN_CLASS AddressObj : public InterlockedObject {
 public:
 	HasherEng& Hasher;
 	String Comment;
 
 	typedef vararray<uint8_t, MAX_PUBKEY> CData;
 	CData Data;
+	vector<Blob> Datas;
 	uint8_t WitnessVer;
 	uint8_t RequiredSigs;
-	vector<Blob> Datas;
 	AddressType Type;
 
 	AddressObj(HasherEng& hasher);
@@ -596,7 +607,7 @@ public:
 	}
 };
 
-class KeyInfoBase : public Object {
+class KeyInfoBase : public InterlockedObject {
 	typedef KeyInfoBase class_type;
 
 	Blob m_privKey;

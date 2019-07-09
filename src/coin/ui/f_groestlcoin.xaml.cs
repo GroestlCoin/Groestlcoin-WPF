@@ -87,10 +87,10 @@ namespace Coin {
                         decimal amount = tx.Amount;
                         string s;
                         if (amount > 0)
-                            s = string.Format("{0} {1} received to our ", amount, w.CurrencySymbol);
+                            s = $"{amount} {w.CurrencySymbol} received to our ";
                         else
-                            s = string.Format("{0} {1} sent to", -amount, w.CurrencySymbol);
-                        s += string.Format(" address {0} {1} {2}", addr.Value, addr.Comment, tx.Comment);
+                            s = $"{-amount} {w.CurrencySymbol} sent to";
+                        s += $" address {addr.Value} {addr.Comment} {tx.Comment}";
                         WalletEvents.Add(new WalletEvent() { Timestamp = tx.Timestamp, Comment = s });
                         if (++i > 10)
                             break;
@@ -127,7 +127,7 @@ namespace Coin {
                 if ((int)UserAppRegistryKey.GetValue("UrlRegAsked", 0) == 0) {
                     UserAppRegistryKey.SetValue("UrlRegAsked", 1);
                     RegistryKey keyClasses = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Classes", true);
-                    string toMe = string.Format("\"{0}\" %1", Assembly.GetCallingAssembly().Location);
+                    string toMe = $"\"{Assembly.GetCallingAssembly().Location}\" %1";
                     var subKey = keyClasses.OpenSubKey("bitcoin");
                     if (subKey == null) {
                         keyClasses.CreateSubKey("bitcoin").CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command").SetValue(null, toMe);
@@ -155,6 +155,7 @@ namespace Coin {
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e) {
+            MenuDBMode.IsEnabled = false;       //!!! Until testing of Lite mode
             MenuModeFull.Tag = EEngMode.Bootstrap;
             MenuModeLite.Tag = EEngMode.Lite;
 
@@ -191,6 +192,16 @@ namespace Coin {
 
                 var wf = new WalletForms();
                 wf.Wallet = wallet;
+                MenuItem mi = new MenuItem();
+                wf.MenuItem = mi;
+                mi.Header = $"{wallet.CurrencySymbol}  {currencyName}";
+                mi.Icon = new Image() { Source = new BitmapImage(new Uri($"images/{currencyName}.ico", UriKind.Relative)) };
+                menuCurrency.Items.Add(mi);
+                mi.Template = menuTemplate;
+                mi.IsCheckable = true;
+                mi.Tag = wf;
+                mi.Checked += Currency_CheckChanged;
+                mi.Unchecked += Currency_CheckChanged;
                 m_wallet2forms[wallet] = wf;
                 TheWallet = wf;
 
@@ -325,7 +336,7 @@ namespace Coin {
         WalletForms FindWallet(string netName) {
             var r = ActiveWalletForms.FirstOrDefault(w => w.Wallet.CurrencyName.ToUpper() == netName.ToUpper());
             if (r == null)
-                throw new ApplicationException(string.Format("No active Wallet with name {0}", netName));
+                throw new ApplicationException($"No active Wallet with name {netName}");
             return r;
         }
 
@@ -412,7 +423,7 @@ namespace Coin {
         private void OnHelpAbout(object sender, RoutedEventArgs e) {
             var d = new GuiComp.DialogAbout();
             d.SourceCodeUri = new Uri("https://github.com/ufasoft/coin");
-            d.Image.Source = new BitmapImage(new Uri(string.Format("/{0};component/groestlcoin.ico", System.Reflection.Assembly.GetExecutingAssembly().GetName().Name), UriKind.Relative));
+            d.Image.Source = new BitmapImage(new Uri($"/{ System.Reflection.Assembly.GetExecutingAssembly().GetName().Name};component/coin.ico", UriKind.Relative));
             Dialog.ShowDialog(d, this);
         }
 
@@ -508,6 +519,20 @@ namespace Coin {
                 wf.Wallet.CompactDatabase();
         }
 
+        private void ContextMenu_Opened(object sender, RoutedEventArgs e) {
+            ContextMenu menu = (ContextMenu)sender;
+            var wf = SelectedWallet();
+            menu.DataContext = wf;
+/*
+            MenuDBMode.IsEnabled = wf != null;
+            if (MenuDBMode.IsEnabled)
+                SetMenuDBMode();
+*/
+        }
+
+        private void menuMining_Checked(object sender, RoutedEventArgs e) {
+            SaveActiveCurrencies();
+        }
 
         private void OnChangeWalletPassword(object sender, RoutedEventArgs e) {
             var dlg = new FormPassphrase();
