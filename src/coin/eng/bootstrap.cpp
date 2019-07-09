@@ -30,12 +30,10 @@ void BootstrapDbThread::Execute() {
 	DBG_LOCAL_IGNORE_CONDITION(ExtErr::EndOfStream);
 	DBG_LOCAL_IGNORE_CONDITION(CoinErr::InvalidBootstrapFile);
 
-	CEngStateDescription stateDesc(Eng, EXT_STR("Bootstrapping from " << PathBootstrap));
+	CEngStateDescription stateDesc(Eng, EXT_STR((Indexing ? "Indexing " : "Bootstrapping from ") << PathBootstrap));
 
 	FileStream stm(PathBootstrap, FileMode::Open, FileAccess::Read, FileShare::ReadWrite, Stream::DEFAULT_BUF_SIZE, FileOptions::SequentialScan);
-#ifdef _DEBUG//!!!
 	stm.Position = Eng.OffsetInBootstrap;
-#endif
 	ProtocolReader rd(stm);
 	rd.WitnessAware = true;
 	try {
@@ -76,7 +74,7 @@ void CoinEng::ExportToBootstrapDat(const path& pathBoostrap) {
 	FileStream fs(pathBoostrap, FileMode::Create, FileAccess::Write);
 	BinaryWriter wr(fs);
 
-	for (uint32_t i=0; i<n && Runned; ++i) {
+	for (uint32_t i = 0; i < n && Runned; ++i) {
 		wr << ChainParams.ProtocolMagic;
 		MemoryStream ms;
 

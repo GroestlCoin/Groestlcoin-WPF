@@ -219,7 +219,7 @@ HashValue PosBlockObj::HashProofOfStake() const {
 		MemoryStream msBlock;
 		ProtocolWriter wrPrev(msBlock);
 		blockPrev.WriteHeader(wrPrev);
-		CoinSerialized::WriteVarInt(wrPrev, blockPrev.get_Txes().size());
+		CoinSerialized::WriteVarUInt64(wrPrev, blockPrev.get_Txes().size());
 		EXT_FOR (const Tx& t, blockPrev.get_Txes()) {
 			if (Coin::Hash(t) == txIn.PrevOutPoint.TxHash) {
 				wr << uint32_t(Span(msBlock).size());
@@ -277,10 +277,10 @@ void PosBlockObj::CheckSignature() {
 	CoinEng& eng = Eng();
 	const vector<Tx>& txes = get_Txes();
 
-	if (0 == Signature.Size) {
+	if (0 == Signature.size()) {
 		if (Hash() == eng.ChainParams.Genesis)
 			return;
-	} else if (VerifySignatureByTxOut(ProofType()==ProofOf::Stake ? txes[1].TxOuts()[1] : txes[0].TxOuts()[0]))
+	} else if (VerifySignatureByTxOut(ProofType() == ProofOf::Stake ? txes[1].TxOuts()[1] : txes[0].TxOuts()[0]))
 		return;
 	Throw(CoinErr::BadBlockSignature);
 }
