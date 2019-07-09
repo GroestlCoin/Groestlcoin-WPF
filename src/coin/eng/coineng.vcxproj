@@ -596,7 +596,6 @@
     <ClCompile Include="..\..\el\xml\xml-reader.cpp" />
     <ClCompile Include="..\..\el\xml\xml-writer.cpp" />
     <ClCompile Include="backend-dblite.cpp" />
-    <ClCompile Include="backend-normal.cpp" />
     <ClCompile Include="backend-sqlite.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='D_St|Win32'">true</ExcludedFromBuild>

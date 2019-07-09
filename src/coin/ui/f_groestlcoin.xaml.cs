@@ -192,6 +192,7 @@ namespace Coin {
 
                 var wf = new WalletForms();
                 wf.Wallet = wallet;
+                /*
                 MenuItem mi = new MenuItem();
                 wf.MenuItem = mi;
                 mi.Header = $"{wallet.CurrencySymbol}  {currencyName}";
@@ -202,6 +203,7 @@ namespace Coin {
                 mi.Tag = wf;
                 mi.Checked += Currency_CheckChanged;
                 mi.Unchecked += Currency_CheckChanged;
+                */
                 m_wallet2forms[wallet] = wf;
                 TheWallet = wf;
 
@@ -528,10 +530,10 @@ namespace Coin {
             if (MenuDBMode.IsEnabled)
                 SetMenuDBMode();
 */
-        }
+            }
 
         private void menuMining_Checked(object sender, RoutedEventArgs e) {
-            SaveActiveCurrencies();
+//            SaveActiveCurrencies();
         }
 
         private void OnChangeWalletPassword(object sender, RoutedEventArgs e) {
@@ -554,11 +556,12 @@ namespace Coin {
             tabSend.Focus();
         }
 
+        /*!!!?
         private void menuMining_Checked(object sender, RoutedEventArgs e) {
             var sk = UserAppRegistryKey.OpenSubKey(TheWallet.CurrencySymbol, true);
             if (sk != null)
                 sk.SetValue("Mining", TheWallet.MiningEnabled ? 1 : 0);
-        }
+        }*/
 
     }
 

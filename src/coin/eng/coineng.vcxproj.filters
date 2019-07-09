@@ -171,13 +171,13 @@
     <ClCompile Include="coinconf.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="backend-normal.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\el\win\secdesc.cpp">
       <Filter>comp</Filter>
     </ClCompile>
     <ClCompile Include="prune.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="blocktree.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

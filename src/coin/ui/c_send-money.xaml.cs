@@ -57,7 +57,7 @@ namespace Coin {
         void OnCancel(object sender, RoutedEventArgs e) {
         }
 
-        void OnSend(object sender, RoutedEventArgs e) {
+        public void OnSend(object sender, RoutedEventArgs e) {
             if (FormMain.I.EnsurePassphraseUnlock()) {
                 var prevCursor = Cursor;
                 Cursor = Cursors.Wait;
