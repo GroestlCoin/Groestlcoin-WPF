@@ -12,7 +12,7 @@
 
 	<Upgrade Id='$(var.UpgradeCode)'>
 		<UpgradeVersion OnlyDetect="yes" Minimum="$(var.PRODVER)" Property="NEWERVERSIONDETECTED" IncludeMinimum="no" />
-		<UpgradeVersion OnlyDetect="no" Maximum="2.99.0.7" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
+		<UpgradeVersion OnlyDetect="no" Maximum="99.0.0.0" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
 	</Upgrade>
 
     <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
@@ -48,7 +48,7 @@
 	</Directory>
 
 <?if $(sys.BUILDARCH) = x64 ?>
-	<Media Id="1" Cabinet="x64.cab" EmbedCab="yes"/>
+	<Media Id="1" Cabinet="x64.cab" EmbedCab="yes" CompressionLevel="high"/>
 
 	<Component Id='CMP_Groestlcoin' Guid='d40983c1-f860-42fa-9dfd-67bc4302f87c' Directory='INSTALLDIR' >
 		<File Id="Groestlcoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
