@@ -12,7 +12,6 @@
 					<MenuItem Header="_Export Wallet..." Click="OnFileExport"/>
 					<Separator/>
 					<MenuItem Header="Import Blockchain from bootstrap.dat..." Click="OnFileImportBlockchain"/>
-					<MenuItem Header="Export Blockchain to bootstrap.dat..." Click="OnFileExportBlockchain"/>
 					<Separator/>
 					<MenuItem Header="E_xit" Click="OnFileExit" />
 				</MenuItem>

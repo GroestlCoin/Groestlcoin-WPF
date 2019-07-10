@@ -21,7 +21,6 @@ namespace GuiComp {
 			labelProductName.Content = AssemblyProduct;
 			labelVersion.Content = String.Format("Version {0}", AssemblyVersion);
 			labelCopyright.Content = AssemblyCopyright;
-			labelCompanyName.Content = AssemblyCompany;
 			textBlockDescription.Text = AssemblyDescription;
 		}
 

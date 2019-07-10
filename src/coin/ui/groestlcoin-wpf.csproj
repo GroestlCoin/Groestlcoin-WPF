@@ -4,14 +4,15 @@
     <OutputType>WinExe</OutputType>
     <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
     <Platforms>x64;x86</Platforms>
+    <Configurations>R_St;D_St</Configurations>
     <RootNamespace>Coin</RootNamespace>
     <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
-    <ApplicationIcon>images\groestlcoin.ico</ApplicationIcon>
+    <ApplicationIcon>..\images\groestlcoin.ico</ApplicationIcon>
     <StartupObject>Coin.App</StartupObject>
     <AssemblyName>Groestlcoin-WPF</AssemblyName>
+    <Company>Groestlcoin</Company>
     <Product>Groestlcoin-WPF</Product>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <Configurations>R_St;D_St</Configurations>
+    <Description>Groestlcoin client for Windows</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Version>2.19.0.8</Version>
     <Copyright>Copyright © Groestlcoin 2014-2019</Copyright>
@@ -44,6 +45,7 @@
     <EmbeddedResource Include="..\..\m\guicomp\f_querystring.resx" Link="GuiComp\f_querystring.resx" />
     <EmbeddedResource Include="..\..\m\guicomp\f_textinfo.resx" Link="GuiComp\f_textinfo.resx" />
     <Resource Include="images\groestlcoin.ico"><Link>groestlcoin.ico   </Link></Resource>
+    <Resource Include="..\images\groestlcoin256.png"><Link>groestlcoin256.png   </Link></Resource>
     <Reference Include="Interop.coineng"> <EmbedInteropTypes>True</EmbedInteropTypes> <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath> </Reference>
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿/*######   Copyright (c) 2011-2018 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
+﻿/*######   Copyright (c) 2011-2019 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
 #                                                                                                                                     #
 #       See LICENSE for licensing information                                                                                         #
 #####################################################################################################################################*/
@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
@@ -128,14 +129,14 @@ namespace Coin {
                     UserAppRegistryKey.SetValue("UrlRegAsked", 1);
                     RegistryKey keyClasses = Registry.CurrentUser.OpenSubKey("Software").OpenSubKey("Classes", true);
                     string toMe = $"\"{Assembly.GetCallingAssembly().Location}\" %1";
-                    var subKey = keyClasses.OpenSubKey("bitcoin");
+                    var subKey = keyClasses.OpenSubKey("groestlcoin");
                     if (subKey == null) {
-                        keyClasses.CreateSubKey("bitcoin").CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command").SetValue(null, toMe);
+                        keyClasses.CreateSubKey("groestlcoin").CreateSubKey("shell").CreateSubKey("open").CreateSubKey("command").SetValue(null, toMe);
                     }  else {
                         var keyCommand = subKey.OpenSubKey("shell").OpenSubKey("open").OpenSubKey("command");
                         string path = (string)keyCommand.GetValue(null, "");
                         if (path != toMe) {
-                            if (MessageBox.Show("Register Bitcoin URI for this Application", "Coin", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+                            if (MessageBox.Show("Register Groestlcoin URI for this Application", "Coin", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                                 keyCommand.SetValue(null, toMe);
                         }
                     }
@@ -219,6 +220,7 @@ namespace Coin {
 //                      bMiningEnabled = (int)sk.GetValue("Mining", 0) != 0;
                     } catch (Exception) { }
                 }
+                mode = EEngMode.Bootstrap;  //!!! Lite Mode not supported temporary
                 wallet.Mode = mode;
                 if (wallet.MiningAllowed)
                     wallet.MiningEnabled = bMiningEnabled;
@@ -424,8 +426,8 @@ namespace Coin {
 
         private void OnHelpAbout(object sender, RoutedEventArgs e) {
             var d = new GuiComp.DialogAbout();
-            d.SourceCodeUri = new Uri("https://github.com/ufasoft/coin");
-            d.Image.Source = new BitmapImage(new Uri($"/{ System.Reflection.Assembly.GetExecutingAssembly().GetName().Name};component/coin.ico", UriKind.Relative));
+            d.SourceCodeUri = new Uri("https://github.com/Groestlcoin/Groestlcoin-WPF");
+            d.Image.Source = new BitmapImage(new Uri($"/{ System.Reflection.Assembly.GetExecutingAssembly().GetName().Name};component/groestlcoin256.png", UriKind.Relative));
             Dialog.ShowDialog(d, this);
         }
 
@@ -513,7 +515,7 @@ namespace Coin {
 
         private void OnHelp(object sender, RoutedEventArgs e) {
             string exe = Assembly.GetExecutingAssembly().Location;
-            System.Windows.Forms.Help.ShowHelpIndex(null, Path.Combine(Path.GetDirectoryName(exe), Path.GetFileNameWithoutExtension(exe) + ".htm"));
+            Process.Start(Path.Combine(Path.GetDirectoryName(exe), Path.GetFileNameWithoutExtension(exe) + ".htm"));
         }
 
         private void OnFileCompact(object sender, RoutedEventArgs e) {
