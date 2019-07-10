@@ -11,6 +11,7 @@
 		<Checkpoint Block='100002' 	Hash='0000000001968bbc3e7edd38448661449091a83e1ae6ce42dd8e19af3954c4ec' />
 		<Checkpoint Block='669286' 	Hash='000000001727e1d13ca7272dee43996efdfc6b3b57a6d2b0c48257ef52f40bcb' />
 		<Checkpoint Block='2000000'	Hash='00000000000434d5b8d1c3308df7b6e3fd773657dfb28f5dd2f70854ef94cc66' />
+		<Checkpoint Block='2600000'	Hash='0000000000002d526754a280ad7668b663cb9eea08b003edad3ddf6037fc574e' />
 
 		<Seed EndPoint='' />
 	</Chain>
