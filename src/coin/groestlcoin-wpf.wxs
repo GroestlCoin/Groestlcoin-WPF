@@ -2,7 +2,7 @@
 
 
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
-<?define PRODVER="2.19.0.8"?>
+<?define PRODVER="2.19.0.10"?>
 
 <Product Name='Groestlcoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Groestlcoin' Language='1033' >
    	<Package Id='*' Keywords='Installer' Description="Groestlcoin Installer" Comments='Groestlcoin-WPF' Manufacturer='Groestlcoin' InstallerVersion='301' Compressed='yes'  />
@@ -63,7 +63,7 @@
 		<File Source="..\..\x64_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
 -->
-		<File Source="help\groestlcoin-wpf.htm"						/>
+		<File Source="help\Groestlcoin-WPF.htm"						/>
 	</Component>
 <?else ?>
 	<Media Id="1" Cabinet="x86.cab" EmbedCab="yes"/>
@@ -77,7 +77,7 @@
 		<File Source="..\..\x64_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
 		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
-		<File Source="help\groestlcoin-wpf.htm"						/>
+		<File Source="help\Groestlcoin-WPF.htm"						/>
 	</Component>
 <?endif ?>
 

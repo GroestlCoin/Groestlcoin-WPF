@@ -55,7 +55,7 @@ namespace Coin {
 
         public static RegistryKey UserAppRegistryKey {
             get {
-                return Registry.CurrentUser.CreateSubKey(@"Software\GroestlCoin-WPF");
+                return Registry.CurrentUser.CreateSubKey(@"Software\Groestlcoin-WPF");
             }
         }
 

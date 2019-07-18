@@ -1,6 +1,6 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <CoinChains>
-    <Chain Name='GroestlCoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5'  Hrp='grs' MiningAllowed='1'
+    <Chain Name='Groestlcoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5'  Hrp='grs' MiningAllowed='1'
 			Genesis='00000ac5927c594d49cc0bdb81759d0da8297eb614683d3acb62f0703b639023'
 			MaxMoney='105000000'  MinTxFee='10000'
 			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000'

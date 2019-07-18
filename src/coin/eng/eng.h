@@ -971,7 +971,8 @@ public:
 	DEFPROP_GET(Version, ProductVersion);
 
 private:
-	void LoadConf(const path& confPath);
+	void LoadConf(const path& confPath);	
+	path GetBaseDataFolder() override;
 };
 
 //extern CoinEngApp theApp;

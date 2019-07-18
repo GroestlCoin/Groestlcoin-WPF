@@ -43,7 +43,7 @@
 						<ListView.View>
 							<GridView>
 								<GridViewColumn Header="Balance" DisplayMemberBinding="{Binding Path=Balance}" Width="80" />
-								<GridViewColumn Header="Block" DisplayMemberBinding="{Binding Path=BlockHeight}" Width="60"/>
+								<GridViewColumn Header="Block" DisplayMemberBinding="{Binding Path=BlockHeight}" Width="62"/>
 								<GridViewColumn Header="State" DisplayMemberBinding="{Binding Path=State}" Width="300" />
 								<GridViewColumn Header="Peers" DisplayMemberBinding="{Binding Path=Peers}" Width="50" />
 							</GridView>
