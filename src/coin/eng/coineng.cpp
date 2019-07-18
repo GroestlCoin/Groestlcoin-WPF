@@ -1023,6 +1023,19 @@ Version CoinEngApp::get_ProductVersion() {
 	return Version(ar[0], ar[1]);
 }
 
+path CoinEngApp::GetBaseDataFolder() {		//GRS  Don't include 'Groestlcoin' into Data path
+	path r;
+	try {
+		r = path(Environment::GetEnvironmentVariable("APPDATA").c_str());
+		if (r.empty())
+			r = Environment::GetFolderPath(SpecialFolder::ApplicationData);
+	} catch (RCExc) {
+		r = System.WindowsDirectory / "Application Data";
+	}
+	create_directory(r);
+	return r;
+}
+
 CoinEngApp theApp;
 
 void SetUserVersion(SqliteConnection& db, const Version& ver) {

@@ -343,13 +343,6 @@ bool CoinDb::get_PeersDatabaseExists() {
 
 void CoinDb::LoadKeys(RCString password) {
 	// Eng() is not defined here
-#ifdef X_DEBUG	//!!!D
-	ptr<CoinEng> peng;
-	for (CurrencyFactoryBase* p = CurrencyFactoryBase::Root; p; p = p->Next)
-		if (p->Name == "GroestlCoin")
-			peng = p->CreateEng(_self);
-#endif
-
 	BuggyAes aesA;
 	BuggyAes aesB;
 	if (!password.empty()) {
@@ -676,4 +669,3 @@ P2P::Link *CoinDb::CreateLink(thread_group& tr) {
 
 
 } // Coin::
-
