@@ -36,7 +36,7 @@ public:
 		, MAX_HEADERS_RESULTS = 2000;
 };
 
-struct MessageHeader {
+struct SMessageHeader {
 	uint32_t Magic;
 	char Command[12];
 	uint32_t Length, Checksum;
@@ -63,8 +63,8 @@ public:
 	Inventory() {}
 
 	Inventory(InventoryType typ, const Coin::HashValue& hash)
-		: Type(typ)
-		, HashValue(hash)
+		: HashValue(hash)
+		, Type(typ)
 	{}
 
 	bool operator==(const Inventory& inv) const {
@@ -99,6 +99,7 @@ public:
 
 	typedef unordered_set<Inventory> CInvertorySetToSend;
 	CInvertorySetToSend InvertorySetToSend;
+	//---- Under Mtx
 
 	Block m_curMerkleBlock;
 	vector<HashValue> m_curMatchedHashes;
@@ -119,7 +120,7 @@ public:
 		IsLimitedNode,
         IsPreferredDownload,
         IsSyncStarted,
-        HaveWitness,
+        HasWitness,
         PreferHeaders,
 		PreferHeaderAndIDs,
 		SupportsDesiredCmpctVersion,
@@ -142,8 +143,8 @@ class VersionMessage : public CoinMessage {
 	typedef CoinMessage base;
 public:
 	uint64_t Nonce, Services;
-	uint32_t ProtocolVer;
 	String UserAgent;
+	uint32_t ProtocolVer;
 	int32_t LastReceivedBlock;
 	mutable DateTime RemoteTimestamp;
 	PeerInfoBase RemotePeerInfo, LocalPeerInfo;
@@ -521,8 +522,8 @@ ENUM_CLASS(RejectReason) {
 class RejectMessage : public CoinMessage {
 	typedef CoinMessage base;
 public:
-	String Command, Reason;
 	HashValue Hash;
+	String Command, Reason;
 	RejectReason Code;
 
 	RejectMessage(RejectReason code = RejectReason::Malformed, RCString command = String(), RCString reason = String())

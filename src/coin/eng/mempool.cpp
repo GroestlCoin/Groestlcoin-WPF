@@ -74,6 +74,12 @@ bool TxPool::AddToPool(const Tx& tx, vector<HashValue>& vQueue) {
 	if (!g_conf.AcceptNonStdTxn)
 		tx.CheckStandard();
 
+	DateTime now = Clock::now();
+
+	if (!tx.IsFinal(Eng.BestBlockHeight() + 1, now))
+		Throw(CoinErr::ContainsNonFinalTx);
+
+
 /*!!!?
 	int sigOpCount = tx.SigOpCount;
 	if (sigOpCount > serSize/34 || serSize < 100)
@@ -157,7 +163,7 @@ void TxMessage::Trace(Link& link, bool bSend) const {
 
 void TxMessage::Process(Link& link) {
 	CoinEng& eng = static_cast<CoinEng&>(*link.Net);
-	CCoinEngThreadKeeper keeper(&eng, &ScriptPolicy(true));
+	CCoinEngThreadKeeper keeper(&eng, &ScriptPolicy(true), true);
 
 	HashValue hash = Hash(Tx);
 
