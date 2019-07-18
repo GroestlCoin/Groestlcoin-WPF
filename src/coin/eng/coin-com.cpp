@@ -642,7 +642,7 @@ WalletAndEng::WalletAndEng(CoinDb& cdb, RCString name)
 	,	m_iWallet(static_cast<IWallet*>(new WalletCom(_self)))
 {
 	EXT_LOCK (cdb.MtxDb) {
-		SqliteCommand cmd("SELECT * FROM nets WHERE name=?", cdb.m_dbWallet);
+		SqliteCommand cmd("SELECT * FROM nets WHERE name=? COLLATE NOCASE", cdb.m_dbWallet);
 		cmd.Bind(1, name);
 		if (!cmd.ExecuteReader().Read()) {
 			SqliteCommand("INSERT INTO nets (name) VALUES(?)", cdb.m_dbWallet)
