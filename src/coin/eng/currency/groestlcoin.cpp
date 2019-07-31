@@ -26,7 +26,7 @@ class COIN_CLASS GroestlcoinEng : public CoinEng {
 	typedef CoinEng base;
 public:
 	GroestlcoinEng(CoinDb& cdb)
-		:	base(cdb)
+		: base(cdb)
 	{
 		MaxBlockVersion = 112;
 	}
@@ -59,6 +59,10 @@ protected:
 
 	HashValue HashMessage(RCSpan cbuf) override {
 		return GroestlHash(cbuf);		// OP_HASH256 implementation
+	}
+
+	HashValue HashForWallet(RCSpan s) override {
+		return GroestlHash(s);
 	}
 
 	HashValue HashForAddress(RCSpan cbuf) override {

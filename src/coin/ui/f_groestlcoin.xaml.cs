@@ -259,6 +259,8 @@ namespace Coin {
             MenuTop.DataContext = TheWallet;
 
             //MenuMining.IsEnabled = TheWallet.MiningAllowed;
+            if (LvWallet.SelectedItem == null && LvWallet.Items.Count == 1)
+                LvWallet.SelectedIndex = 0;
         }
 
         public bool EnsurePassphraseUnlock() {
@@ -440,7 +442,7 @@ namespace Coin {
             SelectedWalletNotNull().Wallet.Rescan();
         }
 
-        private void OnFileImport(object sender, RoutedEventArgs e) {
+        void OnFileImport(object sender, RoutedEventArgs e) {
             if (!EnsurePassphraseUnlock())
                 return;
             var wf = SelectedWalletNotNull();
@@ -452,12 +454,24 @@ namespace Coin {
                 string password = "";
                 while (true) {
                     try {
-                        wf.Wallet.ImportWallet(d.FileName, password);
-                        CtlMyAddresses.UpdateMyAddresses();
-                        CtlRecipients.UpdateRecipients();
-                        wf.Wallet.Rescan();
+                        switch (d.FilterIndex) {
+                            case 1:
+                                wf.Wallet.ImportWallet(d.FileName, password);
+                                CtlMyAddresses.UpdateMyAddresses();
+                                CtlRecipients.UpdateRecipients();
+                                wf.Wallet.Rescan();
+
+                                break;
+                            case 2:
+                            case 3:
+                                foreach (var key in File.ReadAllLines(d.FileName))
+                                    wf.Wallet.ImportPrivateKey(key.Trim(), password);
+                                break;
+                        }
                         break;
-                    } catch (Exception) {
+                    } catch (Exception ex) {
+                        if (ex.HResult != (int)Err.InvalidPassword)
+                            throw;
                         var dlg = new FormPassphrase();
                         dlg.labelRetype.Visibility = Visibility.Hidden;
                         dlg.textRetype.Visibility = Visibility.Hidden;
@@ -470,25 +484,28 @@ namespace Coin {
             }
         }
 
-        private void OnFileExport(object sender, RoutedEventArgs e) {
-            if (MessageBox.Show("Exported wallet file will contain unencrypted keys. You can lose all your Groestlcoins if this file will be stolen!\nPlease save it to secure place and remove from the working computer.\nAre you sure to export the wallet?",
-                    "Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK) {
-                if (!EnsurePassphraseUnlock())
-                    return;
-                var wf = SelectedWalletNotNull();
-                var d = new SaveFileDialog();
-                d.InitialDirectory = Eng.AppDataDirectory;
-                d.Filter = wf.Wallet.CurrencyName + " Wallet format|wallet.dat|Ufasoft Coin XML|*.xml";
-                d.FileName = "wallet-backup";
-                if (Dialog.ShowDialog(d, this)) {
-                    if (File.Exists(d.FileName))
-                        File.Delete(d.FileName);
-                    switch (d.FilterIndex) {
-                        case 1:
-                            wf.Wallet.ExportWalletToBdb(d.FileName);
-                            break;
-                    case 2:
-                        Eng.ExportWalletToXml(d.FileName);
+        bool AskUnencryptedExportWarning() {
+            return MessageBox.Show("Exported file will contain unencrypted keys. You can lose all your Coins if this file will be stolen!\nPlease save it to secure place and remove from the Working computer.\nAre you sure to export?",
+                    "Coin Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK;
+        }
+
+
+        void OnFileExport(object sender, RoutedEventArgs e) {
+            if (!AskUnencryptedExportWarning())
+                return;
+
+            if (!EnsurePassphraseUnlock())
+                return;
+            var d = new SaveFileDialog();
+            d.InitialDirectory = Eng.AppDataDirectory;
+            d.Filter = wf.Wallet.CurrencyName + " Wallet format|wallet.dat";
+            d.FileName = "wallet-backup";
+            if (Dialog.ShowDialog(d, this)) {
+                if (File.Exists(d.FileName))
+                    File.Delete(d.FileName);
+                switch (d.FilterIndex) {
+                    case 1:
+                        SelectedWalletNotNull().Wallet.ExportWalletToBdb(d.FileName);
                         break;
                     }
                 }
