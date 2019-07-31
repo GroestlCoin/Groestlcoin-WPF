@@ -44,7 +44,7 @@
     <EmbeddedResource Include="..\..\m\guicomp\f_about.resx" Link="GuiComp\f_about.resx" />
     <EmbeddedResource Include="..\..\m\guicomp\f_querystring.resx" Link="GuiComp\f_querystring.resx" />
     <EmbeddedResource Include="..\..\m\guicomp\f_textinfo.resx" Link="GuiComp\f_textinfo.resx" />
-    <Resource Include="images\groestlcoin.ico"><Link>groestlcoin.ico   </Link></Resource>
+    <Resource Include="..\images\groestlcoin.ico"><Link>groestlcoin.ico </Link></Resource>
     <Resource Include="..\images\groestlcoin256.png"><Link>groestlcoin256.png   </Link></Resource>
     <Reference Include="Interop.coineng"> <EmbedInteropTypes>True</EmbedInteropTypes> <HintPath>$(OutputPath)\inc\Interop.coineng.dll</HintPath> </Reference>
   </ItemGroup>

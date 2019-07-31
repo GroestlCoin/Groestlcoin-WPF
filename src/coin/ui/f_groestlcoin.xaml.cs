@@ -433,11 +433,6 @@ namespace Coin {
             Dialog.ShowDialog(d, this);
         }
 
-        bool AskUnencryptedExportWarning() {
-            return MessageBox.Show("Exported file will contain unencrypted keys. You can lose all your Coins if this file will be stolen!\nPlease save it to secure place and remove from the Working computer.\nAre you sure to export?",
-                    "Coin Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK;
-        }
-
         private void OnToolsRescan(object sender, RoutedEventArgs e) {
             SelectedWalletNotNull().Wallet.Rescan();
         }
@@ -485,7 +480,7 @@ namespace Coin {
         }
 
         bool AskUnencryptedExportWarning() {
-            return MessageBox.Show("Exported file will contain unencrypted keys. You can lose all your Coins if this file will be stolen!\nPlease save it to secure place and remove from the Working computer.\nAre you sure to export?",
+            return MessageBox.Show("Exported file will contain unencrypted keys. You can lose all your Groestlcoins if this file will be stolen!\nPlease save it to secure place and remove from the Working computer.\nAre you sure to export?",
                     "Coin Security Warning", MessageBoxButton.OKCancel, MessageBoxImage.Warning) == MessageBoxResult.OK;
         }
 
@@ -496,6 +491,7 @@ namespace Coin {
 
             if (!EnsurePassphraseUnlock())
                 return;
+            var wf = SelectedWalletNotNull();
             var d = new SaveFileDialog();
             d.InitialDirectory = Eng.AppDataDirectory;
             d.Filter = wf.Wallet.CurrencyName + " Wallet format|wallet.dat";
@@ -507,7 +503,6 @@ namespace Coin {
                     case 1:
                         SelectedWalletNotNull().Wallet.ExportWalletToBdb(d.FileName);
                         break;
-                    }
                 }
             }
         }
