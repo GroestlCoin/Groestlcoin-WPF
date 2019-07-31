@@ -3,7 +3,7 @@
     <Chain Name='Groestlcoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5'  Hrp='grs' MiningAllowed='1'
 			Genesis='00000ac5927c594d49cc0bdb81759d0da8297eb614683d3acb62f0703b639023'
 			MaxMoney='105000000'  MinTxFee='10000'
-			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000'
+			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000' SegwitHeight='2000000'
 			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
 			  ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
 			BootUrls='dns://dnsseed1.groestlcoin.org dns://dnsseed2.groestlcoin.org dnsseed3.groestlcoin.org dnsseed4.groestlcoin.org' >

@@ -14,6 +14,7 @@
 #define UCFG_USE_BOOST 0
 #define UCFG_STLSOFT 0
 #define UCFG_USE_RTTI 1
+#define UCFG_USE_OPENSSL 0
 
 #define UCFG_EH_SUPPORT_IGNORE 0
 

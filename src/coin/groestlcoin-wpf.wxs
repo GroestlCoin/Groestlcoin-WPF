@@ -15,7 +15,7 @@
 		<UpgradeVersion OnlyDetect="no" Maximum="99.0.0.0" Property="OLDERVERSIONBEINGUPGRADED" IncludeMaximum="no" />
 	</Upgrade>
 
-    <Icon Id="Groestlcoin.ico" SourceFile="ui\images\groestlcoin.ico" />
+    <Icon Id="Groestlcoin.ico" SourceFile="images\groestlcoin.ico" />
 
 	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
    	<Property Id='DiskPrompt' Value="Groestlcoin-WPF" />
