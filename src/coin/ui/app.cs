@@ -1,4 +1,4 @@
-﻿/*######   Copyright (c) 2011-2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
+/*######   Copyright (c) 2011-2015 Ufasoft  http://ufasoft.com  mailto:support@ufasoft.com,  Sergey Pavlov  mailto:dev@ufasoft.com ####
 #                                                                                                                                     #
 #       See LICENSE for licensing information                                                                                         #
 #####################################################################################################################################*/
@@ -26,7 +26,9 @@ namespace Coin {
         }
 
         public static Uri SendUri;
-        public static bool CancelPendingTxes;
+        public static bool
+            CancelPendingTxes,
+            Testnet;
 
         void ProcessCommandLine(string[] args) {
             SendUri = null;
@@ -35,6 +37,9 @@ namespace Coin {
                 switch (arg) {
                     case "-cancelpending":
                         CancelPendingTxes = true;
+                        break;
+                    case "-testnet":
+                        Testnet = true;
                         break;
                     default:
                         if (Uri.IsWellFormedUriString(arg, UriKind.Absolute)) {

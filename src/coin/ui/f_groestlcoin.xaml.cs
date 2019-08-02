@@ -179,6 +179,9 @@ namespace Coin {
                 }
             }
 
+            if (App.Testnet)
+                Eng.Testnet = App.Testnet;
+
             Wallet[] wallets = null;
             try {
                 wallets = Eng.Wallets;
