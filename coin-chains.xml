@@ -6,7 +6,7 @@
 			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000' SegwitHeight='2000000'
 			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
 			  ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
-			BootUrls='dns://dnsseed1.groestlcoin.org dns://dnsseed2.groestlcoin.org dnsseed3.groestlcoin.org dnsseed4.groestlcoin.org' >
+			BootUrls='dns://dnsseed1.groestlcoin.org dns://dnsseed2.groestlcoin.org dns://dnsseed3.groestlcoin.org dns://dnsseed4.groestlcoin.org' >
 
 		<Checkpoint Block='100002' 	Hash='0000000001968bbc3e7edd38448661449091a83e1ae6ce42dd8e19af3954c4ec' />
 		<Checkpoint Block='669286' 	Hash='000000001727e1d13ca7272dee43996efdfc6b3b57a6d2b0c48257ef52f40bcb' />
@@ -15,4 +15,20 @@
 
 		<Seed EndPoint='' />
 	</Chain>
+
+<Chain Name='Groestlcoin-testnet' Symbol='TGRS' Algo='groestl' AddressVersion='111' ScriptAddressVersion='195' Hrp='tgrs' MiningAllowed='1'  IsTestNet='1'
+			Genesis='000000ffbb50fc9898cdd36ec163e6ba23230164c0052a28876255b7dcf2cd36'
+			MaxMoney='105000000'  MinTxFee='10000'
+			BIP34Height='21111' BIP65Height='581885' BIP66Height='330776' SegwitHeight='2000000'
+			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
+			ProtocolMagicHex='0709110B' DefaultPort='17777'
+			BootUrls='dns://testnet1.groestlcoin.org dns://testnet2.groestlcoin.org dns://testp2pool.groestlcoin.org dns://testp2pool2.groestlcoin.org' >
+
+
+		<Checkpoint Block='546'	Hash='000000002a936ca763904c3c35fce2f3556c559c0214345d31b1bcebf76acb70' />
+
+		<Seed EndPoint='' />
+	</Chain>
+
+
 </CoinChains>
