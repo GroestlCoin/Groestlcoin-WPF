@@ -31,9 +31,6 @@
     <Filter Include="comp\xml">
       <UniqueIdentifier>{42bd6f2c-064b-4479-b13f-127465310d56}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source Files\currency">
-      <UniqueIdentifier>{985db27c-9a5f-4e52-a867-322305289df2}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\COM">
       <UniqueIdentifier>{63ce99f8-bb76-466e-a0d4-fd9191cfa889}</UniqueIdentifier>
     </Filter>
@@ -42,6 +39,9 @@
     </Filter>
     <Filter Include="Source Files\Obsolete\backend-sqlite">
       <UniqueIdentifier>{56311435-2adf-4160-b7b4-d85dae621222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="currency">
+      <UniqueIdentifier>{cf19bb68-daac-4abc-8f7c-c49c4d079944}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>

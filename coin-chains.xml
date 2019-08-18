@@ -1,32 +1,27 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <CoinChains>
-    <Chain Name='Groestlcoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5'  Hrp='grs' MiningAllowed='1'
+    <Chain Name='Groestlcoin' Symbol='GRS' Algo='groestl' AddressVersion='36' ScriptAddressVersion='5' Hrp='grs' MiningAllowed='1'
 			Genesis='00000ac5927c594d49cc0bdb81759d0da8297eb614683d3acb62f0703b639023'
 			MaxMoney='105000000'  MinTxFee='10000'
 			BIP34Height='800000' BIP65Height='2464000' BIP66Height='800000' SegwitHeight='2000000'
 			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
-			  ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
+			ProtocolMagicHex='D4B4BEF9' DefaultPort='1331'
 			BootUrls='dns://dnsseed1.groestlcoin.org dns://dnsseed2.groestlcoin.org dns://dnsseed3.groestlcoin.org dns://dnsseed4.groestlcoin.org' >
-
 		<Checkpoint Block='100002' 	Hash='0000000001968bbc3e7edd38448661449091a83e1ae6ce42dd8e19af3954c4ec' />
 		<Checkpoint Block='669286' 	Hash='000000001727e1d13ca7272dee43996efdfc6b3b57a6d2b0c48257ef52f40bcb' />
 		<Checkpoint Block='2000000'	Hash='00000000000434d5b8d1c3308df7b6e3fd773657dfb28f5dd2f70854ef94cc66' />
 		<Checkpoint Block='2600000'	Hash='0000000000002d526754a280ad7668b663cb9eea08b003edad3ddf6037fc574e' />
-
-		<Seed EndPoint='' />
 	</Chain>
-
 
 	<Chain Name='Groestlcoin-testnet' Symbol='TGRS' Algo='groestl' AddressVersion='111' ScriptAddressVersion='196' Hrp='tgrs' MiningAllowed='1'  IsTestNet='1'
 			Genesis='000000ffbb50fc9898cdd36ec163e6ba23230164c0052a28876255b7dcf2cd36'
 			MaxMoney='105000000'  MinTxFee='10000'
-			BIP34Height='286' BIP65Height='982000' BIP66Height='286' SegwitHeight='2000000'
-			InitBlockValue='100' MaxTargetHex='1E0FFFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
+			BIP34Height='286' BIP65Height='982000' BIP66Height='286' SegwitHeight='70000'
+			InitBlockValue='100' MaxTargetHex='1E00FFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
 			ProtocolMagicHex='0709110B' DefaultPort='17777'
 			BootUrls='dns://testnet1.groestlcoin.org dns://testnet2.groestlcoin.org dns://testp2pool.groestlcoin.org dns://testp2pool2.groestlcoin.org' >
 		<Checkpoint Block='50000'	Hash='00000081951486bb535f8cffec8ac0641bd24b814f89641f6cc2cad737f18950' />
 		<Checkpoint Block='887766'	Hash='000000cc069338b7cd182dbf3e98dedd80c9ce85f26b78daaec0a6c964ffa501' />
 	</Chain>
-
 
 </CoinChains>

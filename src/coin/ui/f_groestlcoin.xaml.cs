@@ -200,7 +200,7 @@ namespace Coin {
                 MenuItem mi = new MenuItem();
                 wf.MenuItem = mi;
                 mi.Header = $"{wallet.CurrencySymbol}  {currencyName}";
-                mi.Icon = new Image() { Source = new BitmapImage(new Uri($"images/{currencyName}.ico", UriKind.Relative)) };
+                mi.Icon = new Image() { Source = new BitmapImage(new Uri($"images/{Regex.Replace(currencyName, @"-testnet\d?", "")}.ico", UriKind.Relative)) };
                 menuCurrency.Items.Add(mi);
                 mi.Template = menuTemplate;
                 mi.IsCheckable = true;
@@ -601,7 +601,9 @@ namespace Coin {
             }*/
         }
 
-        public Uri IconUri { get { return new Uri("images/" + Wallet.CurrencyName + ".ico", UriKind.Relative); } }
+
+
+        public Uri IconUri { get { return new Uri("images/" + Regex.Replace(Wallet.CurrencyName, @"-testnet\d?", "") + ".ico", UriKind.Relative); } }
         public string CurrencySymbol { get { return Wallet.CurrencySymbol; } }
         public string Balance { get { return Wallet.Balance.ToString("0.########"); } }
         public string BlockHeight =>  Wallet.LastBlock.ToString("n0", CultureInfo.InvariantCulture);
