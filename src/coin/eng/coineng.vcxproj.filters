@@ -147,9 +147,6 @@
     <ClCompile Include="buggy-aes.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="currency\groestlcoin.cpp">
-      <Filter>Source Files\currency</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\el\elwin\dllmodul.cpp">
       <Filter>comp</Filter>
     </ClCompile>
@@ -182,6 +179,9 @@
     </ClCompile>
     <ClCompile Include="blockchain-detector.cpp">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="currency\groestlcoin.cpp">
+      <Filter>currency</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

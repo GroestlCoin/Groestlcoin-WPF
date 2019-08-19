@@ -53,11 +53,7 @@ namespace Coin {
         WalletForms TheWallet;
         Dictionary<string, int> AllAlerts = new Dictionary<string, int>();
 
-        public static RegistryKey UserAppRegistryKey {
-            get {
-                return Registry.CurrentUser.CreateSubKey(@"Software\Groestlcoin-WPF");
-            }
-        }
+        public static RegistryKey UserAppRegistryKey => Registry.CurrentUser.CreateSubKey(@"Software\Groestlcoin-WPF");
 
         public class WalletEvent {
             public DateTime Timestamp { get; set; }
@@ -254,7 +250,6 @@ namespace Coin {
                     UpdateView();
             };
             timer1.Start();
-
             UpdateView();
             CheckForCommands();
             //          RegisterUriHandler();
