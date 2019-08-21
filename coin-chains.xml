@@ -19,7 +19,7 @@
 			BIP34Height='286' BIP65Height='982000' BIP66Height='286' SegwitHeight='70000'
 			InitBlockValue='100' MaxTargetHex='1E00FFFF' InitTargetHex='1E0FFFFF'  BlockSpan='60'
 			ProtocolMagicHex='0709110B' DefaultPort='17777'
-			BootUrls='dns://testnet1.groestlcoin.org dns://testnet2.groestlcoin.org dns://testp2pool.groestlcoin.org dns://testp2pool2.groestlcoin.org' >
+			BootUrls='dns://testnet-seed1.groestlcoin.org dns://testnet-seed2.groestlcoin.org' >
 		<Checkpoint Block='50000'	Hash='00000081951486bb535f8cffec8ac0641bd24b814f89641f6cc2cad737f18950' />
 		<Checkpoint Block='887766'	Hash='000000cc069338b7cd182dbf3e98dedd80c9ce85f26b78daaec0a6c964ffa501' />
 	</Chain>
