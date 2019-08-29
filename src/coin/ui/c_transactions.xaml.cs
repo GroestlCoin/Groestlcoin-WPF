@@ -133,44 +133,27 @@ namespace Coin {
     public class Tx {
         internal ITransaction m_iTx;
 
-        public DateTime Timestamp { get { return m_iTx.Timestamp.ToLocalTime(); } }
+        decimal? amount;
+        IAddress address;
 
-        public string Debit {
-            get {
-                var v = m_iTx.Amount;
-                return v < 0 ? v.ToString() : "";
-            }
-        }
-
-        public string Credit {
-            get {
-                var v = m_iTx.Amount;
-                return v > 0 ? v.ToString() : "";
-            }
-        }
+        public DateTime Timestamp => m_iTx.Timestamp.ToLocalTime();
+        public decimal Amount => amount ??= m_iTx.Amount;
+        public string AmountColor => Amount > 0 ? "Black" : "Red";
+        public string Address => (address ??= m_iTx.Address).Value;
+        public int Confirmations => m_iTx.Confirmations;
+        public string Status => m_iTx.Confirmations switch { 0 => "Pending", int v when v < 6 => v.ToString(), _ => "OK" };
+        public string Hash => m_iTx.Hash;
+        public string Comment => (address ??= m_iTx.Address).Comment switch { "" => "", var s => $"[{s}] " } + m_iTx.Comment;
 
         public string Fee {
             get {
                 try {
-                    var v = m_iTx.Fee;
-                    return v != 0 ? v.ToString() : "";
+                    return m_iTx.Fee switch { 0 => "", var v => v.ToString() };
                 } catch (Exception) {
                     return "Unknown";
                 }
             }
         }
-
-        public string Address { get { return m_iTx.Address.Value; } }
-        public int Confirmations { get { return m_iTx.Confirmations; } }
-        public string Hash { get { return m_iTx.Hash; } }
-
-        public string Comment {
-            get {
-                string addrComment = m_iTx.Address.Comment;
-                return (addrComment == "" ? "" : "[" + addrComment + "] ") + m_iTx.Comment;
-            }
-        }
-
     };
 
     public class DateTimeConverter : IValueConverter {
