@@ -1,5 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
+    <LangVersion>preview</LangVersion>
     <UseWPF>true</UseWPF>
     <OutputType>WinExe</OutputType>
     <RuntimeIdentifiers>win7-x64;win7-x86</RuntimeIdentifiers>
