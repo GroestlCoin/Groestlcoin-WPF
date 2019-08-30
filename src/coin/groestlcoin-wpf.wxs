@@ -2,7 +2,7 @@
 
 
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
-<?define PRODVER="2.19.0.13"?>
+<?define PRODVER="2.19.0.14"?>
 
 <Product Name='Groestlcoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Groestlcoin' Language='1033' >
    	<Package Id='*' Keywords='Installer' Description="Groestlcoin Installer" Comments='Groestlcoin-WPF' Manufacturer='Groestlcoin' InstallerVersion='301' Compressed='yes'  />
@@ -16,6 +16,7 @@
 	</Upgrade>
 
     <Icon Id="Groestlcoin.ico" SourceFile="images\groestlcoin.ico" />
+    <Icon Id="GroestlcoinTestnet.ico" SourceFile="images\groestlcoin-testnet.ico" />
 
 	<Property Id="ARPPRODUCTICON" Value="Groestlcoin.ico" />
    	<Property Id='DiskPrompt' Value="Groestlcoin-WPF" />
@@ -52,8 +53,9 @@
 
 	<Component Id='CMP_Groestlcoin' Guid='d40983c1-f860-42fa-9dfd-67bc4302f87c' Directory='INSTALLDIR' >
 		<File Id="Groestlcoin_WPF.exe" Source="..\..\x64_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
-			<Shortcut Id="startmenuGroestlcoin" 	Directory="ProgramMenuFolder" 	Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
-			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="startmenuGroestlcoin" 		Directory="ProgramMenuFolder" 	Name="Groestlcoin-WPF" 			Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+			<Shortcut Id="desktopGroestlcoin" 			Directory="DesktopFolder"  		Name="Groestlcoin-WPF" 			Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+            <Shortcut Id="startmenuGroestlcoinTestnet"  Directory="ProgramMenuFolder"   Name="Groestlcoin-WPF Testnet"  Icon="GroestlcoinTestnet.ico" IconIndex="0" Arguments="-testnet" Advertise="yes" />
 		</File>
 		<File Source="..\..\x64_R_St\coineng.dll" 					/>
 		<File Source="..\..\x64_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
@@ -72,9 +74,10 @@
 		<File Id="Groestlcoin_WPF.exe" Source="..\..\x86_R_St\Groestlcoin-WPF.exe"	KeyPath='yes' 		>
 			<Shortcut Id="startmenuGroestlcoin" 	Directory="ProgramMenuFolder" 	Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
 			<Shortcut Id="desktopGroestlcoin" 		Directory="DesktopFolder"  		Name="Groestlcoin-WPF" Icon="Groestlcoin.ico" IconIndex="0" Advertise="yes" />
+            <Shortcut Id="startmenuGroestlcoinTestnet"  Directory="ProgramMenuFolder"   Name="Groestlcoin-WPF Testnet"  Icon="GroestlcoinTestnet.ico" IconIndex="0" Arguments="-testnet" Advertise="yes" />
 		</File>
 		<File Source="..\..\x86_R_St\coineng.dll" 					/>
-		<File Source="..\..\x64_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
+		<File Source="..\..\x86_R_St\Hardcodet.Wpf.TaskbarNotification.dll"	/>
 		<File Source="..\..\x86_R_St\groestlcoin-miner.exe" 		/>
 		<File Source="..\..\miner-example.cmd"						/>
 		<File Source="help\Groestlcoin-WPF.htm"						/>

@@ -6,13 +6,15 @@
 
 <h1>Ufasoft Groestlcoin Wallet Manual</h1>
 
-<h2>Command line options</h2>
+<h2>Command line usage</h2>
 <pre>
-	Groestlcoin-WPF.exe [-cancelpending]
-
-	<b>-cancelpending</b>   Cancels all penting (with 0 confirmations) transactions and returns their money to the Balance.
-
+	Groestlcoin-WPF.exe [options]
 </pre>
+<h3>Options</h3>
+	<ul>
+		<li><b>-cancelpending</b>   Cancels all penting (with 0 confirmations) transactions and returns their money to the Balance.</li>
+		<li><b>-testnet</b> Use the test blockchain</li>
+	</ul>
 
 
 
@@ -21,7 +23,7 @@
 
 <h3>Full mode</h3>
 	<p>It is a flat, binary file containing Groestlcoin blockchain data, from the genesis block through a recent height.
-  	 All versions automatically create, validate and index  file <b>%APPDATA%\Groestlcoin-WPF\GRS\grs.bootstrap.dat<b>.
+  	 All versions automatically create, validate and index  file <b>%APPDATA%\Groestlcoin-WPF\GRS\grs.bootstrap.dat</b>.
 	Grs.bootstrap.dat is compatible with Qt wallet. Qt can boot from it. </p>
 
 <h3>SPV (Lite) mode</h3>

@@ -15,7 +15,7 @@
     <Product>Groestlcoin-WPF</Product>
     <Description>Groestlcoin client for Windows</Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Version>2.19.0.13</Version>
+    <Version>2.19.0.14</Version>
     <Copyright>Copyright © Groestlcoin 2014-2019</Copyright>
   </PropertyGroup>
   <ItemGroup>
