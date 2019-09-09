@@ -24,7 +24,6 @@ namespace GuiComp {
             textBlockDescription.Text = AssemblyDescription;
         }
 
-
         public string AssemblyTitle {
             get {
                 // Get all Title attributes on this assembly
@@ -44,7 +43,10 @@ namespace GuiComp {
 
         public string AssemblyVersion {
             get {
-                return ExeAssembly.GetName().Version.ToString();
+				var ver = ExeAssembly.GetName().Version;
+				return ver.ToString(ver.Revision != 0 ? 4
+					: ver.Build != 0 ? 3
+					: 2);
             }
         }
 
