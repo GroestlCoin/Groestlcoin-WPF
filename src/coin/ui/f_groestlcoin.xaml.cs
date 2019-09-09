@@ -602,7 +602,10 @@ namespace Coin {
         public string State => Wallet.State;
         public int Peers => Wallet.Peers;
         public bool MiningAllowed => Wallet.MiningAllowed;
-        public bool MiningEnabled => Wallet.MiningEnabled; } set { Wallet.MiningEnabled = value;
+        public bool MiningEnabled {
+            get => Wallet.MiningEnabled;
+            set =>  Wallet.MiningEnabled = value;
+        }
 
         public bool LiteModeEnabled {
             get => Wallet.Mode == EEngMode.Lite;

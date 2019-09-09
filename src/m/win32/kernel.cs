@@ -785,13 +785,9 @@ public partial class Api
 {
 
 #if UCFG_CF
-        private const string kernel32 = "kernel32.dll";
-#endif
-
-    public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;
     private const string kernel32 = "coredll.dll";
 #else
-        private const string kernel32 = "kernel32.dll";
+    private const string kernel32 = "kernel32.dll";
 #endif
 
     public const uint INVALID_FILE_ATTRIBUTES = 0xFFFFFFFF;
@@ -801,7 +797,6 @@ public partial class Api
 
     [DllImport("kernel32", SetLastError = true)]
     public static extern FileType GetFileType(SafeFileHandle hFile);
->>>>>>> b3a0fc0b854529b1fdfd5ae925e6acd16abd2f82
 
     [DllImport("kernel32",SetLastError = true)]
     public static extern int TerminateProcess(HANDLE hProcess,int uExitCode);
