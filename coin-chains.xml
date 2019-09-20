@@ -23,5 +23,4 @@
 		<Checkpoint Block='50000'	Hash='00000081951486bb535f8cffec8ac0641bd24b814f89641f6cc2cad737f18950' />
 		<Checkpoint Block='887766'	Hash='000000cc069338b7cd182dbf3e98dedd80c9ce85f26b78daaec0a6c964ffa501' />
 	</Chain>
-
 </CoinChains>
