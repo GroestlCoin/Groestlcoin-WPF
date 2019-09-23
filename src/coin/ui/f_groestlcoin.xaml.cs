@@ -328,20 +328,15 @@ namespace Coin {
             }
         }
 
-        WalletForms SelectedWallet() {
-            return TheWallet;
+        WalletForms SelectedWallet() => TheWallet;
+
+        WalletForms SelectedWalletNotNull() => TheWallet;
+            return
         }
 
-        WalletForms SelectedWalletNotNull() {
-            return TheWallet;
-        }
-
-        WalletForms FindWallet(string netName) {
-            var r = ActiveWalletForms.FirstOrDefault(w => w.Wallet.CurrencyName.ToUpper() == netName.ToUpper());
-            if (r == null)
-                throw new ApplicationException($"No active Wallet with name {netName}");
-            return r;
-        }
+        WalletForms FindWallet(string netName) =>
+            ActiveWalletForms.FirstOrDefault(w => w.Wallet.CurrencyName.ToUpper() == netName.ToUpper())
+                ?? throw new ApplicationException($"No active Wallet with name {netName}");
 
         public void SendMoney(string netName, string address, decimal amount, string label, string comment) {
             CtlSendMoney.Wallet = FindWallet(netName).Wallet;
@@ -400,7 +395,6 @@ namespace Coin {
             base.OnSourceInitialized(e);
 //            this.SetPlacement(Settings.Default.MainWindowPlacement);
         }
-
 
 
         void SetMenuDBMode() {
