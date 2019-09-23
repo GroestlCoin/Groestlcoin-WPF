@@ -218,7 +218,6 @@ namespace Coin {
 //                      bMiningEnabled = (int)sk.GetValue("Mining", 0) != 0;
                     } catch (Exception) { }
                 }
-                mode = EEngMode.Bootstrap;  //!!! Lite Mode not supported temporary
                 wallet.Mode = mode;
                 if (wallet.MiningAllowed)
                     wallet.MiningEnabled = bMiningEnabled;
