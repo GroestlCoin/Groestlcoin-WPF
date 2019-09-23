@@ -331,8 +331,6 @@ namespace Coin {
         WalletForms SelectedWallet() => TheWallet;
 
         WalletForms SelectedWalletNotNull() => TheWallet;
-            return
-        }
 
         WalletForms FindWallet(string netName) =>
             ActiveWalletForms.FirstOrDefault(w => w.Wallet.CurrencyName.ToUpper() == netName.ToUpper())
