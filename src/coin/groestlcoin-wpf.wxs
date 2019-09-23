@@ -2,7 +2,7 @@
 
 
 <?define UpgradeCode="100d64d5-8881-4787-a51e-bd187da49471"?>
-<?define PRODVER="2.19.0.15"?>
+<?define PRODVER="2.19.0.16"?>
 
 <Product Name='Groestlcoin-WPF' Id='*' UpgradeCode='$(var.UpgradeCode)' Version='$(var.PRODVER)' Manufacturer='Groestlcoin' Language='1033' >
    	<Package Id='*' Keywords='Installer' Description="Groestlcoin Installer" Comments='Groestlcoin-WPF' Manufacturer='Groestlcoin' InstallerVersion='301' Compressed='yes'  />
